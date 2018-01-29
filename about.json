@@ -1,0 +1,98 @@
+{
+	"schemaVersion": 1,
+	"name": "origami-build-service",
+	"systemCode": "origami-build-service-v3",
+	"purpose": "Front end build process as a service. Fetches specified Origami components from git, runs Origami build process, and returns the resulting CSS or JS bundle over HTTP.",
+	"audience": "public",
+	"primaryUrl": "https://www.ft.com/__origami/service/build/v3",
+	"serviceTier": "bronze",
+	"apiVersion": 2,
+	"apiVersions": [
+		{
+			"path": "/v1",
+			"supportStatus": "deprecated"
+		},
+		{
+			"path": "/v2",
+			"supportStatus": "deprecated"
+		},
+		{
+			"path": "/v3",
+			"supportStatus": "active"
+		}
+	],
+	"dateCreated": "2018-01-02",
+	"contacts": [
+		{
+			"name": "Origami team",
+			"email": "origami.support@ft.com",
+			"rel": "owner",
+			"domain": "All support enquiries"
+		}
+	],
+	"links": [
+		{
+			"url": "https://github.com/Financial-Times/origami-build-service-v3/issues",
+			"category": "issues"
+		},
+		{
+			"url": "https://github.com/Financial-Times/origami-build-service-v3",
+			"category": "repo"
+		},
+		{
+			"url": "https://dashboard.heroku.com/apps/origami-build-service-v3-eu",
+			"category": "deployment",
+			"description": "Heroku dashboard (Production EU)"
+		},
+		{
+			"url": "https://dashboard.heroku.com/apps/origami-build-service-v3-us",
+			"category": "deployment",
+			"description": "Heroku dashboard (Production US)"
+		},
+		{
+			"url": "https://dashboard.heroku.com/apps/origami-build-service-v3-qa",
+			"category": "deployment",
+			"description": "Heroku dashboard (QA)"
+		},
+		{
+			"url": "https://dashboard.heroku.com/pipelines/ca23db83-a5d2-4ac7-a77f-39b3ebb49673",
+			"category": "deployment",
+			"description": "Heroku dashboard (QA > Production pipeline)"
+		},
+		{
+			"url": "http://grafana.ft.com/dashboard/db/origami-build-service-v3",
+			"category": "monitoring",
+			"description": "Grafana dashboard"
+		},
+		{
+			"url": "https://my.pingdom.com/newchecks/checks#check=4260813",
+			"category": "monitoring",
+			"description": "Pingdom check (Production EU)"
+		},
+		{
+			"url": "https://my.pingdom.com/newchecks/checks#check=4260822",
+			"category": "monitoring",
+			"description": "Pingdom check (Production US)"
+		},
+		{
+			"url": "https://my.pingdom.com/newchecks/checks#check=4260852",
+			"category": "monitoring",
+			"description": "Pingdom check (Staging)"
+		},
+		{
+			"url": "https://github.com/Financial-Times/origami-build-service-v3#readme",
+			"category": "documentation",
+			"description": "README"
+		},
+		{
+			"url": "https://sentry.io/nextftcom/origami-build-service-v3-produ/",
+			"category": "monitoring",
+			"description": "Sentry dashboard (Production)"
+		},
+		{
+			"url": "https://sentry.io/nextftcom/origami-build-service-v3-qa/",
+			"category": "monitoring",
+			"description": "Sentry dashboard (QA)"
+		}
+	]
+}

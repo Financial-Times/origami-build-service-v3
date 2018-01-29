@@ -1,0 +1,26 @@
+{
+  "name": "origami-build-vervice-v3",
+  "version": "1",
+  "main": "./lib/service.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@financial-times/health-check": "^1.2.3",
+    "@financial-times/origami-service": "^2.4.0",
+    "@financial-times/origami-service-makefile": "^6.1.0",
+    "dotenv": "^4.0.0",
+    "throng": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-plugin-prettier": "^2.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.0.0",
+    "nodemon": "^1.14.11",
+    "prettier": "1.10.2",
+    "proclaim": "^3.5.1",
+    "supertest": "^3.0.0"
+  }
+}
