@@ -1,0 +1,12 @@
+{
+	"base": "origami-build-service-v3-eu.herokuapp.com",
+	"protocol": "https",
+	"healthSuffix": "__health",
+	"aboutSuffix": "__about",
+	"isLive": "False",
+	"isHealthcheckFor": {
+		"system": [{
+			"dataItemID": "origami-build-service-v3"
+		}]
+	}
+}
