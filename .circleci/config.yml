@@ -68,7 +68,7 @@ jobs:
       - *restore_repo
       - run:
           name: Check Dependencies conform with the WhiteSource policy
-          command: "make whitesource"
+          command: "npm i -g npm@5.5.1 && make whitesource"
 
 workflows:
   version: 2
