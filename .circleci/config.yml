@@ -41,8 +41,11 @@ jobs:
       - checkout
       - *restore_node_modules
       - run:
+          name: Install npm
+          command: sudo npm i -g npm@5.5.1
+      - run:
           name: Install Dependencies
-          command: npm i -g npm@5.5.1 && npm install
+          command: npm install
       - *cache_node_modules
       - *cache_repo
 
