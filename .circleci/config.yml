@@ -42,7 +42,7 @@ jobs:
       - *restore_node_modules
       - run:
           name: Install Dependencies
-          command: npm install
+          command: npm i -g npm@5.5.1 && npm install
       - *cache_node_modules
       - *cache_repo
 
@@ -68,7 +68,7 @@ jobs:
       - *restore_repo
       - run:
           name: Check Dependencies conform with the WhiteSource policy
-          command: "npm i -g npm@5.5.1 && make whitesource"
+          command: "make whitesource"
 
 workflows:
   version: 2
