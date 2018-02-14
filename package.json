@@ -21,6 +21,7 @@
     "http-errors": "^1.6.2",
     "lodash": "^4.17.4",
     "mem": "^3.0.0",
+    "npm-run-path": "^2.0.2",
     "origami-build-tools": "^7.3.2",
     "rimraf": "^2.6.2",
     "semver-extra": "^2.0.1",
