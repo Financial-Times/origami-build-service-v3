@@ -215,8 +215,7 @@ describe("/v3/bundles/css", function() {
 				proclaim.include(
 					response.text,
 					`.test-compile-error {
-	color: red; }
-	/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJvd2VyX2NvbXBvbmVudHMvby10ZXN0LWNvbXBvbmVudC9tYWluLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0E7RUFDQyxXQUFVLEVBQ1YiLCJmaWxlIjoibWFpbi5jc3MifQ== */`,
+  color: red; }`,
 				);
 			});
 		});
