@@ -1,12 +1,16 @@
 "use strict";
 
-const itRespondsWithContentType = require("./helpers/it-responds-with-content-type");
-// const itRespondsWithHeader = require("./helpers/it-responds-with-header");
-const itRespondsWithStatus = require("./helpers/it-responds-with-status");
-const setupRequest = require("./helpers/setup-request");
+const request = require("supertest");
+global.Promise = require("bluebird");
+Promise.config({
+	longStackTraces: true,
+});
 
-describe("GET /__about", function() {
-	setupRequest("GET", "/__about");
-	itRespondsWithStatus(200);
-	itRespondsWithContentType("application/json");
+describe("/__about", function() {
+	it("GET /__about", function() {
+		return request(this.app)
+			.get("/__about")
+			.expect(200)
+			.expect("content-type", "application/json; charset=utf-8");
+	});
 });

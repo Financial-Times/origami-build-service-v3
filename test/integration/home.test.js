@@ -1,11 +1,14 @@
 "use strict";
 
-const itRespondsWithStatus = require("./helpers/it-responds-with-status");
-const itRespondsWithHeader = require("./helpers/it-responds-with-header");
-const setupRequest = require("./helpers/setup-request");
+const request = require("supertest");
+global.Promise = require("bluebird");
+Promise.config({ longStackTraces: true });
 
-describe.skip("GET /", function() {
-	setupRequest("GET", "/");
-	itRespondsWithStatus(302);
-	itRespondsWithHeader("Location", "/v3/");
+describe("/", function() {
+	it.skip("GET /", function() {
+		return request(this.app)
+			.get("/")
+			.expect(302)
+			.expect("Location", "/v3/");
+	});
 });

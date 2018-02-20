@@ -1,212 +1,194 @@
 "use strict";
 
+const request = require("supertest");
+global.Promise = require("bluebird");
+Promise.config({ longStackTraces: true });
 const proclaim = require("proclaim");
-const itRespondsWithContentType = require("../../helpers/it-responds-with-content-type");
-const itRespondsWithHeader = require("../../helpers/it-responds-with-header");
-const itRespondsWithStatus = require("../../helpers/it-responds-with-status");
-const setupRequest = require("../../helpers/setup-request");
 
 describe("/v3/bundles/css", function() {
-	describe("GET /v3/bundles/css", function() {
-		setupRequest("GET", "/v3/bundles/css");
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css", function() {
+		return request(this.app)
+			.get("/v3/bundles/css")
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules", function() {
-		setupRequest("GET", "/v3/bundles/css?modules");
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules")
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=,,", function() {
-		setupRequest("GET", "/v3/bundles/css?modules=,,");
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules=,,", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=,,")
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=1a-", function() {
-		setupRequest("GET", "/v3/bundles/css?modules=1a-");
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules=1a-", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=1a-")
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.19", function() {
-		setupRequest("GET", "/v3/bundles/css?modules=o-test-component@1.0.19");
-		itRespondsWithStatus(200);
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// itRespondsWithHeader("etag", "d41d8cd98f00b204e9800998ecf8427e");
-		itRespondsWithHeader(
-			"cache-control",
-			"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-		);
-		itRespondsWithContentType("text/css");
-		it("responds with valid css", function() {
-			return this.request.expect(response => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=o-test-component@1.0.19")
+			.expect(200)
+			.expect(
+				"cache-control",
+				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+			)
+			.expect("Content-Type", "text/css; charset=utf-8")
+			.expect(response => {
 				proclaim.isString(response.text);
 				proclaim.notMatch(
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
 			});
-		});
+		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
+		// .expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19",
-		);
-		itRespondsWithStatus(200);
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// itRespondsWithHeader("etag", "d41d8cd98f00b204e9800998ecf8427e");
-		itRespondsWithHeader(
-			"cache-control",
-			"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-		);
-		itRespondsWithContentType("text/css");
-		it("responds with valid css", function() {
-			return this.request.expect(response => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19")
+			.expect(200)
+			.expect(
+				"cache-control",
+				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+			)
+			.expect("Content-Type", "text/css; charset=utf-8")
+			.expect(response => {
 				proclaim.isString(response.text);
 				proclaim.notMatch(
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
 			});
-		});
+		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
+		// .expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19",
-		);
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19", function() {
+		return request(this.app)
+			.get(
+				"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19",
+			)
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19",
-		);
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19", function() {
+		return request(this.app)
+			.get(
+				"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19",
+			)
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19",
-		);
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19", function() {
+		return request(this.app)
+			.get(
+				"/v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19",
+			)
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29",
-		);
-		itRespondsWithStatus(200);
-		itRespondsWithHeader("etag", "5b1f99cce840d1881d89902c54418f96");
-		itRespondsWithHeader(
-			"cache-control",
-			"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-		);
-		itRespondsWithContentType("text/css");
-		it("responds with valid css", function() {
-			return this.request.expect(response => {
+	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29")
+			.expect(200)
+			.expect("etag", "b012ee3b8ce835fa47c4b09d9d97c6f6")
+			.expect(
+				"cache-control",
+				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+			)
+			.expect("Content-Type", "text/css; charset=utf-8")
+			.expect(response => {
 				proclaim.isString(response.text);
 				proclaim.notMatch(
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
 			});
-		});
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe",
-		);
-		itRespondsWithStatus(400);
-		itRespondsWithContentType("text/html");
-		itRespondsWithHeader(
-			"cache-control",
-			"max-age=0, must-revalidate, no-cache, no-store",
-		);
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe")
+			.expect(400)
+			.expect("Content-Type", "text/html; charset=utf-8")
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.29&minify=on",
-		);
-		itRespondsWithStatus(200);
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// itRespondsWithHeader("etag", "5b1f99cce840d1881d89902c54418f96");
-		itRespondsWithHeader(
-			"cache-control",
-			"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-		);
-		itRespondsWithContentType("text/css");
-		it("responds with valid css", function() {
-			return this.request.expect(response => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=on")
+			.expect(200)
+			.expect(
+				"cache-control",
+				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+			)
+			.expect("Content-Type", "text/css; charset=utf-8")
+			.expect(response => {
 				proclaim.isString(response.text);
 				proclaim.notMatch(
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
 			});
-		});
+		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
+		// .expect("etag", "b012ee3b8ce835fa47c4b09d9d97c6f6");
 	});
 
-	describe("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", function() {
-		setupRequest(
-			"GET",
-			"/v3/bundles/css?modules=o-test-component@1.0.29&minify=off",
-		);
-		itRespondsWithStatus(200);
-		// TODO: Ensure consistent builds when minification is turned off
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// itRespondsWithHeader("etag", "1a331559de933cfef085f95a4603602e");
-		itRespondsWithHeader(
-			"cache-control",
-			"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-		);
-		itRespondsWithContentType("text/css");
-		it("responds with valid css", function() {
-			return this.request.expect(response => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", function() {
+		return request(this.app)
+			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=off")
+			.expect(200)
+			.expect(
+				"cache-control",
+				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+			)
+			.expect("Content-Type", "text/css; charset=utf-8")
+			.expect(response => {
 				proclaim.isString(response.text);
 				proclaim.match(
 					response.text,
@@ -218,6 +200,8 @@ describe("/v3/bundles/css", function() {
   color: red; }`,
 				);
 			});
-		});
+		// TODO: Ensure consistent builds when minification is turned off
+		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
+		// .expect("etag", "1a331559de933cfef085f95a4603602e");
 	});
 });

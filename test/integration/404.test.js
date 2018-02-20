@@ -1,11 +1,15 @@
 "use strict";
 
-const itRespondsWithContentType = require("./helpers/it-responds-with-content-type");
-const itRespondsWithStatus = require("./helpers/it-responds-with-status");
-const setupRequest = require("./helpers/setup-request");
-
-describe("GET /404", function() {
-	setupRequest("GET", "/404");
-	itRespondsWithStatus(404);
-	itRespondsWithContentType("text/html");
+const request = require("supertest");
+global.Promise = require("bluebird");
+Promise.config({
+	longStackTraces: true,
+});
+describe("/404", function() {
+	it("GET /404", function() {
+		return request(this.app)
+			.get("/404")
+			.expect(404)
+			.expect("content-type", "text/html; charset=utf-8");
+	});
 });

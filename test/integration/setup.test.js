@@ -1,7 +1,6 @@
 "use strict";
 
 const service = require("../../lib/service");
-const supertest = require("supertest");
 
 const noop = () => {};
 const mockLog = {
@@ -18,7 +17,6 @@ before(function() {
 	})
 		.listen()
 		.then(app => {
-			this.agent = supertest.agent(app);
 			this.app = app;
 		});
 });
