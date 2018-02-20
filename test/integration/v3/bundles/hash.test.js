@@ -288,7 +288,7 @@ describe("/v3/bundles/hash", () => {
 			);
 	});
 
-	it.skip("GET /v3/bundles/hash?modules=o-test-component@1.0.29&shrinkwrap=o-autoinit@1.3.3&autoinit=off&minify=off&export=7", function() {
+	it("GET /v3/bundles/hash?modules=o-test-component@1.0.29&shrinkwrap=o-autoinit@1.3.3&autoinit=off&minify=off&export=7", function() {
 		return request(this.app)
 			.get(
 				"/v3/bundles/hash?modules=o-test-component@1.0.29&shrinkwrap=o-autoinit@1.3.3&autoinit=off&minify=off&export=7",
@@ -304,7 +304,7 @@ describe("/v3/bundles/hash", () => {
 			);
 	});
 
-	it.skip("GET /v3/bundles/hash?modules=o-test-component@1.0.29&shrinkwrap=o-autoinit@1.3.3,o-test-component@1.0.29&autoinit=off&minify=off&export=7", function() {
+	it("GET /v3/bundles/hash?modules=o-test-component@1.0.29&shrinkwrap=o-autoinit@1.3.3,o-test-component@1.0.29&autoinit=off&minify=off&export=7", function() {
 		return request(this.app)
 			.get(
 				"/v3/bundles/hash?modules=o-test-component@1.0.29&shrinkwrap=o-autoinit@1.3.3,o-test-component@1.0.29&autoinit=off&minify=off&export=7",

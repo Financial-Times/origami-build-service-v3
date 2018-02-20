@@ -151,10 +151,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-autoinit@1\.3\.3,o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-autoinit@1\.3\.3,o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
+				);
 				proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 	});
@@ -248,10 +248,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
+				);
 				proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
@@ -282,10 +282,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
+				);
 				proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				proclaim.include(
 					response.text,
@@ -325,10 +325,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
+				);
 				proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 		// TODO: As o-autoinit will be included in the bundle, the etag will change whenever a new version of o-autoinit is released.
@@ -346,6 +346,7 @@ describe("/v3/bundles/js", function() {
 				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
 			)
 			.expect("Content-Type", "application/javascript; charset=utf-8")
+			.expect("etag", "2d7033bea4ae31e4b3564d6c92d05949")
 			.expect(response => {
 				const sandbox = {
 					window: {
@@ -361,13 +362,12 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%401.3.3\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%401.3.3\n \*\//,
+				);
 				proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
-		// .expect("etag", "2d7033bea4ae31e4b3564d6c92d05949")
 	});
 
 	it("GET /v3/bundles/js?modules=o-test-component@1.0.29&autoinit=off", function() {
@@ -395,10 +395,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
+				);
 				proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 	});
@@ -429,10 +429,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window.Origami, "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
+				);
 				proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 		// TODO: Ensure consistent builds when minification is turned off
@@ -465,10 +465,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window["7"], "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
+				);
 				proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 		// TODO: Ensure consistent builds when minification is turned off
@@ -500,10 +500,10 @@ describe("/v3/bundles/js", function() {
 					vm.runInContext(response.text, sandbox);
 				});
 				proclaim.include(sandbox.window["7"], "o-test-component");
-				// proclaim.match(
-				// 	response.text,
-				// 	/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
-				// );
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/js\?modules=o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
+				);
 				proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 			});
 		// TODO: Ensure consistent builds when minification is turned off

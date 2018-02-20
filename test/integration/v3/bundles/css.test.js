@@ -141,6 +141,10 @@ describe("/v3/bundles/css", function() {
 			.expect("Content-Type", "text/css; charset=utf-8")
 			.expect(response => {
 				proclaim.isString(response.text);
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/css\?modules=o-autoinit@1\.3\.3,o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
+				);
 				proclaim.notMatch(
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
@@ -159,7 +163,7 @@ describe("/v3/bundles/css", function() {
 			);
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on", function() {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on&shrinkwrap=o-autoinit%401.3.3", function() {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=on")
 			.expect(200)
@@ -168,15 +172,18 @@ describe("/v3/bundles/css", function() {
 				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
 			)
 			.expect("Content-Type", "text/css; charset=utf-8")
+			.expect("etag", "4a63a5a0eb6f8f9c86d572a96028ee54")
 			.expect(response => {
 				proclaim.isString(response.text);
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/css\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%401\.3\.3\n \*\//,
+				);
 				proclaim.notMatch(
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
 			});
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// .expect("etag", "b012ee3b8ce835fa47c4b09d9d97c6f6");
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", function() {
@@ -198,6 +205,10 @@ describe("/v3/bundles/css", function() {
 					response.text,
 					`.test-compile-error {
   color: red; }`,
+				);
+				proclaim.match(
+					response.text,
+					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/css\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
 				);
 			});
 		// TODO: Ensure consistent builds when minification is turned off
