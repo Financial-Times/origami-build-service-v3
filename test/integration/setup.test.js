@@ -9,16 +9,15 @@ const mockLog = {
 	warn: noop,
 };
 
-before(function() {
-	return service({
+before(async function() {
+	const app = await service({
 		environment: "test",
 		log: mockLog,
 		port: 0,
-	})
-		.listen()
-		.then(app => {
-			this.app = app;
-		});
+	});
+
+	this.app = app;
+	app.listen();
 });
 
 after(function() {

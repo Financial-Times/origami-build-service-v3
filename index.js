@@ -12,23 +12,30 @@ const options = {
 	name: "Origami Build Service",
 	workers: process.env.WEB_CONCURRENCY || 1,
 	environment: process.env.NODE_ENV,
+	githubUsername: process.env.GITHUB_USERNAME,
+	githubPassword: process.env.GITHUB_PASSWORD,
 };
 
-if (options.environment === "production") {
-	throng({
-		workers: options.workers,
-		start: () => {
-			service(options)
-				.listen()
-				.catch(() => {
+async function startService() {
+	if (options.environment === "production") {
+		throng({
+			workers: options.workers,
+			start: async () => {
+				const app = await service(options);
+				app.listen().catch(() => {
 					process.exit(1);
 				});
-		},
-	});
-} else {
-	service(options)
-		.listen()
-		.catch(() => {
-			process.exit(1);
+			},
 		});
+	} else {
+		const app = await service(options);
+		app
+			.listen()
+			.listen()
+			.catch(() => {
+				process.exit(1);
+			});
+	}
 }
+
+startService();
