@@ -13,7 +13,7 @@ prettier:
 # Configuration
 # -------------
 
-INTEGRATION_TIMEOUT = 10000
+INTEGRATION_TIMEOUT = 20000
 INTEGRATION_SLOW = 2000
 
 SERVICE_NAME = Origami Build Service V3
