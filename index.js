@@ -1,9 +1,16 @@
 "use strict";
 
+const process = require("process");
+global.Promise = require("bluebird");
+if (process.env.NODE_ENV !== "production") {
+	Promise.config({
+		longStackTraces: true,
+	});
+}
+
 const dotenv = require("dotenv");
 const service = require("./lib/service");
 const throng = require("throng");
-const process = require("process");
 
 dotenv.load();
 
@@ -29,12 +36,9 @@ async function startService() {
 		});
 	} else {
 		const app = await service(options);
-		app
-			.listen()
-			.listen()
-			.catch(() => {
-				process.exit(1);
-			});
+		app.listen().catch(() => {
+			process.exit(1);
+		});
 	}
 }
 
