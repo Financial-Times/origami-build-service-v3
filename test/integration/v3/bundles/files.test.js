@@ -4,7 +4,7 @@ const request = require("supertest");
 global.Promise = require("bluebird");
 Promise.config({ longStackTraces: true });
 
-describe("/v3/files", function() {
+describe.skip("/v3/files", function() {
 	it("works correctly for files which exist within a component", function() {
 		return request(this.app)
 			.get("/v3/files/o-test-component@1.0.13/readme.md")

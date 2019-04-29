@@ -9,8 +9,8 @@ const mockLog = {
 	warn: noop,
 };
 
-before(async function() {
-	const app = await service({
+before(function() {
+	const app = service({
 		environment: "test",
 		log: mockLog,
 		port: 0,

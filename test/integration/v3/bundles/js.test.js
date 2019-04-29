@@ -6,7 +6,7 @@ const request = require("supertest");
 global.Promise = require("bluebird");
 Promise.config({ longStackTraces: true });
 
-describe("/v3/bundles/js", function() {
+describe.skip("/v3/bundles/js", function() {
 	it("GET /v3/bundles/js", function() {
 		return request(this.app)
 			.get("/v3/bundles/js")
