@@ -32,7 +32,8 @@
     "rimraf": "^2.6.3",
     "sass": "^1.17.2",
     "semver-extra": "^2.0.1",
-    "throng": "^4.0.0"
+    "throng": "^4.0.0",
+    "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
     "@financial-times/grafana-tools": "^1.0.1",
