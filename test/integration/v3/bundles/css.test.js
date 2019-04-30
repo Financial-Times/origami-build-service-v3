@@ -6,7 +6,7 @@ Promise.config({ longStackTraces: true });
 const proclaim = require("proclaim");
 
 describe("/v3/bundles/css", function() {
-	it("GET /v3/bundles/css", async t => {
+	it("GET /v3/bundles/css", () => {
 		return request(this.app)
 			.get("/v3/bundles/css")
 			.expect(400)
@@ -14,7 +14,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules", async t => {
+	it("GET /v3/bundles/css?modules", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules")
 			.expect(400)
@@ -22,7 +22,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=,,", async t => {
+	it("GET /v3/bundles/css?modules=,,", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=,,")
 			.expect(400)
@@ -30,7 +30,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=1a-", async t => {
+	it("GET /v3/bundles/css?modules=1a-", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=1a-")
 			.expect(400)
@@ -38,7 +38,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.19", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.19")
 			.expect(200)
@@ -58,7 +58,7 @@ describe("/v3/bundles/css", function() {
 		// .expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19")
 			.expect(200)
@@ -78,7 +78,7 @@ describe("/v3/bundles/css", function() {
 		// .expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19", () => {
 		return request(this.app)
 			.get(
 				"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19",
@@ -88,7 +88,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19", () => {
 		return request(this.app)
 			.get(
 				"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19",
@@ -98,7 +98,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19", () => {
 		return request(this.app)
 			.get(
 				"/v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19",
@@ -108,7 +108,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", async t => {
+	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29")
 			.expect(200)
@@ -127,7 +127,7 @@ describe("/v3/bundles/css", function() {
 			});
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe")
 			.expect(400)
@@ -135,7 +135,7 @@ describe("/v3/bundles/css", function() {
 			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on&shrinkwrap=o-autoinit%401.3.3", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on&shrinkwrap=o-autoinit%401.3.3", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=on")
 			.expect(200)
@@ -154,7 +154,7 @@ describe("/v3/bundles/css", function() {
 			});
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", async t => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=off")
 			.expect(200)
