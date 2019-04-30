@@ -63,9 +63,8 @@ describe("/v3/bundles/css", function() {
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
-			});
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// .expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
+			})
+			.expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", () => {
@@ -83,9 +82,8 @@ describe("/v3/bundles/css", function() {
 					response.text,
 					/\/\*# sourceMappingURL=data:application\/json;base64,(.+)/,
 				);
-			});
-		// TODO: As o-autoinit will be included in the bundle by default, the etag will change whenever a new version of o-autoinit is released.
-		// .expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
+			})
+			.expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19", () => {

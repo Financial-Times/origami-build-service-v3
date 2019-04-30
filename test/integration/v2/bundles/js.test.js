@@ -174,47 +174,47 @@ describe("/v2/bundles/js", function() {
 		);
 	});
 
-	it("GET /v2/bundles/js?modules=o-test-component@1.0.29&autoinit=on", function() {
+	it("GET /v2/bundles/js?modules=o-test-component@1.0.29", function() {
 		return request(this.app)
-			.get("/v2/bundles/js?modules=o-test-component@1.0.29&autoinit=on")
+			.get("/v2/bundles/js?modules=o-test-component@1.0.29")
 			.expect(301)
 			.expect(
 				"location",
-				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29&autoinit=on",
+				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29",
 			);
 	});
 
-	it("GET /v2/bundles/js?modules=o-test-component@1.0.29&autoinit=off", function() {
+	it("GET /v2/bundles/js?modules=o-test-component@1.0.29", function() {
 		return request(this.app)
-			.get("/v2/bundles/js?modules=o-test-component@1.0.29&autoinit=off")
+			.get("/v2/bundles/js?modules=o-test-component@1.0.29")
 			.expect(301)
 			.expect(
 				"location",
-				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29&autoinit=off",
+				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29",
 			);
 	});
 
-	it("GET /v2/bundles/js?modules=o-test-component@1.0.29&autoinit=off&minify=off", function() {
+	it("GET /v2/bundles/js?modules=o-test-component@1.0.29&minify=off", function() {
 		return request(this.app)
 			.get(
-				"/v2/bundles/js?modules=o-test-component@1.0.29&autoinit=off&minify=off",
+				"/v2/bundles/js?modules=o-test-component@1.0.29&minify=off",
 			)
 			.expect(301)
 			.expect(
 				"location",
-				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29&autoinit=off&minify=off",
+				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29&minify=off",
 			);
 	});
 
-	it("GET /v2/bundles/js?modules=o-test-component@1.0.29&autoinit=off&minify=off&export=7", function() {
+	it("GET /v2/bundles/js?modules=o-test-component@1.0.29&minify=off&export=7", function() {
 		return request(this.app)
 			.get(
-				"/v2/bundles/js?modules=o-test-component@1.0.29&autoinit=off&minify=off&export=7",
+				"/v2/bundles/js?modules=o-test-component@1.0.29&minify=off&export=7",
 			)
 			.expect(301)
 			.expect(
 				"location",
-				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29&autoinit=off&minify=off&export=7",
+				"https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-test-component%401.0.29&minify=off&export=7",
 			);
 	});
 });
