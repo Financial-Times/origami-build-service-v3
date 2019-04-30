@@ -2,10 +2,6 @@
 
 const proclaim = require("proclaim");
 const request = require("supertest");
-global.Promise = require("bluebird");
-Promise.config({
-	longStackTraces: true,
-});
 
 describe("/__gtg", function() {
 	it("GET /__gtg", function() {

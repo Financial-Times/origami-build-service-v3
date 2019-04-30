@@ -3,8 +3,6 @@
 const vm = require("vm");
 const proclaim = require("proclaim");
 const request = require("supertest");
-global.Promise = require("bluebird");
-Promise.config({ longStackTraces: true });
 
 describe.skip("/v3/bundles/js", function() {
 	it("GET /v3/bundles/js", function() {

@@ -1,8 +1,6 @@
 "use strict";
 
 const request = require("supertest");
-global.Promise = require("bluebird");
-Promise.config({ longStackTraces: true });
 
 describe("/bundles/js", function() {
 	it("GET /bundles/js", function() {

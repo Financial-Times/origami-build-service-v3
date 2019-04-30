@@ -2,8 +2,6 @@
 
 const proclaim = require("proclaim");
 const request = require("supertest");
-global.Promise = require("bluebird");
-Promise.config({ longStackTraces: true });
 
 describe("/robots.txt", function() {
 	it.skip("GET /robots.txt", function() {

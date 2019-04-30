@@ -1,10 +1,7 @@
 "use strict";
 
 const request = require("supertest");
-global.Promise = require("bluebird");
-Promise.config({
-	longStackTraces: true,
-});
+
 describe("/404", function() {
 	it("GET /404", function() {
 		return request(this.app)
