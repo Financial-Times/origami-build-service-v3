@@ -1,92 +1,18 @@
 version: 2
 
-references:
 
-  container_config: &container_config
-    docker:
-      - image: circleci/node:8
-
-  repo_cache_key: &repo_cache_key
-    v1-repo-{{ .Branch }}-{{ .Revision }}
-
-  restore_repo: &restore_repo
-    restore_cache:
-      keys:
-        - *repo_cache_key
-
-  cache_repo: &cache_repo
-    save_cache:
-      key: v1-repo-{{ .Branch }}-{{ .Revision }}
-      paths:
-        - .
-
-  npm_cache_key: &npm_cache_key
-    v1-dependency-npm-{{ checksum "package-lock.json" }}
-
-  restore_node_modules: &restore_node_modules
-    restore_cache:
-      keys:
-        - *npm_cache_key
-
-  cache_node_modules: &cache_node_modules
-    save_cache:
-      key: *npm_cache_key
-      paths:
-        - ./node_modules
 jobs:
   build:
-    <<: *container_config
+    docker:
+      - image: circleci/node:10
     steps:
-      - *restore_repo
       - checkout
-      - *restore_node_modules
-      - run:
-          name: Install npm
-          command: sudo npm i -g npm@5.5.1
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - *cache_node_modules
-      - *cache_repo
-
-  validate:
-    <<: *container_config
-    steps:
-      - *restore_repo
-      - run:
-          name: Validate formatting
-          command: "make verify"
-
-  test_node:
-    <<: *container_config
-    steps:
-      - *restore_repo
-      - run:
-          name: Test JS
-          command: "make test"
-
-  check_dependencies:
-    <<: *container_config
-    steps:
-      - *restore_repo
-      - run:
-          name: Check Dependencies conform with the WhiteSource policy
-          command: "make whitesource"
+      - run: npm install
+      - run: make verify
+      - run: make test
 
 workflows:
   version: 2
   test:
     jobs:
       - build
-
-      - validate:
-          requires:
-            - build
-
-      - test_node:
-          requires:
-            - build
-
-      - check_dependencies:
-          requires:
-            - build
