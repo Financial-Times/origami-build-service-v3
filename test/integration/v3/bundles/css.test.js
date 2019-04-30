@@ -1,8 +1,6 @@
 "use strict";
 
 const request = require("supertest");
-global.Promise = require("bluebird");
-Promise.config({ longStackTraces: true });
 const proclaim = require("proclaim");
 
 describe("/v3/bundles/css", function() {
@@ -11,7 +9,10 @@ describe("/v3/bundles/css", function() {
 			.get("/v3/bundles/css")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules", () => {
@@ -19,7 +20,10 @@ describe("/v3/bundles/css", function() {
 			.get("/v3/bundles/css?modules")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=,,", () => {
@@ -27,7 +31,10 @@ describe("/v3/bundles/css", function() {
 			.get("/v3/bundles/css?modules=,,")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=1a-", () => {
@@ -35,7 +42,10 @@ describe("/v3/bundles/css", function() {
 			.get("/v3/bundles/css?modules=1a-")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.19", () => {
@@ -85,7 +95,10 @@ describe("/v3/bundles/css", function() {
 			)
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19", () => {
@@ -95,7 +108,10 @@ describe("/v3/bundles/css", function() {
 			)
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19", () => {
@@ -105,7 +121,10 @@ describe("/v3/bundles/css", function() {
 			)
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", () => {
@@ -132,7 +151,10 @@ describe("/v3/bundles/css", function() {
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect("cache-control", "max-age=0, must-revalidate, no-cache, no-store");
+			.expect(
+				"cache-control",
+				"max-age=0, must-revalidate, no-cache, no-store",
+			);
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on&shrinkwrap=o-autoinit%401.3.3", () => {

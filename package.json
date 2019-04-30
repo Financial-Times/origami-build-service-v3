@@ -30,6 +30,7 @@
     "sass": "^1.17.2",
     "semver-extra": "^2.0.1",
     "throng": "^4.0.0",
+    "unique-filename": "^1.1.1",
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
