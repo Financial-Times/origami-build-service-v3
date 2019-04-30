@@ -139,10 +139,6 @@ describe("/v3/bundles/css", function() {
 			.expect("Content-Type", "text/css; charset=utf-8")
 			.expect(response => {
 				proclaim.isString(response.text);
-				proclaim.match(
-					response.text,
-					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/css\?modules=o-autoinit@1\.3\.3,o-test-component@1\.0\.29&shrinkwrap=\n \*\//,
-				);
 			});
 	});
 
@@ -157,7 +153,7 @@ describe("/v3/bundles/css", function() {
 			);
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on&shrinkwrap=o-autoinit%401.3.3", () => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on", () => {
 		return request(this.app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=on")
 			.expect(200)
@@ -166,13 +162,8 @@ describe("/v3/bundles/css", function() {
 				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
 			)
 			.expect("Content-Type", "text/css; charset=utf-8")
-			.expect("etag", "11b0dac9b84449c938c4dc6759c12945")
 			.expect(response => {
 				proclaim.isString(response.text);
-				proclaim.match(
-					response.text,
-					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/css\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%401\.3\.3\n \*\//,
-				);
 			});
 	});
 
@@ -191,10 +182,6 @@ describe("/v3/bundles/css", function() {
 					response.text,
 					`.test-compile-error {
 	color: red; }`,
-				);
-				proclaim.match(
-					response.text,
-					/\/\*\* Shrinkwrap URL:\n \*      \/v3\/bundles\/css\?modules=o-test-component@1\.0\.29&shrinkwrap=o-autoinit%40.*\n \*\//,
 				);
 			});
 	});
