@@ -1,10 +1,21 @@
 "use strict";
 
 const request = require("supertest");
+const service = require("../../../../lib/service");
+
+const app = service({
+	environment: "test",
+	log: {
+		info: () => {},
+		error: () => {},
+		warn: () => {},
+	},
+	port: 0,
+});
 
 describe.skip("/v3/files", function() {
 	it("works correctly for files which exist within a component", function() {
-		return request(this.app)
+		return request(app)
 			.get("/v3/files/o-test-component@1.0.13/readme.md")
 			.expect(200)
 			.expect("Content-Type", "text/markdown; charset=utf-8")
@@ -18,7 +29,7 @@ describe.skip("/v3/files", function() {
 	});
 
 	it("works correctly for files which do not exist within a component which has not specified an explicit version", function() {
-		return request(this.app)
+		return request(app)
 			.get("/v3/files/o-test-component/NOTAFILE")
 			.expect(404)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -27,7 +38,7 @@ describe.skip("/v3/files", function() {
 	});
 
 	it("works correctly for files which do not exist within a component", function() {
-		return request(this.app)
+		return request(app)
 			.get("/v3/files/o-test-component@1.0.0/NOTAFILE")
 			.expect(404)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -36,7 +47,7 @@ describe.skip("/v3/files", function() {
 	});
 
 	it("works correctly for components which do not exist", function() {
-		return request(this.app)
+		return request(app)
 			.get("/v3/files/test-404/README.md")
 			.expect(404)
 			.expect("Content-Type", "text/html; charset=utf-8")

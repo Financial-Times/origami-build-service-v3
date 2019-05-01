@@ -2,10 +2,21 @@
 
 const request = require("supertest");
 const proclaim = require("proclaim");
+const service = require("../../../../lib/service");
+
+const app = service({
+	environment: "test",
+	log: {
+		info: () => {},
+		error: () => {},
+		warn: () => {},
+	},
+	port: 0,
+});
 
 describe("/v3/bundles/css", function() {
 	it("GET /v3/bundles/css", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -16,7 +27,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -27,7 +38,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=,,", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=,,")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -38,7 +49,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=1a-", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=1a-")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -49,7 +60,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.19", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.19")
 			.expect(200)
 			.expect(
@@ -68,7 +79,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19")
 			.expect(200)
 			.expect(
@@ -87,7 +98,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19", () => {
-		return request(this.app)
+		return request(app)
 			.get(
 				"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.19",
 			)
@@ -100,7 +111,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19", () => {
-		return request(this.app)
+		return request(app)
 			.get(
 				"/v3/bundles/css?modules=o-test-component@1.0.19,o-test-component@1.0.17%20-%201.0.19",
 			)
@@ -113,7 +124,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19", () => {
-		return request(this.app)
+		return request(app)
 			.get(
 				"/v3/bundles/css?modules=o-test-component@1.0.17,o-test-component@1.0.19",
 			)
@@ -126,10 +137,10 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29")
 			.expect(200)
-			.expect("etag", "b012ee3b8ce835fa47c4b09d9d97c6f6")
+			.expect("etag", "5b1f99cce840d1881d89902c54418f96")
 			.expect(
 				"cache-control",
 				"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
@@ -141,7 +152,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe")
 			.expect(400)
 			.expect("Content-Type", "text/html; charset=utf-8")
@@ -152,7 +163,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=on")
 			.expect(200)
 			.expect(
@@ -166,7 +177,7 @@ describe("/v3/bundles/css", function() {
 	});
 
 	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", () => {
-		return request(this.app)
+		return request(app)
 			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=off")
 			.expect(200)
 			.expect(
@@ -179,7 +190,8 @@ describe("/v3/bundles/css", function() {
 				proclaim.include(
 					response.text,
 					`.test-compile-error {
-	color: red; }`,
+  color: red;
+}`,
 				);
 			});
 	});
