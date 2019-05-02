@@ -1,18 +1,156 @@
 version: 2
-
-
 jobs:
-  build:
+  lint_terraform:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:11
     steps:
       - checkout
-      - run: npm install
+      - run: sudo ~/project/.circleci/install_terraform.sh
+      - run: terraform fmt -check=true fastly/terraform/
+
+  deploy_dev:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: npm ci
+      - run: ~/project/.circleci/create_netrc_file.sh
+      - run: git push https://git.heroku.com/origami-build-service-v3-dev.git HEAD:master --force
+      - run: sudo ~/project/.circleci/install_terraform.sh
+      - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf fastly/terraform/domains_override.tf
+      - run: terraform init fastly/terraform/
+      - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
+      - run: terraform apply --auto-approve -var name=origami-build-service-dev.in.ft.com -var domain=origami-build-service-dev.in.ft.com fastly/terraform/
+      - run: sleep 60
+      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.com/service/$FASTLY_SERVICE_ID_DEV/purge_all"
+      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Development --summary 'Releasing Origami Build Service to Development'
+
+  integration_tests_dev:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: npm ci
+      - run: HOST=https://origami-build-service-dev.in.ft.com npm run test:fastly
+
+  deploy_staging:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: npm ci
+      - run: ~/project/.circleci/create_netrc_file.sh
+      - run: git push https://git.heroku.com/origami-build-service-qa-v3.git HEAD:master --force
+      - run: sudo ~/project/.circleci/install_terraform.sh
+      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf fastly/terraform/domains_override.tf
+      - run: terraform init fastly/terraform/
+      - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_STAGING
+      - run: terraform apply --auto-approve -var name=origami-build-service-qa.in.ft.com -var domain=origami-build-service-qa.in.ft.com fastly/terraform/
+      - run: sleep 60
+      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.com/service/$FASTLY_SERVICE_ID_STAGING/purge_all"
+      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Test --summary 'Releasing Origami Build Service to QA'
+
+  integration_tests_staging:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: sudo npm i -g npm && npm ci
+      - run: HOST=https://origami-build-service-qa.in.ft.com npm run test:fastly
+
+  deploy_service_production:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: npm ci
+      - run: sudo ~/project/.circleci/install_heroku.sh
+      - run: ~/project/.circleci/create_netrc_file.sh
+      - run: sudo ~/project/.circleci/install_terraform.sh
+      - run: heroku pipelines:promote --app origami-build-service-qa-v3 --to origami-build-service-eu-v3,origami-build-service-us-v3
+      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/qa_override.tf fastly/terraform/domains_override.tf
+      - run: terraform init fastly/terraform/
+      - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_PROD
+      - run: terraform apply --auto-approve -var name=origami-build-service.in.ft.com -var domain=origami-build-service.in.ft.com fastly/terraform/
+      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Production --summary 'Releasing Origami Build Service to Production EU'
+      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Production --summary 'Releasing Origami Build Service to Production US'
+
+  lint_js:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: npm ci
       - run: make verify
-      - run: make test
+
+  unit_tests:
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run: npm ci
+      - run: make test-unit-coverage
+      - run: make test-integration
 
 workflows:
   version: 2
   test:
     jobs:
-      - build
+      - lint_terraform:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
+      - lint_js:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
+      - unit_tests:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
+      - deploy_dev:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
+          requires:
+            - lint_terraform
+            - lint_js
+            - unit_tests
+      - integration_tests_dev:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
+          requires:
+            - deploy_dev
+      - deploy_staging:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              only:
+               - master
+      - integration_tests_staging:
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              only:
+                - master
+          requires:
+            - deploy_staging
+      - deploy_service_production:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
