@@ -38,6 +38,7 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "test:fastly": "mocha test/fastly/*.test.js test/fastly/**/*.test.js --recursive --bail --check-leaks --forbid-only --forbid-pending"
   }
 }
