@@ -5,7 +5,7 @@ resource "fastly_service_v1" "app" {
 
   backend {
     name                  = "eu"
-    address               = "origami-build-service-qa-v3.herokuapp.com"
+    address               = "origami-build-service-v3-qa.herokuapp.com"
     port                  = 443
     healthcheck           = "eu_healthcheck"
     ssl_cert_hostname     = "*.herokuapp.com"
@@ -19,7 +19,7 @@ resource "fastly_service_v1" "app" {
 
   healthcheck {
     name      = "eu_healthcheck"
-    host      = "origami-build-service-qa-v3.herokuapp.com"
+    host      = "origami-build-service-v3-qa.herokuapp.com"
     path      = "/__gtg"
     timeout   = 5000
     threshold = 2
@@ -28,7 +28,7 @@ resource "fastly_service_v1" "app" {
 
   backend {
     name                  = "us"
-    address               = "origami-build-service-qa-v3.herokuapp.com"
+    address               = "origami-build-service-v3-qa.herokuapp.com"
     port                  = 443
     healthcheck           = "us_healthcheck"
     ssl_cert_hostname     = "*.herokuapp.com"
@@ -42,7 +42,7 @@ resource "fastly_service_v1" "app" {
 
   healthcheck {
     name      = "us_healthcheck"
-    host      = "origami-build-service-qa-v3.herokuapp.com"
+    host      = "origami-build-service-v3-qa.herokuapp.com"
     path      = "/__gtg"
     timeout   = 5000
     threshold = 2
@@ -54,7 +54,7 @@ resource "fastly_service_v1" "app" {
     action      = "set"
     type        = "request"
     destination = "http.EU_Host"
-    source      = "\"origami-build-service-qa-v3.herokuapp.com\""
+    source      = "\"origami-build-service-v3-qa.herokuapp.com\""
   }
 
   header {
@@ -62,6 +62,6 @@ resource "fastly_service_v1" "app" {
     action      = "set"
     type        = "request"
     destination = "http.US_Host"
-    source      = "\"origami-build-service-qa-v3.herokuapp.com\""
+    source      = "\"origami-build-service-v3-qa.herokuapp.com\""
   }
 }
