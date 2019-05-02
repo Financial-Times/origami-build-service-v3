@@ -22,7 +22,7 @@ jobs:
       - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
       - run: terraform apply --auto-approve -var name=origami-build-service-dev.in.ft.com -var domain=origami-build-service-dev.in.ft.com fastly/terraform/
       - run: sleep 60
-      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.build/service/$FASTLY_SERVICE_ID_DEV/purge_all"
+      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.com/service/$FASTLY_SERVICE_ID_DEV/purge_all"
       - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Development --summary 'Releasing Origami Build Service to Development'
 
   integration_tests_dev:
@@ -47,7 +47,7 @@ jobs:
       - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_STAGING
       - run: terraform apply --auto-approve -var name=origami-build-service-qa.in.ft.com -var domain=origami-build-service-qa.in.ft.com fastly/terraform/
       - run: sleep 60
-      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.build/service/$FASTLY_SERVICE_ID_STAGING/purge_all"
+      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.com/service/$FASTLY_SERVICE_ID_STAGING/purge_all"
       - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Test --summary 'Releasing Origami Build Service to QA'
 
   integration_tests_staging:
