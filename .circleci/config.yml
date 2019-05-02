@@ -15,7 +15,7 @@ jobs:
       - checkout
       - run: npm ci
       - run: ~/project/.circleci/create_netrc_file.sh
-      - run: git push https://git.heroku.com/origami-build-service-dev-v3.git HEAD:master --force
+      - run: git push https://git.heroku.com/origami-build-service-v3-dev.git HEAD:master --force
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf fastly/terraform/domains_override.tf
       - run: terraform init fastly/terraform/
