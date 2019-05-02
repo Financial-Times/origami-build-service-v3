@@ -59,9 +59,9 @@ describe("/v3/bundles/css", function() {
 			);
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.19", () => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.19&source=test", () => {
 		return request(app)
-			.get("/v3/bundles/css?modules=o-test-component@1.0.19")
+			.get("/v3/bundles/css?modules=o-test-component@1.0.19&source=test")
 			.expect(200)
 			.expect(
 				"cache-control",
@@ -78,9 +78,11 @@ describe("/v3/bundles/css", function() {
 			.expect("etag", "d41d8cd98f00b204e9800998ecf8427e");
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19", () => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19&source=test", () => {
 		return request(app)
-			.get("/v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19")
+			.get(
+				"/v3/bundles/css?modules=o-test-component@1.0.17%20-%201.0.19&source=test",
+			)
 			.expect(200)
 			.expect(
 				"cache-control",
@@ -136,9 +138,11 @@ describe("/v3/bundles/css", function() {
 			);
 	});
 
-	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29", () => {
+	it("GET /v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test", () => {
 		return request(app)
-			.get("/v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29")
+			.get(
+				"/v3/bundles/css?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test",
+			)
 			.expect(200)
 			.expect("etag", "5b1f99cce840d1881d89902c54418f96")
 			.expect(
@@ -162,9 +166,11 @@ describe("/v3/bundles/css", function() {
 			);
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on", () => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=on&source=test", () => {
 		return request(app)
-			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=on")
+			.get(
+				"/v3/bundles/css?modules=o-test-component@1.0.29&minify=on&source=test",
+			)
 			.expect(200)
 			.expect(
 				"cache-control",
@@ -176,9 +182,11 @@ describe("/v3/bundles/css", function() {
 			});
 	});
 
-	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off", () => {
+	it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=off&source=test", () => {
 		return request(app)
-			.get("/v3/bundles/css?modules=o-test-component@1.0.29&minify=off")
+			.get(
+				"/v3/bundles/css?modules=o-test-component@1.0.29&minify=off&source=test",
+			)
 			.expect(200)
 			.expect(
 				"cache-control",
