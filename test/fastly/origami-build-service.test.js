@@ -12,13 +12,13 @@ describe("Origami-build-service", function() {
 		it("does not include the source query parameter in the cache key", () => {
 			const path = "/v3/bundles/js?modules=o-header";
 			return request(host)
-				.get(`${path}?source=vcl-test`)
+				.get(`${path}&source=vcl-test`)
 				.set("Fastly-Debug", "true")
 				.expect(200)
 				.then(response => {
 					const digest = response.headers["fastly-debug-digest"];
 					return request(host)
-						.get(`${path}?source=${Math.random()}`)
+						.get(`${path}&source=${Math.random()}`)
 						.set("Fastly-Debug", "true")
 						.expect("Fastly-Debug-Digest", digest)
 						.expect("X-Cache", /\bHIT\b/)
@@ -35,7 +35,7 @@ describe("Origami-build-service", function() {
 					const digestWithoutSourceParameter =
 						response.headers["fastly-debug-digest"];
 					return request(host)
-						.get(`${path}?source=${Math.random()}`)
+						.get(`${path}&source=${Math.random()}`)
 						.set("Fastly-Debug", "true")
 						.then(response => {
 							const digestWithSourceParameter =
