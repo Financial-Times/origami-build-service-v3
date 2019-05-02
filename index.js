@@ -1,18 +1,12 @@
 "use strict";
 
-const process = require("process");
-global.Promise = require("bluebird");
-if (process.env.NODE_ENV !== "production") {
-	Promise.config({
-		longStackTraces: true,
-	});
-}
+require("make-promises-safe"); // installs an 'unhandledRejection' handler
 
 const dotenv = require("dotenv");
 const service = require("./lib/service");
 const throng = require("throng");
 
-dotenv.load();
+dotenv.config();
 
 const options = {
 	log: console,
@@ -23,23 +17,19 @@ const options = {
 	githubPassword: process.env.GITHUB_PASSWORD,
 };
 
-async function startService() {
-	if (options.environment === "production") {
-		throng({
-			workers: options.workers,
-			start: async () => {
-				const app = await service(options);
-				app.listen().catch(() => {
-					process.exit(1);
-				});
-			},
-		});
-	} else {
-		const app = await service(options);
-		app.listen().catch(() => {
-			process.exit(1);
-		});
-	}
+if (options.environment === "production") {
+	throng({
+		workers: options.workers,
+		start: async () => {
+			const app = service(options);
+			app.listen().catch(() => {
+				process.exit(1);
+			});
+		},
+	});
+} else {
+	const app = service(options);
+	app.listen().catch(() => {
+		process.exit(1);
+	});
 }
-
-startService();
