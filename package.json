@@ -1,12 +1,4 @@
 {
-  "name": "origami-build-vervice-v3",
-  "version": "1.0.0",
-  "description": "Creates bundles of JavaScript and CSS from Origami (and Origami-compatible modules). See [the production service][production-url] for API information.",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
   "dependencies": {
     "@financial-times/health-check": "^1.10.0",
     "@financial-times/origami-service": "^4.1.0",
@@ -25,6 +17,7 @@
     "make-promises-safe": "^5.0.0",
     "mime-types": "^2.1.24",
     "npm-run-path": "^3.1.0",
+    "origami-build-tools": "^8.0.4",
     "postcss": "^7.0.14",
     "rimraf": "^2.6.3",
     "sass": "^1.19.0",
@@ -46,15 +39,5 @@
   },
   "scripts": {
     "start": "node ./index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Financial-Times/origami-build-service-v3.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Financial-Times/origami-build-service-v3/issues"
-  },
-  "homepage": "https://github.com/Financial-Times/origami-build-service-v3#readme"
+  }
 }
