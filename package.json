@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "node ./index.js",
-    "test:fastly": "mocha test/fastly/*.test.js test/fastly/**/*.test.js --recursive --bail --check-leaks --forbid-only --forbid-pending --exit",
-    "test:integration": "mocha \"test/integration/**/*.test.js\" --recursive --timeout 5000 --bail --check-leaks --forbid-only --exit"
+    "test:fastly": "mocha \"test/fastly/**/*.test.js\" --recursive --timeout 15000 --bail --check-leaks --forbid-only --forbid-pending --exit",
+    "test:integration": "mocha \"test/integration/**/*.test.js\" --recursive --timeout 15000 --bail --check-leaks --forbid-only --exit"
   }
 }
