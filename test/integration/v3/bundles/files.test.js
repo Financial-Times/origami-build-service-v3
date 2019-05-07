@@ -3,17 +3,26 @@
 const request = require("supertest");
 const service = require("../../../../lib/service");
 
-const app = service({
-	environment: "test",
-	log: {
-		info: () => {},
-		error: () => {},
-		warn: () => {},
-	},
-	port: 0,
-});
-
 describe("/v3/files", function() {
+	let app;
+	beforeEach(() => {
+		return service({
+			environment: "test",
+			log: {
+				info: () => {},
+				error: () => {},
+				warn: () => {},
+			},
+			port: 0,
+		})
+			.listen()
+			.then(appp => {
+				app = appp;
+			});
+	});
+	afterEach(function() {
+		return app.ft.server.close();
+	});
 	context("invalid registry parameter", function() {
 		it("GET /v3/files/o-test-component@1.0.13/readme.md?registry=carrot&source=test", function() {
 			return request(app)
@@ -30,14 +39,16 @@ describe("/v3/files", function() {
 	});
 
 	context("missing source parameter", function() {
-		return request(app)
-			.get("/v3/files/o-test-component@1.0.13/readme.md")
-			.expect(400)
-			.expect("Content-Type", "text/html; charset=utf-8")
-			.expect(
-				"cache-control",
-				"max-age=0, must-revalidate, no-cache, no-store",
-			);
+		it("returns an error", function() {
+			return request(app)
+				.get("/v3/files/o-test-component@1.0.13/readme.md")
+				.expect(400)
+				.expect("Content-Type", "text/html; charset=utf-8")
+				.expect(
+					"cache-control",
+					"max-age=0, must-revalidate, no-cache, no-store",
+				);
+		});
 	});
 
 	context.skip("bower registry", function() {

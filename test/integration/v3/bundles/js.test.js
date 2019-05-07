@@ -5,17 +5,26 @@ const proclaim = require("proclaim");
 const request = require("supertest");
 const service = require("../../../../lib/service");
 
-const app = service({
-	environment: "test",
-	log: {
-		info: () => {},
-		error: () => {},
-		warn: () => {},
-	},
-	port: 0,
-});
-
 describe("/v3/bundles/js", function() {
+	let app;
+	beforeEach(() => {
+		return service({
+			environment: "test",
+			log: {
+				info: () => {},
+				error: () => {},
+				warn: () => {},
+			},
+			port: 0,
+		})
+			.listen()
+			.then(appp => {
+				app = appp;
+			});
+	});
+	afterEach(function() {
+		return app.ft.server.close();
+	});
 	context("missing all parameters", function() {
 		it("GET /v3/bundles/js", function() {
 			return request(app)
