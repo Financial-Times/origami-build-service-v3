@@ -90,7 +90,7 @@ jobs:
       - checkout
       - run: npm ci
       - run: make test-unit-coverage
-      - run: make test-integration
+      - run: npm run test:integration
 
 workflows:
   version: 2
