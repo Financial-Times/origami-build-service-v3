@@ -67,7 +67,7 @@ describe("/v3/bundles/js", function() {
 	context("invalid registry parameter", function() {
 		it("returns an error", function() {
 			return request(app)
-				.get("/v3/bundles/js?registry=carrot")
+				.get("/v3/bundles/js?registry=carrot&source=test")
 				.expect(400)
 				.expect("Content-Type", "text/html; charset=utf-8")
 				.expect(
@@ -78,7 +78,7 @@ describe("/v3/bundles/js", function() {
 
 		it("returns an error", function() {
 			return request(app)
-				.get("/v3/bundles/js?registry=")
+				.get("/v3/bundles/js?registry=&source=test")
 				.expect(400)
 				.expect("Content-Type", "text/html; charset=utf-8")
 				.expect(
