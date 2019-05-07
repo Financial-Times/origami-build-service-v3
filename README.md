@@ -75,7 +75,7 @@ The tests are split into unit tests and integration tests. To run tests on your 
 ```sh
 make test              # run all the tests
 make test-unit         # run the unit tests
-make test-integration  # run the integration tests
+npm run test:integration  # run the integration tests
 ```
 
 You can run the unit tests with coverage reporting, which expects 90% coverage or more:
