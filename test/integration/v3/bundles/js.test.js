@@ -75,10 +75,12 @@ describe("/v3/bundles/js", function() {
 					"max-age=0, must-revalidate, no-cache, no-store",
 				);
 		});
+	});
 
+	context("missing source parameter", function() {
 		it("returns an error", function() {
 			return request(app)
-				.get("/v3/bundles/js?registry=&source=test")
+				.get("/v3/bundles/js?modules=o-test-component")
 				.expect(400)
 				.expect("Content-Type", "text/html; charset=utf-8")
 				.expect(
@@ -87,8 +89,6 @@ describe("/v3/bundles/js", function() {
 				);
 		});
 	});
-
-	context("missing source parameter", function() {});
 
 	context("npm registry", function() {
 		it("GET /v3/bundles/js?modules=o-test-component@1.0.19&source=test&registry=npm", function() {
@@ -203,9 +203,9 @@ describe("/v3/bundles/js", function() {
 		});
 
 		context("invalid module name", function() {
-			it("GET /v3/bundles/js?modules=o-autoinit_@$&source=test", function() {
+			it("GET /v3/bundles/js?modules=o-autoinit_@$&source=test&registry=npm", function() {
 				return request(app)
-					.get("/v3/bundles/js?modules=o-autoinit_@$&source=test")
+					.get("/v3/bundles/js?modules=o-autoinit_@$&source=test&registry=npm")
 					.expect(400)
 					.expect(
 						"cache-control",
