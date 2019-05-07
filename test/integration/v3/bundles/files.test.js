@@ -94,14 +94,10 @@ describe("/v3/files", function() {
 
 	context("npm registry", function() {
 		context("invalid module name", function() {
-			it("GET /v3/files/o-autoinit_AF/readme.md1?source=test&registry=npm", function() {
+			it("GET /v3/files/o-autoinit_±/readme.md1?source=test&registry=npm", function() {
 				return request(app)
-					.get("/v3/bundles/js?modules=o-autoinit_@$&source=test&registry=npm")
-					.expect(404)
-					.expect(
-						"cache-control",
-						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-					);
+					.get("/v3/bundles/js?modules=o-autoinit_±&source=test&registry=npm")
+					.expect(400);
 			});
 		});
 

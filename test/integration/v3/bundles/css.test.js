@@ -185,14 +185,10 @@ describe("/v3/bundles/css", function() {
 		});
 
 		context("invalid module name", function() {
-			it("GET /v3/bundles/css?modules=o-autoinit_@$&source=test", function() {
+			it("GET /v3/bundles/css?modules=o-autoinit_±|&source=test", function() {
 				return request(app)
-					.get("/v3/bundles/css?modules=o-autoinit_@$&source=test")
-					.expect(400)
-					.expect(
-						"cache-control",
-						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-					);
+					.get("/v3/bundles/css?modules=o-autoinit_±|&source=test")
+					.expect(400);
 			});
 		});
 

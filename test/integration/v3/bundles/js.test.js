@@ -203,14 +203,10 @@ describe("/v3/bundles/js", function() {
 		});
 
 		context("invalid module name", function() {
-			it("GET /v3/bundles/js?modules=o-autoinit_@$&source=test&registry=npm", function() {
+			it("GET /v3/bundles/js?modules=o-autoinit_±&source=test&registry=npm", function() {
 				return request(app)
-					.get("/v3/bundles/js?modules=o-autoinit_@$&source=test&registry=npm")
-					.expect(400)
-					.expect(
-						"cache-control",
-						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-					);
+					.get("/v3/bundles/js?modules=o-autoinit_±&source=test&registry=npm")
+					.expect(400);
 			});
 		});
 
@@ -442,14 +438,10 @@ describe("/v3/bundles/js", function() {
 		});
 
 		context("invalid module name", function() {
-			it("GET /v3/bundles/js?modules=o-autoinit_@$&source=test", function() {
+			it("GET /v3/bundles/js?modules=o-autoinit_±&source=test", function() {
 				return request(app)
-					.get("/v3/bundles/js?modules=o-autoinit_@$&source=test")
-					.expect(400)
-					.expect(
-						"cache-control",
-						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-					);
+					.get("/v3/bundles/js?modules=o-autoinit_±&source=test")
+					.expect(400);
 			});
 		});
 
