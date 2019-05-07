@@ -99,8 +99,8 @@ describe("/v3/bundles/css", function() {
 					"cache-control",
 					"max-age=0, must-revalidate, no-cache, no-store",
 				);
-		})
-	})
+		});
+	});
 
 	context("bower registry", function() {
 		it("GET /v3/bundles/css?modules=o-test-component@1.0.19&source=test", () => {
