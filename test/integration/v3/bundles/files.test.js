@@ -51,10 +51,10 @@ describe("/v3/files", function() {
 		});
 	});
 
-	context.skip("bower registry", function() {
+	context("bower registry", function() {
 		it("works correctly for files which exist within a component", function() {
 			return request(app)
-				.get("/v3/files/o-test-component@1.0.13/readme.md")
+				.get("/v3/files/o-test-component@1.0.13/readme.md?source=test")
 				.expect(200)
 				.expect("Content-Type", "text/markdown; charset=utf-8")
 				.expect(
@@ -68,7 +68,7 @@ describe("/v3/files", function() {
 
 		it("works correctly for files which do not exist within a component which has not specified an explicit version", function() {
 			return request(app)
-				.get("/v3/files/o-test-component/NOTAFILE")
+				.get("/v3/files/o-test-component/NOTAFILE?source=test")
 				.expect(404)
 				.expect("Content-Type", "text/html; charset=utf-8")
 				.expect(
@@ -80,7 +80,7 @@ describe("/v3/files", function() {
 
 		it("works correctly for files which do not exist within a component", function() {
 			return request(app)
-				.get("/v3/files/o-test-component@1.0.0/NOTAFILE")
+				.get("/v3/files/o-test-component@1.0.0/NOTAFILE?source=test")
 				.expect(404)
 				.expect("Content-Type", "text/html; charset=utf-8")
 				.expect(
@@ -92,7 +92,7 @@ describe("/v3/files", function() {
 
 		it("works correctly for components which do not exist", function() {
 			return request(app)
-				.get("/v3/files/test-404/README.md")
+				.get("/v3/files/test-404/README.md?source=test")
 				.expect(404)
 				.expect("Content-Type", "text/html; charset=utf-8")
 				.expect(
