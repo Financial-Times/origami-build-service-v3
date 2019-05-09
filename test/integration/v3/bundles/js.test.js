@@ -166,7 +166,7 @@ describe("/v3/bundles/js", function() {
 					"/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
 				)
 				.expect(200)
-				.expect("etag", "e08b31199a2adfb9787fa392e8b9827c")
+				.expect("etag", "454448fa4bf025998094ceb34ddf613a")
 				.expect(
 					"cache-control",
 					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
@@ -415,7 +415,7 @@ describe("/v3/bundles/js", function() {
 					"/v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test",
 				)
 				.expect(200)
-				.expect("etag", "454448fa4bf025998094ceb34ddf613a")
+				.expect("etag", "e08b31199a2adfb9787fa392e8b9827c")
 				.expect(
 					"cache-control",
 					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
