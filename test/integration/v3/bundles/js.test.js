@@ -119,25 +119,6 @@ describe("/v3/bundles/js", function() {
 				.expect("etag", "2d5a5590fcb223dfdd73f157a6aef9cf");
 		});
 
-		it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.17%20-%201.0.19&source=test&registry=npm", function() {
-			return request(app)
-				.get(
-					"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.17%20-%201.0.19&source=test&registry=npm",
-				)
-				.expect(200)
-				.expect(
-					"cache-control",
-					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-				)
-				.expect("Content-Type", "application/javascript; charset=utf-8")
-				.expect(response => {
-					proclaim.isString(response.text);
-					proclaim.doesNotThrow(() => new vm.Script(response.text));
-					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
-				})
-				.expect("etag", "cee79c9c3f96d2b631f4af22f2cdb9c8");
-		});
-
 		context("requesting the same module multiple times", function() {
 			it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.19,@financial-times/o-test-component@1.0.19&registry=npm", function() {
 				return request(app)
@@ -179,10 +160,10 @@ describe("/v3/bundles/js", function() {
 			});
 		});
 
-		it("GET /v3/bundles/js?modules=o-autoinit@1.3.3,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm", function() {
+		it("GET /v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm", function() {
 			return request(app)
 				.get(
-					"/v3/bundles/js?modules=o-autoinit@1.3.3,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
+					"/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
 				)
 				.expect(200)
 				.expect("etag", "e08b31199a2adfb9787fa392e8b9827c")
@@ -351,9 +332,9 @@ describe("/v3/bundles/js", function() {
 	});
 
 	context("bower registry", function() {
-		it("GET /v3/bundles/js?modules=o-test-component@1.0.19&source=test", function() {
+		it("GET /v3/bundles/js?modules=o-test-component@1.0.32&source=test", function() {
 			return request(app)
-				.get("/v3/bundles/js?modules=o-test-component@1.0.19&source=test")
+				.get("/v3/bundles/js?modules=o-test-component@1.0.32&source=test")
 				.expect(200)
 				.expect(
 					"cache-control",
@@ -365,13 +346,13 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "cee79c9c3f96d2b631f4af22f2cdb9c8");
+				.expect("etag", "0a37191130d14cbfacb14353aa765b48");
 		});
 
-		it("GET /v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.19&source=test", function() {
+		it("GET /v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test", function() {
 			return request(app)
 				.get(
-					"/v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.19&source=test",
+					"/v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test",
 				)
 				.expect(200)
 				.expect(
@@ -384,7 +365,7 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "cee79c9c3f96d2b631f4af22f2cdb9c8");
+				.expect("etag", "0a37191130d14cbfacb14353aa765b48");
 		});
 
 		context("requesting the same module multiple times", function() {
@@ -434,7 +415,7 @@ describe("/v3/bundles/js", function() {
 					"/v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test",
 				)
 				.expect(200)
-				.expect("etag", "e08b31199a2adfb9787fa392e8b9827c")
+				.expect("etag", "454448fa4bf025998094ceb34ddf613a")
 				.expect(
 					"cache-control",
 					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
