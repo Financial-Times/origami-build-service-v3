@@ -116,7 +116,7 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "2d5a5590fcb223dfdd73f157a6aef9cf");
+				.expect("etag", "4f72af9cf78e2686541bd4f6ec4f55cb");
 		});
 
 		context("requesting the same module multiple times", function() {
@@ -166,7 +166,7 @@ describe("/v3/bundles/js", function() {
 					"/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
 				)
 				.expect(200)
-				.expect("etag", "454448fa4bf025998094ceb34ddf613a")
+				.expect("etag", "684a29e779b10a40328a22febd8536fd")
 				.expect(
 					"cache-control",
 					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
@@ -174,7 +174,6 @@ describe("/v3/bundles/js", function() {
 				.expect("Content-Type", "application/javascript; charset=utf-8")
 				.expect(response => {
 					const sandbox = {
-						globalThis: {},
 						window: {
 							addEventListener: () => {},
 						},
@@ -188,7 +187,7 @@ describe("/v3/bundles/js", function() {
 						vm.runInContext(response.text, sandbox);
 					});
 					proclaim.include(
-						sandbox.Origami,
+						sandbox.window.Origami,
 						"@financial-times/o-test-component",
 					);
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
@@ -235,6 +234,7 @@ describe("/v3/bundles/js", function() {
 					.expect(response => {
 						const sandbox = {
 							globalThis: {},
+							self: {},
 							window: {
 								addEventListener: () => {},
 							},
@@ -248,12 +248,12 @@ describe("/v3/bundles/js", function() {
 							vm.runInContext(response.text, sandbox);
 						});
 						proclaim.include(
-							sandbox.Origami,
+							sandbox.window.Origami,
 							"@financial-times/o-test-component",
 						);
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "1b5419d4fe43d2421ac3f50dd4abe897");
+					.expect("etag", "23d8eff42471f4540e0765f1eaa7b90a");
 			});
 
 			it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&minify=off&source=test&registry=npm", function() {
@@ -270,6 +270,7 @@ describe("/v3/bundles/js", function() {
 					.expect(response => {
 						const sandbox = {
 							globalThis: {},
+							self: {},
 							window: {
 								addEventListener: () => {},
 							},
@@ -283,13 +284,13 @@ describe("/v3/bundles/js", function() {
 							vm.runInContext(response.text, sandbox);
 						});
 						proclaim.include(
-							sandbox.Origami,
+							sandbox.window.Origami,
 							"@financial-times/o-test-component",
 						);
 						// proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					});
 				// TODO: Ensure consistent builds when minification is turned off
-				// .expect("etag", "2561e1ea36fd92d7112b95bebcff123f");
+				// .expect("etag", "8d70f72aa6835afec5dbcc3828607879")
 			});
 		});
 
@@ -308,6 +309,7 @@ describe("/v3/bundles/js", function() {
 					.expect(response => {
 						const sandbox = {
 							globalThis: {},
+							self: {},
 							window: {
 								addEventListener: () => {},
 							},
@@ -321,12 +323,12 @@ describe("/v3/bundles/js", function() {
 							vm.runInContext(response.text, sandbox);
 						});
 						proclaim.include(
-							sandbox.Origami,
+							sandbox.window.Origami,
 							"@financial-times/o-test-component",
 						);
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "1b5419d4fe43d2421ac3f50dd4abe897");
+					.expect("etag", "23d8eff42471f4540e0765f1eaa7b90a");
 			});
 		});
 	});
@@ -346,7 +348,7 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "0a37191130d14cbfacb14353aa765b48");
+				.expect("etag", "953765554ef73eb481d20ddd26f3cdaf");
 		});
 
 		it("GET /v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test", function() {
@@ -365,7 +367,7 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "0a37191130d14cbfacb14353aa765b48");
+				.expect("etag", "953765554ef73eb481d20ddd26f3cdaf");
 		});
 
 		context("requesting the same module multiple times", function() {
@@ -415,7 +417,7 @@ describe("/v3/bundles/js", function() {
 					"/v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test",
 				)
 				.expect(200)
-				.expect("etag", "e08b31199a2adfb9787fa392e8b9827c")
+				.expect("etag", "b85f90db7e60dccd160f5688f7d4b0aa")
 				.expect(
 					"cache-control",
 					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
@@ -424,6 +426,7 @@ describe("/v3/bundles/js", function() {
 				.expect(response => {
 					const sandbox = {
 						globalThis: {},
+						self: {},
 						window: {
 							addEventListener: () => {},
 						},
@@ -436,7 +439,7 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => {
 						vm.runInContext(response.text, sandbox);
 					});
-					proclaim.include(sandbox.Origami, "o-test-component");
+					proclaim.include(sandbox.window.Origami, "o-test-component");
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				});
 		});
@@ -477,6 +480,7 @@ describe("/v3/bundles/js", function() {
 					.expect(response => {
 						const sandbox = {
 							globalThis: {},
+							self: {},
 							window: {
 								addEventListener: () => {},
 							},
@@ -489,10 +493,10 @@ describe("/v3/bundles/js", function() {
 						proclaim.doesNotThrow(() => {
 							vm.runInContext(response.text, sandbox);
 						});
-						proclaim.include(sandbox.Origami, "o-test-component");
+						proclaim.include(sandbox.window.Origami, "o-test-component");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "436cd62f3c92da6b72a0bb68b1f12b4b");
+					.expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
 			});
 
 			it("GET /v3/bundles/js?modules=o-test-component@1.0.29&minify=off&source=test", function() {
@@ -509,6 +513,7 @@ describe("/v3/bundles/js", function() {
 					.expect(response => {
 						const sandbox = {
 							globalThis: {},
+							self: {},
 							window: {
 								addEventListener: () => {},
 							},
@@ -521,12 +526,38 @@ describe("/v3/bundles/js", function() {
 						proclaim.doesNotThrow(() => {
 							vm.runInContext(response.text, sandbox);
 						});
-						proclaim.include(sandbox.Origami, "o-test-component");
+						proclaim.include(sandbox.window.Origami, "o-test-component");
 						// proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					});
 				// TODO: Ensure consistent builds when minification is turned off
-				// .expect("etag", "2561e1ea36fd92d7112b95bebcff123f");
+				// .expect("etag", "2561e1ea36fd92d7112b95bebcff123f")
 			});
+
+			context(
+				"minified response is smaller than unminified response",
+				function() {
+					it("GET /v3/bundles/js?modules=o-test-component@1.0.29&minify=on&source=test", function() {
+						return request(app)
+							.get(
+								"/v3/bundles/js?modules=o-test-component@1.0.29&minify=on&source=test",
+							)
+							.expect(200)
+							.expect(minifiedResponse => {
+								return request(app)
+									.get(
+										"/v3/bundles/js?modules=o-test-component@1.0.29&minify=on&source=test",
+									)
+									.expect(200)
+									.expect(unminifiedResponse => {
+										proclaim.lessThan(
+											minifiedResponse.text.length,
+											unminifiedResponse.text.length,
+										);
+									});
+							});
+					});
+				},
+			);
 		});
 
 		context("attaches modules to the Origami global object", function() {
@@ -542,6 +573,7 @@ describe("/v3/bundles/js", function() {
 					.expect(response => {
 						const sandbox = {
 							globalThis: {},
+							self: {},
 							window: {
 								addEventListener: () => {},
 							},
@@ -554,10 +586,10 @@ describe("/v3/bundles/js", function() {
 						proclaim.doesNotThrow(() => {
 							vm.runInContext(response.text, sandbox);
 						});
-						proclaim.include(sandbox.Origami, "o-test-component");
+						proclaim.include(sandbox.window.Origami, "o-test-component");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "436cd62f3c92da6b72a0bb68b1f12b4b");
+					.expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
 			});
 		});
 	});
