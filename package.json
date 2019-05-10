@@ -21,7 +21,6 @@
     "npm-run-path": "^3.1.0",
     "origami-build-tools": "^8.0.4",
     "postcss": "^7.0.14",
-    "rimraf": "^2.6.3",
     "sass": "^1.19.0",
     "semver-extra": "^2.0.1",
     "throng": "^4.0.0",
