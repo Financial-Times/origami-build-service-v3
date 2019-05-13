@@ -4,6 +4,9 @@ const vm = require("vm");
 const proclaim = require("proclaim");
 const request = require("supertest");
 const service = require("../../../../lib/service");
+const isES5 = require("is-es5-syntax");
+const isES6 = require("is-es6-syntax");
+const isES7 = require("is-es7-syntax");
 
 describe("/v3/bundles/js", function() {
 	let app;
@@ -348,26 +351,28 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "953765554ef73eb481d20ddd26f3cdaf");
+				.expect("etag", "87af47fbb8b5af7c96219492c7c77681");
 		});
 
-		it("GET /v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test", function() {
-			return request(app)
-				.get(
-					"/v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test",
-				)
-				.expect(200)
-				.expect(
-					"cache-control",
-					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-				)
-				.expect("Content-Type", "application/javascript; charset=utf-8")
-				.expect(response => {
-					proclaim.isString(response.text);
-					proclaim.doesNotThrow(() => new vm.Script(response.text));
-					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
-				})
-				.expect("etag", "953765554ef73eb481d20ddd26f3cdaf");
+		context("handles version ranges", function() {
+			it("GET /v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test", function() {
+				return request(app)
+					.get(
+						"/v3/bundles/js?modules=o-test-component@1.0.17%20-%201.0.32&source=test",
+					)
+					.expect(200)
+					.expect(
+						"cache-control",
+						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+					)
+					.expect("Content-Type", "application/javascript; charset=utf-8")
+					.expect(response => {
+						proclaim.isString(response.text);
+						proclaim.doesNotThrow(() => new vm.Script(response.text));
+						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
+					})
+					.expect("etag", "87af47fbb8b5af7c96219492c7c77681");
+			});
 		});
 
 		context("requesting the same module multiple times", function() {
@@ -411,38 +416,43 @@ describe("/v3/bundles/js", function() {
 			});
 		});
 
-		it("GET /v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test", function() {
-			return request(app)
-				.get(
-					"/v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test",
-				)
-				.expect(200)
-				.expect("etag", "b85f90db7e60dccd160f5688f7d4b0aa")
-				.expect(
-					"cache-control",
-					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-				)
-				.expect("Content-Type", "application/javascript; charset=utf-8")
-				.expect(response => {
-					const sandbox = {
-						globalThis: {},
-						self: {},
-						window: {
-							addEventListener: () => {},
-						},
-						document: {
-							addEventListener: () => {},
-						},
-					};
-					vm.createContext(sandbox);
-					proclaim.isString(response.text);
-					proclaim.doesNotThrow(() => {
-						vm.runInContext(response.text, sandbox);
-					});
-					proclaim.include(sandbox.window.Origami, "o-test-component");
-					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
+		context(
+			"adds the requested modules to the `Origami` global object",
+			function() {
+				it("GET /v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-autoinit@1.3.3,o-test-component@1.0.29&source=test",
+						)
+						.expect(200)
+						.expect("etag", "cddc19891b43c0e82b49e95abf635649")
+						.expect(
+							"cache-control",
+							"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+						)
+						.expect("Content-Type", "application/javascript; charset=utf-8")
+						.expect(response => {
+							const sandbox = {
+								globalThis: {},
+								self: {},
+								window: {
+									addEventListener: () => {},
+								},
+								document: {
+									addEventListener: () => {},
+								},
+							};
+							vm.createContext(sandbox);
+							proclaim.isString(response.text);
+							proclaim.doesNotThrow(() => {
+								vm.runInContext(response.text, sandbox);
+							});
+							proclaim.include(sandbox.window.Origami, "o-test-component");
+							proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
+						});
 				});
-		});
+			},
+		);
 
 		context("invalid module name", function() {
 			it("GET /v3/bundles/js?modules=o-autoinit_±&source=test", function() {
@@ -496,7 +506,7 @@ describe("/v3/bundles/js", function() {
 						proclaim.include(sandbox.window.Origami, "o-test-component");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+					.expect("etag", "7d0e6490aad03b8b795f5fbf297f497f");
 			});
 
 			it("GET /v3/bundles/js?modules=o-test-component@1.0.29&minify=off&source=test", function() {
@@ -589,8 +599,206 @@ describe("/v3/bundles/js", function() {
 						proclaim.include(sandbox.window.Origami, "o-test-component");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+					.expect("etag", "7d0e6490aad03b8b795f5fbf297f497f");
 			});
 		});
+
+		context(
+			"compiles the JavaScript based upon the user-agent header",
+			function() {
+				it("compiles to ES5 for user-agents the service is not aware of", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off",
+						)
+						.set("User-Agent", "unknown_browser/1.2.3")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 11", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off",
+						)
+						.set("User-Agent", "ie/11")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 10", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off",
+						)
+						.set("User-Agent", "ie/10")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 or ES6 for Chrome 70", function() {
+					// o-test-component 1.0.29 is written in ES7 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off",
+						)
+						.set("User-Agent", "chrome/70")
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isFalse(
+								isES6(response.text),
+								"expected JavaScript response to not be valid ECMAScript 6 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES7(response.text),
+								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 for Chrome 70", function() {
+					// o-test-component 1.0.32 is written in ES5 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.32&source=test&minify=off",
+						)
+						.set("User-Agent", "chrome/70")
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES6(response.text),
+								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+			},
+		);
+
+		context(
+			"compiles the JavaScript based upon the ua query parameter",
+			function() {
+				it("takes precedant over the user-agent header", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&ua=unknown_browser/1.2.3",
+						)
+						.set("User-Agent", "chrome/70")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for user-agents the service is not aware of", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&ua=unknown_browser/1.2.3",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 11", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&=ie/11",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 10", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&ua=ie/10",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 or ES6 for Chrome 70", function() {
+					// o-test-component 1.0.29 is written in ES7 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&ua=chrome/70",
+						)
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isFalse(
+								isES6(response.text),
+								"expected JavaScript response to not be valid ECMAScript 6 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES7(response.text),
+								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 for Chrome 70", function() {
+					// o-test-component 1.0.32 is written in ES5 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.32&source=test&minify=off&ua=chrome/70",
+						)
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES6(response.text),
+								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+			},
+		);
 	});
 });
