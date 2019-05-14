@@ -1,9 +1,13 @@
 {
   "dependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
     "@financial-times/health-check": "^1.10.0",
     "@financial-times/origami-service": "^4.1.0",
     "@financial-times/origami-service-makefile": "^7.0.0",
+    "@financial-times/polyfill-useragent-normaliser": "^1.0.6",
     "autoprefixer": "^9.5.1",
+    "babel-loader": "^8.0.6",
     "bower": "^1.8.8",
     "bower-resolve-webpack-plugin": "^1.0.5",
     "compression": "^1.7.4",
@@ -32,6 +36,9 @@
     "@financial-times/grafana-tools": "^1.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "is-es5-syntax": "^1.0.1",
+    "is-es6-syntax": "^1.0.1",
+    "is-es7-syntax": "^1.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.0",
