@@ -103,23 +103,25 @@ describe("/v3/bundles/js", function() {
 	});
 
 	context("npm registry", function() {
-		it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.32-test&source=test&registry=npm", function() {
-			return request(app)
-				.get(
-					"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.32-test&source=test&registry=npm",
-				)
-				.expect(200)
-				.expect(
-					"cache-control",
-					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-				)
-				.expect("Content-Type", "application/javascript; charset=utf-8")
-				.expect(response => {
-					proclaim.isString(response.text);
-					proclaim.doesNotThrow(() => new vm.Script(response.text));
-					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
-				})
-				.expect("etag", "e59bc417b0d50279f73fac87b290c65b");
+		context("basic request", function() {
+			it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.32-test&source=test&registry=npm", function() {
+				return request(app)
+					.get(
+						"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.32-test&source=test&registry=npm",
+					)
+					.expect(200)
+					.expect(
+						"cache-control",
+						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+					)
+					.expect("Content-Type", "application/javascript; charset=utf-8")
+					.expect(response => {
+						proclaim.isString(response.text);
+						proclaim.doesNotThrow(() => new vm.Script(response.text));
+						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
+					})
+					.expect("etag", "e59bc417b0d50279f73fac87b290c65b");
+			});
 		});
 
 		context("requesting the same module multiple times", function() {
@@ -163,38 +165,44 @@ describe("/v3/bundles/js", function() {
 			});
 		});
 
-		it("GET /v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm", function() {
-			return request(app)
-				.get(
-					"/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
-				)
-				.expect(200)
-				.expect("etag", "0eacb04a663aae2dab774d18be7dab6c")
-				.expect(
-					"cache-control",
-					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
-				)
-				.expect("Content-Type", "application/javascript; charset=utf-8")
-				.expect(response => {
-					const sandbox = {
-						window: {
-							addEventListener: () => {},
-						},
-						document: {
-							addEventListener: () => {},
-						},
-					};
-					vm.createContext(sandbox);
-					proclaim.isString(response.text);
-					proclaim.doesNotThrow(() => {
-						vm.runInContext(response.text, sandbox);
+		context("requesting two different modules", function() {
+			it("GET /v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm", function() {
+				return request(app)
+					.get(
+						"/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
+					)
+					.expect(200)
+					.expect("etag", "0eacb04a663aae2dab774d18be7dab6c")
+					.expect(
+						"cache-control",
+						"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
+					)
+					.expect("Content-Type", "application/javascript; charset=utf-8")
+					.expect(response => {
+						const sandbox = {
+							window: {
+								addEventListener: () => {},
+							},
+							document: {
+								addEventListener: () => {},
+							},
+						};
+						vm.createContext(sandbox);
+						proclaim.isString(response.text);
+						proclaim.doesNotThrow(() => {
+							vm.runInContext(response.text, sandbox);
+						});
+						proclaim.include(
+							sandbox.window.Origami,
+							"@financial-times/o-test-component",
+						);
+						proclaim.include(
+							sandbox.window.Origami,
+							"@financial-times/o-autoinit",
+						);
+						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					});
-					proclaim.include(
-						sandbox.window.Origami,
-						"@financial-times/o-test-component",
-					);
-					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
-				});
+			});
 		});
 
 		context("invalid module name", function() {
