@@ -119,7 +119,7 @@ describe("/v3/bundles/js", function() {
 					proclaim.doesNotThrow(() => new vm.Script(response.text));
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
-				.expect("etag", "4f72af9cf78e2686541bd4f6ec4f55cb");
+				.expect("etag", "e59bc417b0d50279f73fac87b290c65b");
 		});
 
 		context("requesting the same module multiple times", function() {
@@ -169,7 +169,7 @@ describe("/v3/bundles/js", function() {
 					"/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-test-component@1.0.29-test&source=test&registry=npm",
 				)
 				.expect(200)
-				.expect("etag", "684a29e779b10a40328a22febd8536fd")
+				.expect("etag", "0eacb04a663aae2dab774d18be7dab6c")
 				.expect(
 					"cache-control",
 					"public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
@@ -256,7 +256,7 @@ describe("/v3/bundles/js", function() {
 						);
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "23d8eff42471f4540e0765f1eaa7b90a");
+					.expect("etag", "616366e148a7eb3c16c3a1718e646dc5");
 			});
 
 			it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&minify=off&source=test&registry=npm", function() {
@@ -331,9 +331,207 @@ describe("/v3/bundles/js", function() {
 						);
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
-					.expect("etag", "23d8eff42471f4540e0765f1eaa7b90a");
+					.expect("etag", "616366e148a7eb3c16c3a1718e646dc5");
 			});
 		});
+
+		context(
+			"compiles the JavaScript based upon the user-agent header",
+			function() {
+				it("compiles to ES5 for user-agents the service is not aware of", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&registry=npm",
+						)
+						.set("User-Agent", "unknown_browser/1.2.3")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 11", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&registry=npm",
+						)
+						.set("User-Agent", "ie/11")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 10", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&registry=npm",
+						)
+						.set("User-Agent", "ie/10")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 or ES6 for Chrome 70", function() {
+					// o-test-component 1.0.29 is written in ES7 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&registry=npm",
+						)
+						.set("User-Agent", "chrome/70")
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isFalse(
+								isES6(response.text),
+								"expected JavaScript response to not be valid ECMAScript 6 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES7(response.text),
+								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 for Chrome 70", function() {
+					// o-test-component 1.0.32 is written in ES5 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.32-test&source=test&minify=off&registry=npm",
+						)
+						.set("User-Agent", "chrome/70")
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES6(response.text),
+								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+			},
+		);
+
+		context(
+			"compiles the JavaScript based upon the ua query parameter",
+			function() {
+				it("takes precedant over the user-agent header", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&ua=unknown_browser/1.2.3&registry=npm",
+						)
+						.set("User-Agent", "chrome/70")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for user-agents the service is not aware of", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&ua=unknown_browser/1.2.3&registry=npm",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 11", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&=ie/11&registry=npm",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles to ES5 for Internet Explorer 10", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&ua=ie/10&registry=npm",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 or ES6 for Chrome 70", function() {
+					// @financial-times/o-test-component 1.0.29-test is written in ES7 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&ua=chrome/70&registry=npm",
+						)
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isFalse(
+								isES6(response.text),
+								"expected JavaScript response to not be valid ECMAScript 6 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES7(response.text),
+								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("does not compile to ES5 for Chrome 70", function() {
+					// @financial-times/o-test-component 1.0.32-test is written in ES5 syntax
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.32-test&source=test&minify=off&ua=chrome/70&registry=npm",
+						)
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES6(response.text),
+								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+			},
+		);
 	});
 
 	context("bower registry", function() {
