@@ -76,6 +76,30 @@ describe("/v3/bundles/js", function() {
 		});
 	});
 
+	context("invalid esmodules parameter", function() {
+		it("GET /v3/bundles/js?esmodules", function() {
+			return request(app)
+				.get("/v3/bundles/js?esmodules")
+				.expect(400)
+				.expect("Content-Type", "text/html; charset=utf-8")
+				.expect(
+					"cache-control",
+					"max-age=0, must-revalidate, no-cache, no-store",
+				);
+		});
+
+		it("GET /v3/bundles/js?esmodules=carrot", function() {
+			return request(app)
+				.get("/v3/bundles/js?esmodules=carrot")
+				.expect(400)
+				.expect("Content-Type", "text/html; charset=utf-8")
+				.expect(
+					"cache-control",
+					"max-age=0, must-revalidate, no-cache, no-store",
+				);
+		});
+	});
+
 	context("invalid registry parameter", function() {
 		it("returns an error", function() {
 			return request(app)
@@ -430,6 +454,58 @@ describe("/v3/bundles/js", function() {
 							proclaim.isTrue(
 								isES6(response.text),
 								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+			},
+		);
+
+		context(
+			"compiles the JavaScript based upon the esmodules query parameter",
+			function() {
+				it("compiles to ES6 when esmodules query parameter is set to `on`", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&esmodules=on&registry=npm",
+						)
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES7(response.text),
+								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles based upon user-agent header if esmodules query parameter is set to `off`", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&esmodules=off&registry=npm",
+						)
+						.set("User-Agent", "unknown_browser/1")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles based upon ua query parameter if esmodules query parameter is set to `off`", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=@financial-times/o-test-component@1.0.29-test&source=test&minify=off&esmodules=off&registry=npm&ua=unknown_browser/1",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
 							);
 						});
 					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
@@ -896,6 +972,58 @@ describe("/v3/bundles/js", function() {
 							proclaim.isTrue(
 								isES6(response.text),
 								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+			},
+		);
+
+		context(
+			"compiles the JavaScript based upon the esmodules query parameter",
+			function() {
+				it("compiles to ES6 when esmodules query parameter is set to `on`", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&esmodules=on",
+						)
+						.expect(response => {
+							proclaim.isFalse(
+								isES5(response.text),
+								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
+							);
+							proclaim.isTrue(
+								isES7(response.text),
+								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles based upon user-agent header if esmodules query parameter is set to `off`", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&esmodules=off",
+						)
+						.set("User-Agent", "unknown_browser/1")
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
+							);
+						});
+					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
+				});
+
+				it("compiles based upon ua query parameter if esmodules query parameter is set to `off`", function() {
+					return request(app)
+						.get(
+							"/v3/bundles/js?modules=o-test-component@1.0.29&source=test&minify=off&esmodules=off&ua=unknown_browser/1",
+						)
+						.expect(response => {
+							proclaim.isTrue(
+								isES5(response.text),
+								"expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
 							);
 						});
 					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
