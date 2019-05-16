@@ -218,6 +218,41 @@ describe("/v3/bundles/css", function() {
 				});
 		});
 
+		context("invalid brand parameter", function() {
+			it("returns an error", function() {
+				return request(app)
+					.get(
+						"/v3/bundles/css?modules=o-test-component@1.0.29&source=test&brand=carrot",
+					)
+					.expect(400)
+					.expect("Content-Type", "text/html; charset=utf-8")
+					.expect(
+						"cache-control",
+						"max-age=0, must-revalidate, no-cache, no-store",
+					);
+			});
+		});
+
+		context("valid brand parameter", function() {
+			it("master brand works", function() {
+				return request(app)
+					.get(
+						"/v3/bundles/css?modules=o-test-component@1.0.29&source=test&brand=master",
+					)
+					.expect(200)
+					.expect("Content-Type", "text/html; charset=utf-8");
+			});
+
+			it("internal brand works", function() {
+				return request(app)
+					.get(
+						"/v3/bundles/css?modules=o-test-component@1.0.29&source=test&brand=internal",
+					)
+					.expect(200)
+					.expect("Content-Type", "text/html; charset=utf-8");
+			});
+		});
+
 		context("invalid minify parameter", function() {
 			it("GET /v3/bundles/css?modules=o-test-component@1.0.29&minify=maybe", () => {
 				return request(app)
