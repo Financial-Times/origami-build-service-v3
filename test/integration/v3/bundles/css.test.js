@@ -240,7 +240,7 @@ describe("/v3/bundles/css", function() {
 						"/v3/bundles/css?modules=o-test-component@1.0.29&source=test&brand=master",
 					)
 					.expect(200)
-					.expect("Content-Type", "text/css; charset=utf-8")
+					.expect("Content-Type", "text/css; charset=utf-8");
 			});
 
 			it("internal brand works", function() {
@@ -249,7 +249,7 @@ describe("/v3/bundles/css", function() {
 						"/v3/bundles/css?modules=o-test-component@1.0.29&source=test&brand=internal",
 					)
 					.expect(200)
-					.expect("Content-Type", "text/css; charset=utf-8")
+					.expect("Content-Type", "text/css; charset=utf-8");
 			});
 		});
 
