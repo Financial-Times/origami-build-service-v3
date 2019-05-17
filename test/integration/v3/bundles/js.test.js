@@ -13,7 +13,7 @@ const acornExportNsFrom = require("acorn-export-ns-from");
 const containsExportStatement = js => {
 	if (!isES7(js)) {
 		try {
-			Parser.extend(acornExportNsFrom).parse(js);
+			Parser.extend(acornExportNsFrom).parse(js, { sourceType: "module" });
 			return true;
 		} catch (error) {
 			return false;
@@ -475,7 +475,7 @@ describe("/v3/bundles/js", function() {
 			},
 		);
 
-		context(
+		context.only(
 			"compiles the JavaScript based upon the esmodules query parameter",
 			function() {
 				it("compiles to ES6 when esmodules query parameter is set to `on`", function() {
@@ -993,7 +993,7 @@ describe("/v3/bundles/js", function() {
 			},
 		);
 
-		context(
+		context.only(
 			"compiles the JavaScript based upon the esmodules query parameter",
 			function() {
 				it("compiles to ES6 when esmodules query parameter is set to `on`", function() {
