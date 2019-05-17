@@ -993,8 +993,8 @@ describe("/v3/bundles/js", function() {
 								"expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
 							);
 							proclaim.isTrue(
-								isES7(response.text),
-								"expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
+								isES6(response.text),
+								"expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
 							);
 						});
 					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
