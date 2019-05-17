@@ -21,7 +21,7 @@ const containsExportStatement = js => {
 	} else {
 		return true;
 	}
-};;
+};
 describe("/v3/bundles/js", function() {
 	let app;
 	beforeEach(() => {
