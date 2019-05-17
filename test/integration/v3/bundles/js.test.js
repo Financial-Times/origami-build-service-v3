@@ -475,7 +475,7 @@ describe("/v3/bundles/js", function() {
 			},
 		);
 
-		context.only(
+		context(
 			"compiles the JavaScript based upon the esmodules query parameter",
 			function() {
 				it("compiles to ES6 when esmodules query parameter is set to `on`", function() {
@@ -993,7 +993,7 @@ describe("/v3/bundles/js", function() {
 			},
 		);
 
-		context.only(
+		context(
 			"compiles the JavaScript based upon the esmodules query parameter",
 			function() {
 				it("compiles to ES6 when esmodules query parameter is set to `on`", function() {
