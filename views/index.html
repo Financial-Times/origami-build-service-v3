@@ -1,16 +1,36 @@
+<div class="o-layout o-layout--landing" data-o-component="o-layout">
+	<div class="o-layout__header">
+		{{> header }}
+	</div>
 
-<div class="o-techdocs-container">
-	<div class="o-techdocs-layout">
-
-		<div class="o-techdocs-sidebar">
-			{{>navigation}}
+	<div class="o-layout__hero o-layout-typography">
+		<h1>A <abbr title="Content Delivery Network">CDN</abbr> for Origami components</h1>
+		<div>
+			<a class="o-layout__unstyled-element o-buttons o-buttons--big o-buttons--mono o-buttons--primary"
+				href="#">Create a bundle</a>
+			<a class="o-layout__unstyled-element o-buttons o-buttons--big o-buttons--mono o-buttons--secondary"
+				href="#">Read the documentation</a>
 		</div>
+	</div>
 
-		<div class="o-techdocs-main o-techdocs-content">
-
-			<h1>Placeholder</h1>
-
+	<div class="o-layout__main o-layout-typography" data-o-component="o-syntax-highlight">
+		<div class="o-layout__overview">
+			<div class="o-layout-item">
+				<h3>Request as many components as you want</h3>
+				<p>In a single <code>script</code> or a single <code>link</code> tag, you can request any combination of Origami components and they will all be available to use.</p>
+			</div>
+			<div class="o-layout-item">
+				<h3>Serve any file from a package</h3>
+				<p>A great way to serve a specific file from a component such as an image, <abbr title="scalable vector graphic">svg</abbr>, or a font file.
+			</div>
+			<div class="o-layout-item">
+				<h3>Differential serving of JS</h3>
+				<p>JavaScript is compiled to the latest version of the language that the browser supports, ensuring small/optimised responses for modern browsers whilst still working in older browsers.</p>
+			</div>
 		</div>
+	</div>
 
+	<div class="o-layout__footer">
+		{{> footer}}
 	</div>
 </div>
