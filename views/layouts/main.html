@@ -6,17 +6,13 @@
 	<title>{{title}}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<script>
-		var cutsTheMustard = (
-			'querySelector' in document &&
-			'localStorage' in window &&
-			'addEventListener' in window
-		);
-		if (cutsTheMustard) {
-			document.documentElement.className = document.documentElement.className.replace(/\bcore\b/g, 'enhanced');
-		}
-	</script>
-
+	<link rel="icon" type="image/png" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&width=16&height=16&format=png" sizes="16x16">
+	<link rel="icon" type="image/png" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&width=32&height=32&format=png" sizes="32x32">
+	<link rel="icon" type="image/png" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&width=96&height=96&format=png" sizes="96x96">
+	<link rel="icon" type="image/png" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&width=128&height=128&format=png" sizes="128x128">
+	<link rel="icon" type="image/png" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&width=196&height=196&format=png" sizes="196x196">
+	<link rel="icon" type="image/png" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&width=310&height=310&format=png" sizes="310x310">
+	<link rel="icon" type="image/svg+xml" href="https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Aorigami?source=origami-registry-ui&format=svg" sizes="any">
 	<style>
 		.core .o--if-js,
 		.enhanced .o--if-no-js {
@@ -30,42 +26,12 @@
 		}
 	</style>
 
-	<link rel="stylesheet" href="https://www.ft.com/__origami/service/build/v2/bundles/css?modules=o-techdocs@^7.0.5,o-grid@^4.0.0,o-icons@^4.2.0,o-header-services" />
-	<link rel="stylesheet" href="/main.css" />
-	<script src="https://polyfill.io/v2/polyfill.min.js?features=fetch,default"></script>
-	<script>
-		(function(src) {
-			if (cutsTheMustard) {
-				var o = document.createElement('script');
-				o.async = o.defer = true;
-				o.src = src;
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(o, s);
-			}
-		}('https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-techdocs@^7.0.5,o-grid@^4.0.0,o-icons@^4.2.0'));
-	</script>
-
+	<link rel="stylesheet" href="/v3/bundles/css?source=origami-build-service&brand=internal&modules=o-layout@^3.1.12,o-header-services@^3.2.15,o-buttons@^5.16.4,o-footer-services@^2.1.3,o-table@^7.3.1,o-fonts@^3.3.1,o-syntax-highlight@^1.6.1" />
+	<script src="/v3/bundles/js?source=origami-build-service&brand=internal&modules=o-autoinit,o-layout@^3.1.12,o-header-services@^3.2.15,o-table@^7.3.1,o-syntax-highlight@^1.6.1" ></script>
 </head>
-<body class="o-techdocs">
 
-	<header class="o-header-services" data-o-component="o-header">
-		<div class="o-header-services__top o-header-services__container">
-			<div class="o-header-services__ftlogo"></div>
-			<div class="o-header-services__title">
-				<h1 class="o-header-services__product-name">
-					<a href="{{basePath}}">{{origami.options.name}}</a>
-				</h1>
-			</div>
-		</div>
-	</header>
-
-	{{{body}}}
-
-	<footer class="o-techdocs-footer">
-		<div class="o-techdocs-footer__inner">
-			<p>&copy; THE FINANCIAL TIMES LTD. FT and 'Financial Times' are trademarks of The Financial Times Ltd.</p>
-		</div>
-	</footer>
-
+<body>
+	{{{ body }}}
 </body>
+
 </html>
