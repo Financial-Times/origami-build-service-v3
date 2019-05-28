@@ -4,6 +4,7 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
     "@financial-times/health-check": "^1.10.0",
+    "@financial-times/origami-repo-data-client": "^1.5.0",
     "@financial-times/origami-service": "^4.1.0",
     "@financial-times/origami-service-makefile": "^7.0.0",
     "@financial-times/polyfill-useragent-normaliser": "^1.0.6",
@@ -46,15 +47,18 @@
     "is-es6-syntax": "^1.0.1",
     "is-es7-syntax": "^1.0.0",
     "istanbul": "^0.4.5",
+    "jsdom": "^15.1.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.0",
     "prettier": "1.17.0",
     "proclaim": "^3.6.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
     "start": "node ./index.js",
     "test:fastly": "mocha \"test/fastly/**/*.test.js\" --recursive --timeout 15000 --bail --check-leaks --forbid-only --forbid-pending --exit",
-    "test:integration": "mocha \"test/integration/**/*.test.js\" --recursive --timeout 15000 --bail --check-leaks --forbid-only --exit"
+    "test:integration": "mocha \"test/integration/**/*.test.js\" --recursive --timeout 15000 --bail --check-leaks --forbid-only --exit",
+    "update-components-list": "node ./scripts/fetch-components.js"
   }
 }

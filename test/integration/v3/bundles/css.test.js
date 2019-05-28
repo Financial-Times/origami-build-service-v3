@@ -1,9 +1,12 @@
+/* eslint-disable no-loop-func */
 "use strict";
 
 const request = require("supertest");
 const proclaim = require("proclaim");
 const service = require("../../../../lib/service");
-
+const componentsWithScss = require("../../../../scripts/components.json").filter(
+	component => component.languages.includes("scss"),
+);
 describe("/v3/bundles/css", function() {
 	let app;
 	beforeEach(() => {
@@ -14,6 +17,7 @@ describe("/v3/bundles/css", function() {
 				error: () => {},
 				warn: () => {},
 			},
+			requestLogFormat: null,
 			port: 0,
 		})
 			.listen()
@@ -305,5 +309,45 @@ describe("/v3/bundles/css", function() {
 					});
 			});
 		});
+
+		context(
+			"works with all active and maintained components which have no defined brand support",
+			function() {
+				const bundleUrl = ({ name, version }) =>
+					`/v3/bundles/css?modules=${name}@${version}&source=test`;
+				for (const component of componentsWithScss) {
+					if (component.brands.length === 0) {
+						const url = bundleUrl(component);
+						it(url, function() {
+							return request(app)
+								.get(url)
+								.expect(200)
+								.expect("Content-Type", "text/css; charset=utf-8");
+						});
+					}
+				}
+			},
+		);
+
+		context(
+			"works with all active and maintained components which have defined brand support",
+			function() {
+				const bundleUrl = ({ name, version }, brand) =>
+					`/v3/bundles/css?modules=${name}@${version}&source=test&brand=${brand}`;
+				for (const component of componentsWithScss) {
+					if (component.brands.length > 0) {
+						for (const brand of component.brands) {
+							const url = bundleUrl(component, brand);
+							it(url, function() {
+								return request(app)
+									.get(url)
+									.expect(200)
+									.expect("Content-Type", "text/css; charset=utf-8");
+							});
+						}
+					}
+				}
+			},
+		);
 	});
 });

@@ -1,6 +1,8 @@
+/* eslint-disable no-loop-func */
 "use strict";
 
-const vm = require("vm");
+const dotenv = require("dotenv");
+dotenv.config();
 const proclaim = require("proclaim");
 const request = require("supertest");
 const service = require("../../../../lib/service");
@@ -9,6 +11,30 @@ const isES6 = require("is-es6-syntax");
 const isES7 = require("is-es7-syntax");
 const { Parser } = require("acorn");
 const acornExportNsFrom = require("acorn-export-ns-from");
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const fs = require("fs");
+const fetchPolyfill = fs.readFileSync(require.resolve("whatwg-fetch"), "utf-8");
+const componentsWithJavaScript = require("../../../../scripts/components.json").filter(
+	component => component.languages.includes("js"),
+);
+const executeBrowserJavaScript = js => {
+	const window = new JSDOM(``, { runScripts: "outside-only" }).window;
+	proclaim.doesNotThrow(
+		() => {
+			try {
+				window.eval(fetchPolyfill);
+				window.eval(js);
+			} catch (err) {
+				console.error(err);
+				throw err;
+			}
+		},
+		undefined,
+		`Expected to be valid browser-based JavaScript but it was not.`,
+	);
+	return window;
+};
 
 const containsExportStatement = js => {
 	if (!isES7(js)) {
@@ -32,6 +58,7 @@ describe("/v3/bundles/js", function() {
 				error: () => {},
 				warn: () => {},
 			},
+			requestLogFormat: null,
 			port: 0,
 		})
 			.listen()
@@ -155,7 +182,16 @@ describe("/v3/bundles/js", function() {
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
 						proclaim.isString(response.text);
-						proclaim.doesNotThrow(() => new vm.Script(response.text));
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
+						proclaim.doesNotThrow(() => {
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
+						});
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
 					.expect("etag", "e59bc417b0d50279f73fac87b290c65b");
@@ -217,27 +253,21 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
 						proclaim.include(
-							sandbox.window.Origami,
+							window.Origami,
 							"@financial-times/o-test-component",
 						);
-						proclaim.include(
-							sandbox.window.Origami,
-							"@financial-times/o-autoinit",
-						);
+						proclaim.include(window.Origami, "@financial-times/o-autoinit");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					});
 			});
@@ -281,23 +311,18 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							globalThis: {},
-							self: {},
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
 						proclaim.include(
-							sandbox.window.Origami,
+							window.Origami,
 							"@financial-times/o-test-component",
 						);
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
@@ -317,23 +342,18 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							globalThis: {},
-							self: {},
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
 						proclaim.include(
-							sandbox.window.Origami,
+							window.Origami,
 							"@financial-times/o-test-component",
 						);
 						// proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
@@ -356,23 +376,18 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							globalThis: {},
-							self: {},
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
 						proclaim.include(
-							sandbox.window.Origami,
+							window.Origami,
 							"@financial-times/o-test-component",
 						);
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
@@ -644,7 +659,16 @@ describe("/v3/bundles/js", function() {
 				.expect("Content-Type", "application/javascript; charset=utf-8")
 				.expect(response => {
 					proclaim.isString(response.text);
-					proclaim.doesNotThrow(() => new vm.Script(response.text));
+					const window = new JSDOM(``, { runScripts: "outside-only" }).window;
+					proclaim.doesNotThrow(() => {
+						try {
+							window.eval(fetchPolyfill);
+							window.eval(response.text);
+						} catch (err) {
+							console.error(err);
+							throw err;
+						}
+					});
 					proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 				})
 				.expect("etag", "87af47fbb8b5af7c96219492c7c77681");
@@ -664,7 +688,16 @@ describe("/v3/bundles/js", function() {
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
 						proclaim.isString(response.text);
-						proclaim.doesNotThrow(() => new vm.Script(response.text));
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
+						proclaim.doesNotThrow(() => {
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
+						});
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
 					.expect("etag", "87af47fbb8b5af7c96219492c7c77681");
@@ -728,22 +761,18 @@ describe("/v3/bundles/js", function() {
 						)
 						.expect("Content-Type", "application/javascript; charset=utf-8")
 						.expect(response => {
-							const sandbox = {
-								globalThis: {},
-								self: {},
-								window: {
-									addEventListener: () => {},
-								},
-								document: {
-									addEventListener: () => {},
-								},
-							};
-							vm.createContext(sandbox);
-							proclaim.isString(response.text);
+							const window = new JSDOM(``, { runScripts: "outside-only" })
+								.window;
 							proclaim.doesNotThrow(() => {
-								vm.runInContext(response.text, sandbox);
+								try {
+									window.eval(fetchPolyfill);
+									window.eval(response.text);
+								} catch (err) {
+									console.error(err);
+									throw err;
+								}
 							});
-							proclaim.include(sandbox.window.Origami, "o-test-component");
+							proclaim.include(window.Origami, "o-test-component");
 							proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 						});
 				});
@@ -784,22 +813,17 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							globalThis: {},
-							self: {},
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
-						proclaim.include(sandbox.window.Origami, "o-test-component");
+						proclaim.include(window.Origami, "o-test-component");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
 					.expect("etag", "7d0e6490aad03b8b795f5fbf297f497f");
@@ -817,22 +841,17 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							globalThis: {},
-							self: {},
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
-						proclaim.include(sandbox.window.Origami, "o-test-component");
+						proclaim.include(window.Origami, "o-test-component");
 						// proclaim.match(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					});
 				// TODO: Ensure consistent builds when minification is turned off
@@ -877,22 +896,17 @@ describe("/v3/bundles/js", function() {
 					)
 					.expect("Content-Type", "application/javascript; charset=utf-8")
 					.expect(response => {
-						const sandbox = {
-							globalThis: {},
-							self: {},
-							window: {
-								addEventListener: () => {},
-							},
-							document: {
-								addEventListener: () => {},
-							},
-						};
-						vm.createContext(sandbox);
-						proclaim.isString(response.text);
+						const window = new JSDOM(``, { runScripts: "outside-only" }).window;
 						proclaim.doesNotThrow(() => {
-							vm.runInContext(response.text, sandbox);
+							try {
+								window.eval(fetchPolyfill);
+								window.eval(response.text);
+							} catch (err) {
+								console.error(err);
+								throw err;
+							}
 						});
-						proclaim.include(sandbox.window.Origami, "o-test-component");
+						proclaim.include(window.Origami, "o-test-component");
 						proclaim.notMatch(response.text, /\/\/#\ssourceMappingURL(.+)/);
 					})
 					.expect("etag", "7d0e6490aad03b8b795f5fbf297f497f");
@@ -1146,6 +1160,70 @@ describe("/v3/bundles/js", function() {
 						});
 					// .expect("etag", "a7c4c23840cef2aa78288a6b32027b0d");
 				});
+			},
+		);
+
+		context(
+			"works with all active and maintained components which have JavaScript minified",
+			function() {
+				const bundleUrl = ({ name, version }) =>
+					`/v3/bundles/js?modules=${name}@${version}&source=test&registry=bower`;
+				for (const component of componentsWithJavaScript) {
+					const url = bundleUrl(component);
+					it(url, function() {
+						return request(app)
+							.get(url)
+							.expect(200)
+							.expect("Content-Type", "application/javascript; charset=utf-8")
+							.expect(response => {
+								const window = executeBrowserJavaScript(response.text);
+								proclaim.include(window.Origami, component.name);
+							});
+					});
+				}
+			},
+		);
+
+		context(
+			"works with all active and maintained components which have JavaScript unminified",
+			function() {
+				const bundleUrl = ({ name, version }) =>
+					`/v3/bundles/js?modules=${name}@${version}&source=test&registry=bower&minify=off`;
+				for (const component of componentsWithJavaScript) {
+					const url = bundleUrl(component);
+					it(url, function() {
+						return request(app)
+							.get(url)
+							.expect(200)
+							.expect("Content-Type", "application/javascript; charset=utf-8")
+							.expect(response => {
+								const window = executeBrowserJavaScript(response.text);
+								proclaim.include(window.Origami, component.name);
+							});
+					});
+				}
+			},
+		);
+
+		// Waiting on https://github.com/jsdom/jsdom/issues/2475
+		context.skip(
+			"works with all active and maintained components which have JavaScript ESM",
+			function() {
+				const bundleUrl = ({ name, version }) =>
+					`/v3/bundles/js?modules=${name}@${version}&source=test&registry=bower&esmodules=on`;
+				for (const component of componentsWithJavaScript) {
+					const url = bundleUrl(component);
+					it(url, function() {
+						return request(app)
+							.get(url)
+							.expect(200)
+							.expect("Content-Type", "application/javascript; charset=utf-8")
+							.expect(response => {
+								const window = executeBrowserJavaScript(response.text);
+								proclaim.include(window.Origami, component.name);
+							});
+					});
+				}
 			},
 		);
 	});
