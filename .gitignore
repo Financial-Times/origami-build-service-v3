@@ -1,7 +1,5 @@
-.editorconfig
-.env
-coverage
 node_modules
-npm-debug.log
-ws-*
-bower_components
+.serverless
+.env
+.*-stack.yml
+.serverless-package

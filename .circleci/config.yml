@@ -1,4 +1,8 @@
-version: 2
+version: 2.1
+
+orbs:
+    change-api: financial-times/change-api@0.24.0
+
 jobs:
   lint_terraform:
     docker:
@@ -8,149 +12,123 @@ jobs:
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: terraform fmt -check=true fastly/terraform/
 
+  lint:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run lint
+
+  unit_test:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run test:unit
+
+  integration_test_dev:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npm ci
+      - run: HOST="https://origami-build-service-v3-dev.in.ft.com" npm run test:integration
+
   deploy_dev:
     docker:
-      - image: circleci/node:11
+      - image: circleci/node:10
     steps:
       - checkout
       - run: npm ci
-      - run: ~/project/.circleci/create_netrc_file.sh
-      - run: git push https://git.heroku.com/origami-build-service-v3-dev.git HEAD:master --force
       - run: sudo ~/project/.circleci/install_terraform.sh
-      - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf fastly/terraform/domains_override.tf
-      - run: terraform init fastly/terraform/
-      - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
-      - run: terraform apply --auto-approve -var name=origami-build-service-dev.in.ft.com -var domain=origami-build-service-dev.in.ft.com fastly/terraform/
-      - run: sleep 60
-      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.com/service/$FASTLY_SERVICE_ID_DEV/purge_all"
-      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Development --summary 'Releasing Origami Build Service to Development'
-
-  integration_tests_dev:
-    docker:
-      - image: circleci/node:11
-    steps:
-      - checkout
-      - run: npm ci
-      - run: HOST=https://origami-build-service-dev.in.ft.com npm run test:fastly
+      - run: NODE_ENV=production npx serverless package --stage dev --package .serverless-package
+      - run: npx serverless deploy --conceal --stage dev --region eu-west-1 --package .serverless-package
+      - run: npx serverless deploy --conceal --stage dev --region us-west-1 --package .serverless-package
+      - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform init fastly/terraform/
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform apply --auto-approve fastly/terraform
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .dev-stack.yml
 
   deploy_staging:
     docker:
-      - image: circleci/node:11
+      - image: circleci/node:10
     steps:
       - checkout
       - run: npm ci
-      - run: ~/project/.circleci/create_netrc_file.sh
-      - run: git push https://git.heroku.com/origami-build-service-qa-v3.git HEAD:master --force
       - run: sudo ~/project/.circleci/install_terraform.sh
-      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf fastly/terraform/domains_override.tf
-      - run: terraform init fastly/terraform/
-      - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_STAGING
-      - run: terraform apply --auto-approve -var name=origami-build-service-qa.in.ft.com -var domain=origami-build-service-qa.in.ft.com fastly/terraform/
-      - run: sleep 60
-      - run: "curl -X POST -H \"Fastly-Key: $FASTLY_API_KEY\" https://api.fastly.com/service/$FASTLY_SERVICE_ID_STAGING/purge_all"
-      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Test --summary 'Releasing Origami Build Service to QA'
+      - run: NODE_ENV=production npx serverless package --stage qa --package .serverless-package
+      - run: npx serverless deploy --conceal --stage qa --region eu-west-1 --package .serverless-package
+      - run: npx serverless deploy --conceal --stage qa --region us-west-1 --package .serverless-package
+      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform init fastly/terraform/
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_QA
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform apply --auto-approve fastly/terraform
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .qa-stack.yml
 
-  integration_tests_staging:
+  deploy_production:
     docker:
-      - image: circleci/node:11
-    steps:
-      - checkout
-      - run: sudo npm i -g npm && npm ci
-      - run: HOST=https://origami-build-service-qa.in.ft.com npm run test:fastly
-
-  deploy_service_production:
-    docker:
-      - image: circleci/node:11
+      - image: circleci/node:10
     steps:
       - checkout
       - run: npm ci
-      - run: sudo ~/project/.circleci/install_heroku.sh
-      - run: ~/project/.circleci/create_netrc_file.sh
       - run: sudo ~/project/.circleci/install_terraform.sh
-      - run: heroku pipelines:promote --app origami-build-service-qa-v3 --to origami-build-service-eu-v3,origami-build-service-us-v3
-      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/qa_override.tf fastly/terraform/domains_override.tf
-      - run: terraform init fastly/terraform/
-      - run: terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_PROD
-      - run: terraform apply --auto-approve -var name=origami-build-service.in.ft.com -var domain=origami-build-service.in.ft.com fastly/terraform/
-      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Production --summary 'Releasing Origami Build Service to Production EU'
-      - run: npx -p @financial-times/release-log@^1 release-log --api-key $RELEASE_LOG_API_KEY --service 'Origami Build Service V3' --owner-email 'rowan.manning@ft.com' --notify-channel "origami-deploys" --description 'Release triggered by CI' --environment Production --summary 'Releasing Origami Build Service to Production US'
-
-  lint_js:
-    docker:
-      - image: circleci/node:11
-    steps:
-      - checkout
-      - run: npm ci
-      - run: make verify
-
-  unit_tests:
-    docker:
-      - image: circleci/node:11
-    steps:
-      - checkout
-      - run: npm ci
-      - run: make test-unit-coverage
-      - run: npm run test:integration
+      - run: NODE_ENV=production npx serverless package --stage prod --package .serverless-package
+      - run: npx serverless deploy --conceal --stage prod --region eu-west-1 --package .serverless-package
+      - run: npx serverless deploy --conceal --stage prod --region us-west-1 --package .serverless-package
+      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform init fastly/terraform/
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_PROD
+      - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform apply --auto-approve fastly/terraform
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .prod-stack.yml
 
 workflows:
-  version: 2
-  test:
+  deploy:
     jobs:
-      - lint_terraform:
-          filters:
-            tags:
-              ignore: /^v.*/
-            branches:
-              ignore: master
-      - lint_js:
-          filters:
-            tags:
-              ignore: /^v.*/
-            branches:
-              ignore: master
-      - unit_tests:
-          filters:
-            tags:
-              ignore: /^v.*/
-            branches:
-              ignore: master
+      - lint_terraform
+      - lint
+      - unit_test
       - deploy_dev:
-          filters:
-            tags:
-              ignore: /^v.*/
-            branches:
-              ignore: master
           requires:
+            - lint
+            - unit_test
             - lint_terraform
-            - lint_js
-            - unit_tests
-      - integration_tests_dev:
           filters:
-            tags:
-              ignore: /^v.*/
             branches:
-              ignore: master
+              ignore:
+                - master
+      - change-api/release-log:
+          requires:
+            - deploy_dev
+          systemCode: 'origami-build-service-v3'
+          environment: 'dev'
+          slackChannels: 'origami-deploys'
+      - integration_test_dev:
           requires:
             - deploy_dev
       - deploy_staging:
+          requires:
+            - lint
+            - unit_test
+            - lint_terraform
           filters:
-            tags:
-              ignore: /^v.*/
-            branches:
-              only:
-               - master
-      - integration_tests_staging:
-          filters:
-            tags:
-              ignore: /^v.*/
             branches:
               only:
                 - master
+      - change-api/release-log:
           requires:
             - deploy_staging
-      - deploy_service_production:
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          systemCode: 'origami-build-service-v3'
+          environment: 'test'
+          slackChannels: 'origami-deploys'
