@@ -1,0 +1,27 @@
+{
+  "scripts": {
+    "dev": "npx serverless offline",
+    "lint": "npx eslint .",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:integration": "jest tests/integration",
+    "test:unit": "jest tests/unit"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "serverless": "1.49.0",
+    "serverless-apigw-binary": "^0.4.4",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-offline": "^5.9.0",
+    "serverless-sentry": "^1.2.0",
+    "serverless-stack-output": "^0.2.3",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "raven": "^2.6.4",
+    "serverless-sentry-lib": "^1.1.2"
+  }
+}
