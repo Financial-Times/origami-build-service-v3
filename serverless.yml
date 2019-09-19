@@ -73,12 +73,14 @@ plugins:
   - serverless-create-global-dynamodb-table
 
 functions:
-  hello:
-    handler: functions/hello.hello
+  update_origami_component_list:
+    handler: ./.build/functions/update_origami_component_list.handler
     events:
-     - http:
-         path: /hello
-         method: get
+      - http:
+          path: /v3/update_origami_component_list
+          method: get
+      - schedule: rate(1 day)
+
 resources:
   Resources:
     ComponentsDynamoDBTable:
