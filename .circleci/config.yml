@@ -43,7 +43,7 @@ jobs:
       - checkout
       - run: npm ci
       - run: sudo ~/project/.circleci/install_terraform.sh
-      - run: NODE_ENV=production npx serverless package --stage dev --package .serverless-package
+      - run: NODE_ENV=production npm run build &&  npx serverless package --stage dev --package .serverless-package
       - run: npx serverless deploy --conceal --stage dev --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --conceal --stage dev --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf
@@ -62,7 +62,7 @@ jobs:
       - checkout
       - run: npm ci
       - run: sudo ~/project/.circleci/install_terraform.sh
-      - run: NODE_ENV=production npx serverless package --stage qa --package .serverless-package
+      - run: NODE_ENV=production npm run build &&  npx serverless package --stage qa --package .serverless-package
       - run: npx serverless deploy --conceal --stage qa --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --conceal --stage qa --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
@@ -81,7 +81,7 @@ jobs:
       - checkout
       - run: npm ci
       - run: sudo ~/project/.circleci/install_terraform.sh
-      - run: NODE_ENV=production npx serverless package --stage prod --package .serverless-package
+      - run: NODE_ENV=production npm run build &&  npx serverless package --stage prod --package .serverless-package
       - run: npx serverless deploy --conceal --stage prod --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --conceal --stage prod --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
