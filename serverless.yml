@@ -5,6 +5,13 @@ service: origami-build-service
 frameworkVersion: "=1.50.0"
 
 provider:
+  environment:
+    REGION: ${self:provider.region}
+    COMPONENT_TABLE: ${self:service}-components
+    NPM_WEBHOOK_SECRET_DEV: ${env:NPM_WEBHOOK_SECRET_DEV}
+    ORIGAMI_REPO_DATA_KEY_ID: ${env:ORIGAMI_REPO_DATA_KEY_ID}
+    ORIGAMI_REPO_DATA_SECRET_KEY: ${env:ORIGAMI_REPO_DATA_SECRET_KEY}
+    SENTRY_DSN: ${env:SENTRY_DSN}
   name: aws
   region: ${opt:region, 'eu-west-1'}
   role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/ApplicationRoleFor_${self:service}
@@ -22,9 +29,22 @@ custom:
     types:
       - '*/*'
   defaultStage: dev
-  dotenv:
-    include:
-      - SENTRY_DSN
+  globalTables: 
+    - 
+      regions: 
+        - eu-west-1
+        - us-west-1
+      tableName: "${self:provider.environment.COMPONENT_TABLE}"
+      tags: 
+        - 
+          Key: systemCode
+          Value: "${self:service}"
+        - 
+          Key: teamDL
+          Value: origami.support@ft.com
+        - 
+          Key: environment
+          Value: "${self:custom.tags.${self:provider.stage}.environment}"
   output:
     file: ./.${self:provider.stage}-stack.yml
   sentry:
@@ -50,7 +70,7 @@ plugins:
   - serverless-offline
   - serverless-sentry
   - serverless-stack-output
-  - serverless-dotenv-plugin
+  - serverless-create-global-dynamodb-table
 
 functions:
   hello:
@@ -59,3 +79,28 @@ functions:
      - http:
          path: /hello
          method: get
+resources:
+  Resources:
+    ComponentsDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:provider.environment.COMPONENT_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: name
+            AttributeType: S
+          -
+            AttributeName: version
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: name
+            KeyType: HASH # partition key
+          -
+            AttributeName: version
+            KeyType: RANGE # sort key
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+        BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
