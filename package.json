@@ -1,12 +1,14 @@
 {
   "scripts": {
-    "dev": "npx serverless offline",
+    "build": "tsc -p .",
+    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:* npx serverless offline",
     "lint": "npx eslint .",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "tap tests/integration",
     "test:unit": "tap tests/unit"
   },
   "devDependencies": {
+    "@types/node": "^12.7.5",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
@@ -22,13 +24,17 @@
     "sinon": "^7.4.2",
     "supertest": "^4.0.2",
     "tap": "^14.6.4",
+    "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@financial-times/origami-repo-data-client": "^1.6.0",
     "axios": "^0.19.0",
     "debug": "^4.1.1",
     "decompress": "^4.2.0",
     "raven": "^2.6.4",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "serverless-sentry-lib": "^1.1.2",
     "tar": "^4.4.10",
