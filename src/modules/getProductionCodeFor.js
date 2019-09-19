@@ -1,6 +1,6 @@
 "use strict";
 
-const axios = require("axios").default;
+const axios = require("axios");
 const decompress = require("decompress");
 const fs = require("fs");
 const os = require("os");
@@ -31,6 +31,7 @@ async function getProductionCodeFor(name, version) {
   let response;
   try {
     log(`Downloading ${urlWithV}`);
+    // @ts-ignore This expression is not callable.
     response = await axios({
       method: "get",
       url: urlWithV,
@@ -39,6 +40,7 @@ async function getProductionCodeFor(name, version) {
   } catch (err) {
     log(`Failed to fetch ${urlWithV}. Error: ${err.toString()}`);
     log(`Downloading ${urlWithoutV}`);
+    // @ts-ignore This expression is not callable.
     response = await axios({
       method: "get",
       url: urlWithoutV,
