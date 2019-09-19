@@ -27,7 +27,11 @@
     "@financial-times/origami-repo-data-client": "^1.6.0",
     "axios": "^0.19.0",
     "debug": "^4.1.1",
+    "decompress": "^4.2.0",
     "raven": "^2.6.4",
-    "serverless-sentry-lib": "^1.1.2"
+    "rimraf": "^3.0.0",
+    "serverless-sentry-lib": "^1.1.2",
+    "tar": "^4.4.10",
+    "utf8": "^3.0.0"
   }
 }
