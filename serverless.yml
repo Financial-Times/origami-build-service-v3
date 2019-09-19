@@ -2,7 +2,7 @@ service: origami-build-service
 #app: your-app-name
 #tenant: your-tenant-name
 
-frameworkVersion: "=1.49.0"
+frameworkVersion: "=1.50.0"
 
 provider:
   name: aws
