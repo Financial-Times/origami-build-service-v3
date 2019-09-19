@@ -21,6 +21,8 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@financial-times/origami-repo-data-client": "^1.6.0",
+    "axios": "^0.19.0",
     "debug": "^4.1.1",
     "raven": "^2.6.4",
     "serverless-sentry-lib": "^1.1.2"
