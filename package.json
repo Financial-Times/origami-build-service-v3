@@ -21,6 +21,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "debug": "^4.1.1",
     "raven": "^2.6.4",
     "serverless-sentry-lib": "^1.1.2"
   }
