@@ -1,6 +1,6 @@
 "use strict";
 
-const axios = require("axios");
+const axios = require("axios").default;
 const decompress = require("decompress");
 const fs = require("fs");
 const os = require("os");
