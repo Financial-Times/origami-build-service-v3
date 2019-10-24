@@ -21,7 +21,7 @@ const jsBundle = async (querystring = {}) => {
 
   try {
     await rmrf(`/Users/jake.champion/.jake-cache`);
-    const modules = parseModulesParameter(querystring.modules || "");
+    const modules = parseModulesParameter(querystring && querystring.modules);
     await fs.writeFile(
       path.join(bundleLocation, "./package.json"),
       JSON.stringify({
