@@ -36,7 +36,7 @@ const jsBundle = async (querystring = {}) => {
     await entrypoint.acquireDependencies(GET);
     await createEntryFile(bundleLocation, modules);
 
-    const { stdout: bundle } = await execa.command(`px ${bundleLocation}`, {
+    const { stdout: bundle } = await execa.command(`oax ${bundleLocation}`, {
       shell: true,
     });
 
