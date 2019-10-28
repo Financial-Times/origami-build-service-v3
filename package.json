@@ -43,6 +43,7 @@
     "http-errors": "^1.7.3",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
+    "oax": "^0.5.21",
     "object.fromentries": "^2.0.0",
     "raven": "^2.6.4",
     "reflect-metadata": "^0.1.13",
