@@ -14,8 +14,8 @@ const util = require("util");
 const rimraf = require("rimraf");
 const rmrf = util.promisify(rimraf);
 const os = require("os");
+const oax = require("oax");
 
-console.clear();
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
   const bundleLocation = await fs.mkdtemp("/tmp/bundle/");
@@ -38,9 +38,7 @@ const jsBundle = async (querystring = {}) => {
     await entrypoint.acquireDependencies(GET);
     await createEntryFile(bundleLocation, modules);
 
-    const { stdout: bundle } = await execa.command(`oax ${bundleLocation}`, {
-      shell: true,
-    });
+    const { stdout: bundle } = await execa(oax, [bundleLocation]);
 
     return {
       body: bundle,
