@@ -9,6 +9,7 @@ const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
   try {
     return await jsBundle(event.queryStringParameters);
   } catch (err) {
+    console.error(err);
     Raven.captureException(err, function(sendErr) {
       // This callback fires once the report has been sent to Sentry
       if (sendErr) {
@@ -21,9 +22,7 @@ const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
     if (err.code) {
       return createError(err.code, err.message);
     } else {
-      return createError.InternalServerError(
-        "Could not update the Origami Component list",
-      );
+      return createError.InternalServerError("Could not create bundle");
     }
   }
 });
