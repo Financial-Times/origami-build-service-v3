@@ -17,7 +17,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm i
       - run: npm run lint
 
   unit_test:
@@ -25,7 +25,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm i
       - run: npm run test:unit
 
   integration_test_dev:
@@ -33,7 +33,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm i
       - run: HOST="https://origami-build-service-v3-dev.in.ft.com" npm run test:integration
 
   deploy_dev:
@@ -41,7 +41,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage dev --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region eu-west-1 --package .serverless-package
@@ -61,7 +61,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage qa --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region eu-west-1 --package .serverless-package
@@ -81,7 +81,7 @@ jobs:
       - image: circleci/node:10
     steps:
       - checkout
-      - run: npm ci
+      - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage prod --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region eu-west-1 --package .serverless-package
