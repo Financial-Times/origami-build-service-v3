@@ -13,6 +13,7 @@ const { SystemCache } = require("./modules/SystemCache");
 const util = require("util");
 const rimraf = require("rimraf");
 const rmrf = util.promisify(rimraf);
+const os = require("os");
 
 console.clear();
 const jsBundle = async (querystring = {}) => {
@@ -20,7 +21,6 @@ const jsBundle = async (querystring = {}) => {
   const bundleLocation = await fs.mkdtemp("/tmp/bundle/");
 
   try {
-    await rmrf(`/Users/jake.champion/.jake-cache`);
     const modules = parseModulesParameter(querystring && querystring.modules);
     await fs.writeFile(
       path.join(bundleLocation, "./package.json"),
@@ -31,7 +31,9 @@ const jsBundle = async (querystring = {}) => {
       }),
       "utf-8",
     );
-    const systemcache = new SystemCache();
+    const systemCacheDirectory = path.join(os.tmpdir(), "pubgrub-cache");
+    await fs.mkdir(systemCacheDirectory, { recursive: true });
+    const systemcache = new SystemCache(systemCacheDirectory);
     const entrypoint = new Entrypoint(bundleLocation, systemcache);
     await entrypoint.acquireDependencies(GET);
     await createEntryFile(bundleLocation, modules);
