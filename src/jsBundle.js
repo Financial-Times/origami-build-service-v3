@@ -38,4 +38,5 @@ const jsBundle = async (querystring = {}) => {
     await rmrf(bundleLocation);
   }
 };
+
 module.exports = { jsBundle };
