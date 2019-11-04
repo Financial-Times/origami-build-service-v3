@@ -21,4 +21,4 @@ module.exports = async function installDependencies(location) {
 
   const entrypoint = new Entrypoint(location, systemcache);
   await entrypoint.acquireDependencies(GET);
-}
+};
