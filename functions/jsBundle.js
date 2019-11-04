@@ -26,6 +26,7 @@ const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
     }
   }
 });
+
 module.exports = {
   handler: jsHandler,
 };
