@@ -4,7 +4,6 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs").promises;
 const { Entrypoint } = require("./Entrypoint");
-const { GET } = require("./SolveType");
 const { SystemCache } = require("./SystemCache");
 
 /**
@@ -20,5 +19,5 @@ module.exports = async function installDependencies(location) {
   const systemcache = new SystemCache(systemCacheDirectory);
 
   const entrypoint = new Entrypoint(location, systemcache);
-  await entrypoint.acquireDependencies(GET);
+  await entrypoint.acquireDependencies();
 };
