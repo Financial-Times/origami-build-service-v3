@@ -9,6 +9,7 @@ const process = require("process");
 const url = require("url");
 const HOME = os.homedir();
 const URL = url.URL;
+const log = require("./log");
 
 /**
  * @param {number} a
@@ -121,7 +122,7 @@ const createSymlink = async (target, symlink, relative = false) => {
     const symlinkDir = path.join(process.cwd(), path.dirname(symlink));
     target = path.normalize(path.relative(symlinkDir, target));
   }
-  console.log(`Creating ${symlink} pointing to ${target}`);
+  log(`Creating ${symlink} pointing to ${target}`);
   await fs.symlink(target, symlink);
 };
 
@@ -145,7 +146,7 @@ const createPackageSymlink = async (
   isSelfLink = false,
   relative = false,
 ) => {
-  console.log(
+  log(
     `Creating ${
       isSelfLink ? "self" : ""
     }link for package '${name}'. From ${symlink}, to ${target}.`,

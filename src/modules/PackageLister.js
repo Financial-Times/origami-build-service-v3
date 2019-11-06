@@ -17,6 +17,7 @@ const { Manifest } = require("./Manifest");
 const { Term } = require("./Term");
 const { VersionConstraint } = require("./Version");
 const { VersionRange } = require("./Version");
+const log = require("./log");
 
 /**
  * A cache of all the versions of a single package that provides information about those versions to the solver.
@@ -264,7 +265,7 @@ class PackageLister {
     } catch (error) {
       if (error instanceof ManifestException) {
         // The lockfile for the manifest couldn't be parsed,
-        console.log(`Failed to parse manifest for ${id}:\n${error}`);
+        log(`Failed to parse manifest for ${id}:\n${error}`);
         this._knownInvalidVersions = this._knownInvalidVersions.union(
           id.version,
         );

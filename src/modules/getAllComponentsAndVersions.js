@@ -98,11 +98,11 @@ module.exports = async function getAllComponentsAndVersions({
           log(`${component} is not on npm`);
           components.delete(component);
         } else {
-          console.log("error:", JSON.parse(e.stdout));
+          log("error:", JSON.parse(e.stdout));
           throw e;
         }
       } catch (er) {
-        console.log({ error: e, component });
+        log({ error: e, component });
         throw e;
       }
     }
@@ -135,11 +135,11 @@ module.exports = async function getAllComponentsAndVersions({
           components.add(`${name}@'${version}'`);
         }
       }
-      console.log("count", count);
+      log("count", count);
       count = count + 1;
-      console.log("component count", components.size);
+      log("component count", components.size);
     } catch (e) {
-      console.log({ error: e, component });
+      log({ error: e, component });
       throw e;
     }
   }
@@ -153,7 +153,7 @@ module.exports = async function getAllComponentsAndVersions({
       });
       let info = JSON.parse(stdout || "[]");
       info = Array.isArray(info) ? info : [info];
-      console.log(`${component}@${version}`);
+      log(`${component}@${version}`);
       info.sort((a, b) => b.version.localeCompare(a.version));
 
       result.push({

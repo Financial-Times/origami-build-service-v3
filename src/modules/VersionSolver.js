@@ -18,6 +18,7 @@ const { Term } = require("./Term");
 const { UnknownSource } = require("./UnknownSource");
 const { Version } = require("./Version");
 const { VersionConstraint } = require("./Version");
+const log = require("./log");
 
 /**
  * The version solver that finds a set of package versions that satisfy the
@@ -93,13 +94,12 @@ class VersionSolver {
       while (next != null) {
         this._propagate(next);
         next = await this._choosePackageVersion();
-        console.log({ next });
       }
 
       return await this._result();
     } finally {
       // Gather some solving metrics.
-      console.log(
+      log(
         `Version solving took ${process.hrtime(stopwatch)} seconds.\nTried ${
           this._solution.attemptedSolutions
         } solutions.`,
@@ -127,7 +127,6 @@ class VersionSolver {
       const incompatibilities = Array.from(this._incompatibilities[$package]);
       for (const incompatibility of incompatibilities.reverse()) {
         const result = this._propagateIncompatibility(incompatibility);
-        console.log({ result });
         if (result == Symbol.for("conflict")) {
           // If `incompatibility` is satisfied by `_solution`, we use
           // `_resolveConflict` to determine the root cause of the conflict as a
@@ -194,7 +193,7 @@ class VersionSolver {
     if (unsatisfied == null) {
       return Symbol.for("conflict");
     }
-    console.log(
+    log(
       `derived: ${
         unsatisfied.isPositive ? "not " : ""
       }${unsatisfied.package.toString()}`,
@@ -221,7 +220,6 @@ class VersionSolver {
    * @memberof VersionSolver
    */
   _resolveConflict(incompatibility) {
-    console.log(`conflict: ${incompatibility}`);
     let newIncompatibility = false;
     while (!incompatibility.isFailure) {
       // The term in `incompatibility.terms` that was most recently satisfied by
@@ -331,11 +329,11 @@ class VersionSolver {
       newIncompatibility = true;
       const partially = difference == null ? "" : " partially";
       const bang = "!";
-      console.log(
+      log(
         `${bang} ${mostRecentTerm} is${partially} satisfied by ${mostRecentSatisfier}`,
       );
-      console.log(`${bang} which is caused by "${mostRecentSatisfier.cause}"`);
-      console.log(`${bang} thus: ${incompatibility}`);
+      log(`${bang} which is caused by "${mostRecentSatisfier.cause}"`);
+      log(`${bang} thus: ${incompatibility}`);
     }
     throw new SolveFailure(
       reformatRanges(this._packageListers, incompatibility),
@@ -354,7 +352,6 @@ class VersionSolver {
    */
   async _choosePackageVersion() {
     const unsatisfied = this._solution.unsatisfied;
-    console.log("unsatisfied.length", unsatisfied.length);
     if (unsatisfied.length === 0) {
       return null;
     }
@@ -428,7 +425,6 @@ class VersionSolver {
     }
 
     let conflict = false;
-    console.log("Package", $package.name);
     const incompatibilities = await this._packageLister(
       $package,
     ).incompatibilitiesFor(version);
@@ -448,9 +444,7 @@ class VersionSolver {
     }
     if (!conflict) {
       this._solution.decide(version);
-      console.log(
-        `selecting ${version.toString()}@${version.version.toString()}`,
-      );
+      log(`selecting ${version.toString()}@${version.version.toString()}`);
     }
 
     return $package.name;
@@ -463,7 +457,7 @@ class VersionSolver {
    * @memberof VersionSolver
    */
   _addIncompatibility(incompatibility) {
-    console.log(`fact: ${incompatibility}`);
+    log(`fact: ${incompatibility}`);
     for (const term of incompatibility.terms) {
       if (!this._incompatibilities[term.package.name]) {
         this._incompatibilities[term.package.name] = [incompatibility];
