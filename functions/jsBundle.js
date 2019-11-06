@@ -20,9 +20,27 @@ const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
     });
 
     if (err.code) {
-      return createError(err.code, err.message);
+      return createError(
+        err.code,
+        `throw new Error(${JSON.stringify(err.message)})`,
+        {
+          headers: {
+            "content-type": "application/javascript;charset=UTF-8",
+            "cache-control": "max-age=0, must-revalidate, no-cache, no-store",
+          },
+        },
+      );
     } else {
-      return createError.InternalServerError("Could not create bundle");
+      // TODO: output stacktrace and error message if not running in production
+      return createError.InternalServerError(
+        `throw new Error(${JSON.stringify("Could not create bundle")})`,
+        {
+          headers: {
+            "content-type": "application/javascript;charset=UTF-8",
+            "cache-control": "max-age=0, must-revalidate, no-cache, no-store",
+          },
+        },
+      );
     }
   }
 });

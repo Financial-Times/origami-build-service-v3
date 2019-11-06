@@ -11,6 +11,8 @@ const rmrf = util.promisify(rimraf);
 const createPackageJsonFile = require("./modules/create-package-json-file");
 const installDependencies = require("./modules/install-dependencies");
 const createJavaScriptBundle = require("./modules/create-javascript-bundle");
+const { SolveFailure } = require("./modules/SolveFailure");
+const { UserException } = require("./modules/HOME");
 
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
@@ -32,8 +34,23 @@ const jsBundle = async (querystring = {}) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/javascript;charset=UTF-8",
+        "Cache-Control":
+          "public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
       },
     };
+  } catch (err) {
+    if (err instanceof SolveFailure || err instanceof UserException) {
+      return {
+        body: `throw new Error(${JSON.stringify(err.message)})`,
+        statusCode: 400,
+        headers: {
+          "Content-Type": "application/javascript;charset=UTF-8",
+          "Cache-Control": "max-age=0, must-revalidate, no-cache, no-store",
+        },
+      };
+    } else {
+      throw err;
+    }
   } finally {
     await rmrf(bundleLocation);
   }
