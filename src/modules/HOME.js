@@ -61,6 +61,12 @@ class UnsupportedError extends Error {}
 class ManifestException extends ApplicationException {}
 
 /**
+ * @class UserException
+ * @extends {ApplicationException}
+ */
+class UserException extends ApplicationException {}
+
+/**
  * @class FileException
  * @extends {Error}
  */
@@ -370,6 +376,7 @@ module.exports.PackageNotFoundException = PackageNotFoundException;
 module.exports.ApplicationException = ApplicationException;
 module.exports.UnsupportedError = UnsupportedError;
 module.exports.ManifestException = ManifestException;
+module.exports.UserException = UserException;
 module.exports.FileException = FileException;
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
