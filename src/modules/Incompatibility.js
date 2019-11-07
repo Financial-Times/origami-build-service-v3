@@ -506,7 +506,9 @@ class Incompatibility {
 
       return buffer.toString();
     }
-    buffer += `${this._terse(latter.terms[0], details)} `;
+    buffer += `${this._terse(latter.terms[0], details)}@${
+      latter.terms[0].constraint
+    } `;
     if (priorLine != null) {
       buffer += `(${priorLine}) `;
     }
