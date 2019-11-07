@@ -72,7 +72,7 @@ module.exports.parseModulesParameter = modules => {
                   module.substr(0, module.lastIndexOf("@")),
                   module.substr(module.lastIndexOf("@") + 1),
                 ]
-              : module.split("@"),
+              : [module, "*"],
           ),
         );
 
