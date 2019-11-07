@@ -245,10 +245,32 @@ describe("/v3/bundles/js", function() {
         response.headers["content-type"],
         "application/javascript;charset=UTF-8",
       );
+      doesThrowInBrowserEnvironment(
+        response.text,
+        // TODO: Is this a potential XSS?
+        "The modules query parameter contains module names which are not valid: o-autoinit_±-test.",
+      );
+    });
+  });
+
+  context("invalid version", function() {
+    it("GET /v3/bundles/js?modules=o-autoinit@!1&source=test", async function() {
+      const response = await request(HOST).get(
+        "/v3/bundles/js?modules=o-autoinit@!1&source=test",
+      );
+      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(
+        response.headers["cache-control"],
+        "max-age=0, must-revalidate, no-cache, no-store",
+      );
+      proclaim.deepEqual(
+        response.headers["content-type"],
+        "application/javascript;charset=UTF-8",
+      );
       // TODO: Is this a potential XSS?
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter contains module names which are not valid: o-autoinit_±-test.",
+        "The version !1 in o-autoinit@!1 is not a valid version.\nPlease refer to TODO (build service documentation) for what is a valid version.",
       );
     });
   });
@@ -261,7 +283,22 @@ describe("/v3/bundles/js", function() {
       proclaim.deepEqual(response.statusCode, 400);
       doesThrowInBrowserEnvironment(
         response.text,
-        "Because o-bundle depends on o-jake-does-not-exist which doesn't exist (could not find package o-jake-does-not-exist), version solving failed.\n",
+        // TODO: Is this a potential XSS?
+        "Because o-bundle depends on o-jake-does-not-exist@* which doesn't exist (could not find package o-jake-does-not-exist), version solving failed.\n",
+      );
+    });
+  });
+
+  context("version which does not exist", function() {
+    it("GET /v3/bundles/js?modules=@financial-times/o-banner@1111111&source=test", async function() {
+      const response = await request(HOST).get(
+        "/v3/bundles/js?modules=@financial-times/o-banner@1111111&source=test",
+      );
+      proclaim.deepEqual(response.statusCode, 400);
+      doesThrowInBrowserEnvironment(
+        response.text,
+        // TODO: Is this a potential XSS?
+        "Because o-bundle depends on @financial-times/o-banner@1111111.0.0 which doesn't match any versions, version solving failed.\n",
       );
     });
   });
@@ -276,225 +313,4 @@ describe("/v3/bundles/js", function() {
       proclaim.include(window.Origami, "@financial-times/o-date");
     });
   });
-
-  context.skip(
-    "compiles the JavaScript based upon the user-agent header",
-    function() {
-      it("compiles to ES5 for user-agents the service is not aware of", function() {
-        return request(HOST)
-          .get("/v3/bundles/js?modules=@financial-times/o-date@*&source=test")
-          .set("User-Agent", "unknown_browser/1.2.3")
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("compiles to ES5 for Internet Explorer 11", function() {
-        return request(HOST)
-          .get("/v3/bundles/js?modules=@financial-times/o-date@*&source=test")
-          .set("User-Agent", "ie/11")
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("compiles to ES5 for Internet Explorer 10", function() {
-        return request(HOST)
-          .get("/v3/bundles/js?modules=@financial-times/o-date@*&source=test")
-          .set("User-Agent", "ie/10")
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("does not compile to ES5 or ES6 for Chrome 70", function() {
-        // o-test-component 1.0.29 is written in ES7 syntax
-        return request(HOST)
-          .get("/v3/bundles/js?modules=@financial-times/o-date@*&source=test")
-          .set("User-Agent", "chrome/70")
-          .expect(response => {
-            proclaim.isFalse(
-              isES5(response.text),
-              "expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
-            );
-            proclaim.isFalse(
-              isES6(response.text),
-              "expected JavaScript response to not be valid ECMAScript 6 syntax but it was.",
-            );
-            proclaim.isTrue(
-              isES7(response.text),
-              "expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("does not compile to ES5 for Chrome 70", function() {
-        // o-test-component 1.0.32 is written in ES5 syntax
-        return request(HOST)
-          .get("/v3/bundles/js?modules=@financial-times/o-date@*&source=test")
-          .set("User-Agent", "chrome/70")
-          .expect(response => {
-            proclaim.isFalse(
-              isES5(response.text),
-              "expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
-            );
-            proclaim.isTrue(
-              isES6(response.text),
-              "expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-    },
-  );
-
-  context.skip(
-    "compiles the JavaScript based upon the ua query parameter",
-    function() {
-      it("takes precedant over the user-agent header", function() {
-        return request(HOST)
-          .get(
-            "/v3/bundles/js?modules=@financial-times/o-date@*&source=test&ua=unknown_browser/1.2.3",
-          )
-          .set("User-Agent", "chrome/70")
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("compiles to ES5 for user-agents the service is not aware of", function() {
-        return request(HOST)
-          .get(
-            "/v3/bundles/js?modules=@financial-times/o-date@*&source=test&ua=unknown_browser/1.2.3",
-          )
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("compiles to ES5 for Internet Explorer 11", function() {
-        return request(HOST)
-          .get(
-            "/v3/bundles/js?modules=@financial-times/o-date@*&source=test&=ie/11",
-          )
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("compiles to ES5 for Internet Explorer 10", function() {
-        return request(HOST)
-          .get(
-            "/v3/bundles/js?modules=@financial-times/o-date@*&source=test&ua=ie/10",
-          )
-          .expect(response => {
-            proclaim.isTrue(
-              isES5(response.text),
-              "expected JavaScript response to be valid ECMAScript 5 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("does not compile to ES5 or ES6 for Chrome 70", function() {
-        // @financial-times/o-test-component 1.0.29-test is written in ES7 syntax
-        return request(HOST)
-          .get(
-            "/v3/bundles/js?modules=@financial-times/o-date@*&source=test&ua=chrome/70",
-          )
-          .expect(response => {
-            proclaim.isFalse(
-              isES5(response.text),
-              "expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
-            );
-            proclaim.isFalse(
-              isES6(response.text),
-              "expected JavaScript response to not be valid ECMAScript 6 syntax but it was.",
-            );
-            proclaim.isTrue(
-              isES7(response.text),
-              "expected JavaScript response to be valid ECMAScript 7 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-
-      it("does not compile to ES5 for Chrome 70", function() {
-        // @financial-times/o-test-component 1.0.32-test is written in ES5 syntax
-        return request(HOST)
-          .get(
-            "/v3/bundles/js?modules=@financial-times/o-date@*&source=test&ua=chrome/70",
-          )
-          .expect(response => {
-            proclaim.isFalse(
-              isES5(response.text),
-              "expected JavaScript response to not be valid ECMAScript 5 syntax but it was.",
-            );
-            proclaim.isTrue(
-              isES6(response.text),
-              "expected JavaScript response to be valid ECMAScript 6 syntax but it was not.",
-            );
-          })
-          .expect(response => {
-            const window = doesNotThrowInBrowserEnvironment(response.text);
-            proclaim.include(window.Origami, "@financial-times/o-date");
-          });
-      });
-    },
-  );
 });
