@@ -111,6 +111,13 @@ plugins:
   - serverless-s3-remover
 
 functions:
+  hello:
+    handler: ./functions/hello.hello
+    # handler: ./.build/functions/hello.hello
+    events:
+     - http:
+         path: /hello
+         method: get
   update_origami_component_list:
     handler: ./functions/update_origami_component_list.handler
     events:

@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noImplicitAny": false,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "strict": true,
+        "lib": ["esnext.array", "es2018"],
+        "preserveConstEnums": true,
+        // "strictNullChecks": true,
+        "sourceMap": true,
+        "target": "es2018",
+        "outDir": ".build",
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "rootDir": "./",
+        // "downlevelIteration": true,
+        // "declaration": true,
+        "typeRoots": [
+            "src/modules",
+            "./node_modules/@types"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.test.js"
+    ]
+}
