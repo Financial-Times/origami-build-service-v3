@@ -2,6 +2,7 @@
 
 const { Map } = require("immutable");
 const validateNpmPackageName = require("validate-npm-package-name");
+const { UserException } = require("./modules/HOME");
 
 /**
  * Used to ensure all module names in the modules query parameter conform to the package.json specification.
@@ -19,7 +20,9 @@ module.exports.parseModulesParameter = modules => {
     const parsedModules = modules.split(",").filter(m => m !== "");
 
     if (modules.length === 0) {
-      const error = new Error("The modules query parameter can not be empty.");
+      const error = new UserException(
+        "The modules query parameter can not be empty.",
+      );
       // @ts-ignore
       error.code = 400;
       throw error;
@@ -38,7 +41,7 @@ module.exports.parseModulesParameter = modules => {
     );
 
     if (invalidModuleNames.length > 0) {
-      const error = new Error(
+      const error = new UserException(
         `The modules query parameter contains module names which are not valid: ${invalidModuleNames.join(
           ", ",
         )}.`,
@@ -47,8 +50,15 @@ module.exports.parseModulesParameter = modules => {
       error.code = 400;
       throw error;
     } else {
-      if (moduleNames.length !== new Set(moduleNames).size) {
-        const error = new Error(
+      if (moduleNames.length === 0) {
+        const error = new UserException(
+          "The modules query parameter can not be empty.",
+        );
+        // @ts-ignore
+        error.code = 400;
+        throw error;
+      } else if (moduleNames.length !== new Set(moduleNames).size) {
+        const error = new UserException(
           `The modules query parameter contains duplicate module names.`,
         );
         // @ts-ignore
@@ -70,7 +80,7 @@ module.exports.parseModulesParameter = modules => {
       }
     }
   } else {
-    const error = new Error("The modules query parameter is required.");
+    const error = new UserException("The modules query parameter is required.");
     // @ts-ignore
     error.code = 400;
     throw error;
