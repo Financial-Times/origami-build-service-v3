@@ -1,0 +1,7 @@
+node_modules
+.serverless
+.env
+.*-stack.yml
+.serverless-package
+.build
+.nyc_output/
