@@ -8,7 +8,7 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "noImplicitReturns": true,
-        // "strict": true,
+        "strict": true,
         "lib": ["esnext.array", "es2018"],
         "preserveConstEnums": true,
         // "strictNullChecks": true,

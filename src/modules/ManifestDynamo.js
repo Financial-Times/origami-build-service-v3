@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable getter-return */
 "use strict";
 
 // This is required for the @aws/dynamodb-data-mapper-annotations package to work.
@@ -7,7 +9,7 @@ const {
   attribute,
   hashKey,
   rangeKey,
-  table
+  table,
 } = require("@aws/dynamodb-data-mapper-annotations");
 
 /**
@@ -40,16 +42,18 @@ function decorateMethod(decorators, target, propertyKey) {
   if (propertyKey) {
     let propertyDescriptor = Object.getOwnPropertyDescriptor(
       target,
-      propertyKey
+      propertyKey,
     );
-    for (let decorator of decorators.reverse()) {
+    for (const decorator of decorators.reverse()) {
       propertyDescriptor = decorator(target, propertyKey) || propertyDescriptor;
     }
+
     return propertyDescriptor;
   } else {
-    for (let decorator of decorators.reverse()) {
+    for (const decorator of decorators.reverse()) {
       target = decorator(target) || target;
     }
+
     return target;
   }
 }
@@ -68,50 +72,68 @@ function decorateMethod(decorators, target, propertyKey) {
  *
  */
 function decorateClass(decorators, target) {
-  for (let decorator of decorators.reverse()) {
+  for (const decorator of decorators.reverse()) {
     target = decorator(target) || target;
   }
+
   return target;
 }
 
-let ManifestDynamo = decorateClass(
-  [table("origami-build-service-components")],
-  class {}
-);
+let ManifestDynamo = class {
+  constructor() {
+    /**
+     * @type {string}
+     */
+    // tslint:disable-next-line: no-unused-expression
+    this.name;
+    /**
+     * @type {string}
+     */
+    // tslint:disable-next-line: no-unused-expression
+    this.version;
+    /**
+     * @type {string}
+     */
+    // tslint:disable-next-line: no-unused-expression
+    this.dependencies;
+    /**
+     * @type {string}
+     */
+    // tslint:disable-next-line: no-unused-expression
+    this.codeLocation;
+  }
+};
 
 decorateMethod(
+  // @ts-ignore
   [hashKey(), Reflect.metadata("design:type", String)],
   ManifestDynamo.prototype,
-  "name"
+  "name",
 );
 
 decorateMethod(
+  // @ts-ignore
   [rangeKey(), Reflect.metadata("design:type", String)],
   ManifestDynamo.prototype,
-  "version"
+  "version",
+);
+
+decorateMethod(
+  // @ts-ignore
+  [attribute(), Reflect.metadata("design:type", String)],
+  ManifestDynamo.prototype,
+  "dependencies",
 );
 
 decorateMethod(
   [attribute(), Reflect.metadata("design:type", String)],
   ManifestDynamo.prototype,
-  "dependencies"
-);
-
-decorateMethod(
-  [attribute(), Reflect.metadata("design:type", String)],
-  ManifestDynamo.prototype,
-  "devDependencies"
-);
-
-decorateMethod(
-  [attribute(), Reflect.metadata("design:type", ArrayBuffer)],
-  ManifestDynamo.prototype,
-  "code"
+  "codeLocation",
 );
 
 ManifestDynamo = decorateClass(
   [table("origami-build-service-components")],
-  ManifestDynamo
+  ManifestDynamo,
 );
 
-module.exports = { ManifestDynamo };
+module.exports.ManifestDynamo = ManifestDynamo;

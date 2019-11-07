@@ -8,6 +8,7 @@ provider:
   environment:
     REGION: ${self:provider.region}
     COMPONENT_TABLE: ${self:service}-components
+    MODULE_BUCKET_NAME: ${self:custom.bucketName}
     NPM_WEBHOOK_SECRET_DEV: ${env:NPM_WEBHOOK_SECRET_DEV}
     ORIGAMI_REPO_DATA_KEY_ID: ${env:ORIGAMI_REPO_DATA_KEY_ID}
     ORIGAMI_REPO_DATA_SECRET_KEY: ${env:ORIGAMI_REPO_DATA_SECRET_KEY}
@@ -25,9 +26,41 @@ provider:
   versionFunctions: false # Optional function versioning
 
 custom:
+  additionalStacks:
+    permanent:
+      Resources:
+        S3ModuleBucketPolicy:
+          Type: 'AWS::S3::BucketPolicy'
+          Properties:
+            Bucket:
+              Ref: "S3ModuleBucket"
+            PolicyDocument:
+              Id: S3ModuleBucketPolicy
+              Statement:
+                - Sid: AllowOnlyApplicationToPutObject
+                  Effect: Allow
+                  Principal:
+                    AWS:
+                    - ${self:provider.role}
+                  Action: s3:PutObject
+                  Resource:
+                  - arn:aws:s3:::${self:custom.additionalStacks.permanent.Resources.S3ModuleBucket.Properties.BucketName}/*
+                - Sid: AllowOnlyApplicationToGetObject
+                  Effect: Allow
+                  Principal:
+                    AWS:
+                    - ${self:provider.role}
+                  Action: s3:PutObject
+                  Resource:
+                  - arn:aws:s3:::${self:custom.additionalStacks.permanent.Resources.S3ModuleBucket.Properties.BucketName}/*
+        S3ModuleBucket:
+          Type: 'AWS::S3::Bucket'
+          Properties:
+            BucketName: ${self:custom.bucketName}
   apigwBinary:
     types:
       - '*/*'
+  bucketName: ${self:service}-${self:provider.stage}-modules
   defaultStage: dev
   globalTables: 
     - 
@@ -47,6 +80,9 @@ custom:
           Value: "${self:custom.tags.${self:provider.stage}.environment}"
   output:
     file: ./.${self:provider.stage}-stack.yml
+  remover:
+     buckets:
+       - ${self:custom.bucketName}
   sentry:
     dsn: ${env:SENTRY_DSN}
     organization: ${env:SENTRY_ORGANISATION}
@@ -71,10 +107,19 @@ plugins:
   - serverless-sentry
   - serverless-stack-output
   - serverless-create-global-dynamodb-table
+  - serverless-plugin-additional-stacks
+  - serverless-s3-remover
 
 functions:
+  hello:
+    handler: ./functions/hello.hello
+    # handler: ./.build/functions/hello.hello
+    events:
+     - http:
+         path: /hello
+         method: get
   update_origami_component_list:
-    handler: ./.build/functions/update_origami_component_list.handler
+    handler: ./functions/update_origami_component_list.handler
     events:
       - http:
           path: /v3/update_origami_component_list

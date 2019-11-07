@@ -11,19 +11,20 @@ module.exports.handler = RavenLambdaWrapper.handler(Raven, async () => {
   try {
     updateOrigamiComponentList({
       origamiRepoDataApiKey: process.env.ORIGAMI_REPO_DATA_KEY_ID,
-      origamiRepoDataApiSecret: process.env.ORIGAMI_REPO_DATA_SECRET_KEY
+      origamiRepoDataApiSecret: process.env.ORIGAMI_REPO_DATA_SECRET_KEY,
     }).catch(e => {
       throw e;
     });
+
     return {
       body: JSON.stringify(
         {
-          message: "Updating the Origami Component database"
+          message: "Updating the Origami Component database",
         },
         null,
-        2
+        2,
       ),
-      statusCode: 200
+      statusCode: 200,
     };
   } catch (err) {
     console.error(err);
@@ -38,7 +39,7 @@ module.exports.handler = RavenLambdaWrapper.handler(Raven, async () => {
     });
 
     return createError.InternalServerError(
-      "Could not update the Origami Component list"
+      "Could not update the Origami Component list",
     );
   }
 });
