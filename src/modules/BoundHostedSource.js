@@ -98,12 +98,10 @@ class BoundHostedSource extends CachedSource {
               this.memoizeManifest(id, manifest);
               results.push(id);
             }
-
-            // If no versions are found, make a request for a specific version so that we can get a better error message from DynamoDB
             if (count == 0) {
               await mapper.get(
                 Object.assign(new ManifestDynamo(), {
-                  name: pkg,
+                  name: $package,
                   version: "0",
                 }),
                 {
@@ -218,11 +216,16 @@ class BoundHostedSource extends CachedSource {
     // Download and extract the archive to a temp directory.
     const tempDir = await this.systemCache.createTempDir();
     const response = await mapper.get(
-      Object.assign(new ManifestDynamo(), { name: $package, version }),
+      Object.assign(new ManifestDynamo(), {
+        name: $package,
+        version,
+      }),
     );
     const a = await this.systemCache.createTempDir();
     const tarPath = path.join(a, `${$package}@${version}.tar.gz`);
-    await mkdir(path.dirname(tarPath), { recursive: true });
+    await mkdir(path.dirname(tarPath), {
+      recursive: true,
+    });
     const s3 = new AWS.S3();
     if (!process.env.MODULE_BUCKET_NAME) {
       throw new Error(
