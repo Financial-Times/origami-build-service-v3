@@ -214,7 +214,7 @@ class PackageLister {
     // Return the most preferable version that matches `constraint`: the latest
     // non-prerelease version if one exists, or the latest prerelease version
     // otherwise.
-    let bestPrerelease;
+    let version;
     const v = Array.from(versions);
     const _versions = this._isDowngrade ? v : v.reverse();
     for (const id of _versions) {
@@ -227,13 +227,13 @@ class PackageLister {
       if (!id.version.isPreRelease) {
         return id;
       }
-      bestPrerelease = bestPrerelease != null ? bestPrerelease : id;
+      version = version != null ? version : id;
     }
 
-    if (bestPrerelease) {
-      return bestPrerelease;
+    if (version) {
+      return version;
     } else {
-      throw new Error("bestPrerelease is undefined.");
+      return null;
     }
   }
 
