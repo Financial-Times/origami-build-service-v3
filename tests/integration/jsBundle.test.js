@@ -4,9 +4,6 @@
 const request = require("supertest");
 const process = require("process");
 const proclaim = require("proclaim");
-const isES5 = require("is-es5-syntax");
-const isES6 = require("is-es6-syntax");
-const isES7 = require("is-es7-syntax");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { Script } = require("vm");
