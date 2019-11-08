@@ -229,9 +229,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("invalid module name", function() {
-    it("GET /v3/bundles/js?modules=o-autoinit_%-test&source=test", async function() {
+    it("GET /v3/bundles/js?modules=o-autoinit_%25-test&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=o-autoinit_%-test&source=test",
+        "/v3/bundles/js?modules=o-autoinit_%25-test&source=test",
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
