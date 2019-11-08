@@ -51,10 +51,6 @@ jobs:
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform apply --auto-approve fastly/terraform
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - .dev-stack.yml
 
   deploy_staging:
     docker:
@@ -71,10 +67,6 @@ jobs:
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_QA
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform apply --auto-approve fastly/terraform
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - .qa-stack.yml
 
   deploy_production:
     docker:
@@ -91,10 +83,6 @@ jobs:
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_PROD
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform apply --auto-approve fastly/terraform
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - .prod-stack.yml
 
 workflows:
   deploy:
