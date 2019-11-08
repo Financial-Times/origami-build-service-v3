@@ -219,16 +219,11 @@ class BoundHostedSource extends CachedSource {
     // Download and extract the archive to a temp directory.
     const tempDir = await this.systemCache.createTempDir();
     const response = await mapper.get(
-      Object.assign(new ManifestDynamo(), {
-        name: $package,
-        version,
-      }),
+      Object.assign(new ManifestDynamo(), { name: $package, version }),
     );
     const a = await this.systemCache.createTempDir();
     const tarPath = path.join(a, `${$package}@${version}.tar.gz`);
-    await mkdir(path.dirname(tarPath), {
-      recursive: true,
-    });
+    await mkdir(path.dirname(tarPath), { recursive: true });
     const s3 = new AWS.S3();
     if (!process.env.MODULE_BUCKET_NAME) {
       throw new Error(
