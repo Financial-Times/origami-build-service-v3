@@ -3,6 +3,7 @@
 const { CachedSource } = require("./CachedSource");
 const { Package } = require("./Package");
 const { resolveVersions } = require("./resolveVersions");
+const { GET } = require("./SolveType");
 const path = require("path");
 
 /**
@@ -48,7 +49,7 @@ class Entrypoint {
    * @memberof Entrypoint
    * @returns {Promise<void>}
    */
-  async acquireDependencies(type) {
+  async acquireDependencies(type = GET) {
     const result = await resolveVersions(type, this.cache, this.root);
     const stopwatch = process.hrtime();
     console.log("packages", result.packages.map(p => p.name).join(" "));
