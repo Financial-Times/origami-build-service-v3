@@ -1,13 +1,12 @@
 "use strict";
 
 const AWS = require("aws-sdk");
-const { ItemNotFoundException } = require("@aws/dynamodb-data-mapper");
 const decompress = require("decompress");
 const { writeFile, rename, mkdir } = require("fs").promises;
 const { fromJS, Map } = require("immutable");
 const path = require("path");
 const { CachedSource } = require("./CachedSource");
-const { dirExists, listDir, PackageNotFoundException, URL } = require("./HOME");
+const { dirExists, listDir, PackageNotFoundException } = require("./HOME");
 const { Package } = require("./Package");
 const { Manifest } = require("./Manifest");
 const { ManifestDynamo } = require("./ManifestDynamo");
