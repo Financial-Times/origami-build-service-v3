@@ -49,7 +49,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter is required.",
+        "Origami Build Service returned an error: The modules query parameter is required.",
       );
     });
   });
@@ -68,7 +68,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter is required.",
+        "Origami Build Service returned an error: The modules query parameter is required.",
       );
     });
 
@@ -85,7 +85,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter can not be empty.",
+        "Origami Build Service returned an error: The modules query parameter can not be empty.",
       );
     });
 
@@ -102,7 +102,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter contains module names which are not valid: !1.",
+        "Origami Build Service returned an error: The modules query parameter contains module names which are not valid: !1.",
       );
     });
   });
@@ -123,7 +123,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "Missing source query parameter, the value should be a valid biz-ops systemcode.",
+        "Origami Build Service returned an error: Missing source query parameter, the value should be a valid biz-ops systemcode.",
       );
     });
   });
@@ -163,7 +163,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter contains duplicate module names.",
+        "Origami Build Service returned an error: The modules query parameter contains duplicate module names.",
       );
     });
 
@@ -183,7 +183,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter contains duplicate module names.",
+        "Origami Build Service returned an error: The modules query parameter contains duplicate module names.",
       );
     });
 
@@ -202,7 +202,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "The modules query parameter contains duplicate module names.",
+        "Origami Build Service returned an error: The modules query parameter contains duplicate module names.",
       );
     });
   });
@@ -245,7 +245,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "The modules query parameter contains module names which are not valid: o-autoinit_%-test.",
+        "Origami Build Service returned an error: The modules query parameter contains module names which are not valid: o-autoinit_%-test.",
       );
     });
   });
@@ -267,7 +267,7 @@ describe("/v3/bundles/js", function() {
       // TODO: Is this a potential XSS?
       doesThrowInBrowserEnvironment(
         response.text,
-        "The version !1 in o-autoinit@!1 is not a valid version.\nPlease refer to TODO (build service documentation) for what is a valid version.",
+        "Origami Build Service returned an error: The version !1 in o-autoinit@!1 is not a valid version.\nPlease refer to TODO (build service documentation) for what is a valid version.",
       );
     });
   });
@@ -281,7 +281,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "Because o-bundle depends on o-jake-does-not-exist@* which doesn't exist (could not find package o-jake-does-not-exist), version solving failed.\n",
+        "Origami Build Service returned an error: Because o-bundle depends on o-jake-does-not-exist@* which doesn't exist (could not find package o-jake-does-not-exist), version solving failed.\n",
       );
     });
   });
@@ -295,7 +295,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "Because o-bundle depends on @financial-times/o-banner@1111111.0.0 which doesn't match any versions, version solving failed.\n",
+        "Origami Build Service returned an error: Because o-bundle depends on @financial-times/o-banner@1111111.0.0 which doesn't match any versions, version solving failed.\n",
       );
     });
   });

@@ -45,7 +45,9 @@ const jsBundle = async (querystring = {}) => {
       err instanceof FormatException
     ) {
       return {
-        body: `throw new Error(${JSON.stringify(err.message)})`,
+        body: `throw new Error(${JSON.stringify(
+          "Origami Build Service returned an error: " + err.message,
+        )})`,
         statusCode: 400,
         headers: {
           "Content-Type": "application/javascript;charset=UTF-8",
