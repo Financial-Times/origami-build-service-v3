@@ -105,7 +105,6 @@ plugins:
   - serverless-apigw-binary
   - serverless-offline
   - serverless-sentry
-  - serverless-stack-output
   - serverless-create-global-dynamodb-table
   - serverless-plugin-additional-stacks
   - serverless-s3-remover
