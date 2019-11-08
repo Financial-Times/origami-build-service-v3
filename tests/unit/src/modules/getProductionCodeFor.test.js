@@ -60,18 +60,5 @@ tap.test("getProductionCodeFor", t => {
     },
   );
 
-  t.test("Removes img folder from only the o-grid tarball", async t => {
-    t.context.execaStub.command.resolves({
-      stdout: new ArrayBuffer(),
-    });
-    t.context.decompressStub.resolves();
-    t.context.rimrafStub.yields();
-    t.context.fsStub.mkdtemp.resolves("/temp-test-directory");
-    await t.context.getProductionCodeFor("@financial-times/o-test", "1.2.3");
-    t.false(t.context.rimrafStub.calledWith(`/temp-test-directory/img`));
-    await t.context.getProductionCodeFor("@financial-times/o-grid", "1.2.3");
-    t.true(t.context.rimrafStub.calledWith(`/temp-test-directory/img`));
-    t.end();
-  });
   t.end();
 });
