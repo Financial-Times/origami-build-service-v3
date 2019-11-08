@@ -72,6 +72,7 @@ class BoundHostedSource extends CachedSource {
           console.log(`Get versions from ${pkg}.`);
           const results = [];
           try {
+            let count = 0;
             for await (const m of mapper.query(
               ManifestDynamo,
               {
@@ -81,6 +82,7 @@ class BoundHostedSource extends CachedSource {
                 projection: ["name", "version", "dependencies"],
               },
             )) {
+              count++;
               let manifestMap = Map();
               manifestMap = manifestMap.set("name", m.name);
               manifestMap = manifestMap.set("version", m.version);
@@ -96,6 +98,19 @@ class BoundHostedSource extends CachedSource {
               const id = this.source.idFor(ref.name, manifest.version);
               this.memoizeManifest(id, manifest);
               results.push(id);
+            }
+
+            // If no versions are found, make a request for a specific version so that we can get a better error message from DynamoDB
+            if (count == 0) {
+              await mapper.get(
+                Object.assign(new ManifestDynamo(), {
+                  name: pkg,
+                  version: "0",
+                }),
+                {
+                  projection: ["name", "version", "dependencies"],
+                },
+              );
             }
           } catch (error) {
             const parsed = this.source._parseDescription(ref.description);
