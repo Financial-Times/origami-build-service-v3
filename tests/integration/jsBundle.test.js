@@ -6,6 +6,6 @@ const tap = require("tap");
 
 const HOST = process.env.HOST;
 tap.test("responds with solved versions", async t => {
-  const response = await request(HOST).get("/hello");
+  const response = await request(HOST).get("/v3/bundles/js");
   t.strictSame(response.statusCode, 200);
 });

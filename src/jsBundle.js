@@ -15,7 +15,7 @@ const rimraf = require("rimraf");
 const rmrf = util.promisify(rimraf);
 
 console.clear();
-const hello = async (querystring = {}) => {
+const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
   const bundleLocation = await fs.mkdtemp("/tmp/bundle/");
 
@@ -51,4 +51,4 @@ const hello = async (querystring = {}) => {
     await rmrf(bundleLocation);
   }
 };
-module.exports = { hello };
+module.exports = { jsBundle };

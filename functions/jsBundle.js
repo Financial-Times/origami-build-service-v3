@@ -2,12 +2,12 @@
 
 const createError = require("http-errors");
 const Raven = require("raven");
-// const RavenLambdaWrapper = require("serverless-sentry-lib");
-const { hello } = require("../src/hello.js");
+const RavenLambdaWrapper = require("serverless-sentry-lib");
+const { jsBundle } = require("../src/jsBundle");
 
-const helloHandler = /*RavenLambdaWrapper.handler(Raven,*/ async event => {
+const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
   try {
-    return hello(event.queryStringParameters);
+    return jsBundle(event.queryStringParameters);
   } catch (err) {
     console.error(err);
 
@@ -24,7 +24,8 @@ const helloHandler = /*RavenLambdaWrapper.handler(Raven,*/ async event => {
       "Could not update the Origami Component list",
     );
   }
-}; /*);*/
+});
+
 module.exports = {
-  hello: helloHandler,
+  handler: jsHandler,
 };
