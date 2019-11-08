@@ -229,9 +229,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("invalid module name", function() {
-    it("GET /v3/bundles/js?modules=o-autoinit_±-test&source=test", async function() {
+    it("GET /v3/bundles/js?modules=o-autoinit_%-test&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=o-autoinit_±-test&source=test",
+        "/v3/bundles/js?modules=o-autoinit_%-test&source=test",
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
@@ -245,7 +245,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "The modules query parameter contains module names which are not valid: o-autoinit_±-test.",
+        "The modules query parameter contains module names which are not valid: o-autoinit_%-test.",
       );
     });
   });
