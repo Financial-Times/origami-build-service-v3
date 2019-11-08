@@ -13,7 +13,7 @@ const installDependencies = require("./modules/install-dependencies");
 const createJavaScriptBundle = require("./modules/create-javascript-bundle");
 const { SolveFailure } = require("./modules/SolveFailure");
 const { UserException, FormatException } = require("./modules/HOME");
-
+const minifyBundle = require("./minify-javaScript");
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
   const bundleLocation = await fs.mkdtemp("/tmp/bundle/");
@@ -29,8 +29,10 @@ const jsBundle = async (querystring = {}) => {
 
     const bundle = await createJavaScriptBundle(bundleLocation);
 
+    const minifiedBundle = await minifyBundle(bundle);
+
     return {
-      body: bundle,
+      body: minifiedBundle.minifiedCode,
       statusCode: 200,
       headers: {
         "Content-Type": "application/javascript;charset=UTF-8",
