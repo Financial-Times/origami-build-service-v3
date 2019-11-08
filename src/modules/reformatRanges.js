@@ -95,7 +95,7 @@ function _reformatTerm(packageListers, term) {
  *
  * @param {import('./PackageName').PackageId[]} versions
  * @param {import('./Version').VersionRange} range
- * @returns
+ * @returns {import('./Version').Version | null}
  */
 function _reformatMin(versions, range) {
   if (range.min == null) {
@@ -123,7 +123,7 @@ function _reformatMin(versions, range) {
  *
  * @param {import('./PackageName').PackageId[]} versions
  * @param {import('./Version').VersionRange} range
- * @returns
+ * @returns {import('./Pair').Pair | null}
  */
 function _reformatMax(versions, range) {
   if (range.max == null) {
