@@ -9,6 +9,7 @@ const execa = require("execa");
 function retryIfServerError(fn, context) {
   const maxRetries = 30;
   let attempts = 0;
+
   return async function(...args) {
     // eslint-disable-next-line no-constant-condition
     while (true) {
