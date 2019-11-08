@@ -67,16 +67,15 @@ class BoundHostedSource extends CachedSource {
       this.doGetVersionsMemo = this.doGetVersionsMemo.set(
         ref,
         (async () => {
-          const parsed = this.source._parseDescription(ref.description);
-          const pkg = parsed.first;
-          console.log(`Get versions from ${pkg}.`);
+          const $package = this.source._parseDescription(ref.description);
+          console.log(`Get versions from ${$package}.`);
           const results = [];
           try {
             let count = 0;
             for await (const m of mapper.query(
               ManifestDynamo,
               {
-                name: pkg,
+                name: $package,
               },
               {
                 projection: ["name", "version", "dependencies"],
@@ -113,8 +112,8 @@ class BoundHostedSource extends CachedSource {
               );
             }
           } catch (error) {
-            const parsed = this.source._parseDescription(ref.description);
-            this._throwFriendlyError(error, parsed.first, parsed.last);
+            const $package = this.source._parseDescription(ref.description);
+            this._throwFriendlyError(error, $package);
           }
 
           return results;
@@ -134,13 +133,12 @@ class BoundHostedSource extends CachedSource {
    * @memberof BoundHostedSource
    */
   async describeUncached(id) {
-    const parsed = this.source._parseDescription(id.description);
-    const pkg = parsed.first;
+    const $package = this.source._parseDescription(id.description);
     const version = encodeURIComponent(id.version.toString());
     const manifest = Map();
     try {
       const m = await mapper.get(
-        Object.assign(new ManifestDynamo(), { name: pkg, version }),
+        Object.assign(new ManifestDynamo(), { name: $package, version }),
         { projection: ["name", "version", "dependencies"] },
       );
       manifest.set("name", m.name);
@@ -164,8 +162,8 @@ class BoundHostedSource extends CachedSource {
     if (!(await this.isInSystemCache(id))) {
       const packageDir = this.getDirectory(id);
       await mkdir(path.dirname(packageDir), { recursive: true });
-      const parsed = this.source._parseDescription(id.description);
-      await this._download(parsed.first, id.version, packageDir);
+      const $package = this.source._parseDescription(id.description);
+      await this._download($package, id.version, packageDir);
     }
 
     return Package.load(this.getDirectory(id), this.systemCache.sources);
@@ -183,14 +181,9 @@ class BoundHostedSource extends CachedSource {
    * @memberof BoundHostedSource
    */
   getDirectory(id) {
-    const parsed = this.source._parseDescription(id.description);
-    const dir = this._urlToDirectory(parsed.last);
+    const $package = this.source._parseDescription(id.description);
 
-    return path.join(
-      this.systemCacheRoot,
-      dir,
-      `${parsed.first}-${id.version}`,
-    );
+    return path.join(this.systemCacheRoot, `${$package}-${id.version}`);
   }
 
   /**

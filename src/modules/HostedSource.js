@@ -5,7 +5,6 @@ const { BoundHostedSource } = require("./BoundHostedSource");
 const { ArgumentError, FormatException, URL } = require("./HOME");
 const { PackageId } = require("./PackageName");
 const { PackageRef } = require("./PackageName");
-const { Pair } = require("./Pair");
 const { Source } = require("./Source");
 
 /**
@@ -92,7 +91,7 @@ class HostedSource extends Source {
    * @memberof HostedSource
    */
   formatDescription(description) {
-    return `on ${this._parseDescription(description).last}`;
+    return `on ${this._parseDescription(description)}`;
   }
 
   /**
@@ -153,16 +152,16 @@ class HostedSource extends Source {
   /**
    * Parses the description for a package.
    *
-   * If the package parses correctly, this returns a (name, url) pair. If not,
+   * If the package parses correctly, this returns the name. If not,
    * this throws a descriptive FormatException.
    *
    * @param {(string | import('immutable').Map<string, string>)} description
-   * @returns {import('./Pair').Pair<string, string>}
+   * @returns {string}
    * @memberof HostedSource
    */
   _parseDescription(description) {
     if (typeof description == "string") {
-      return new Pair(description, this.defaultUrl);
+      return description;
     }
     if (!(description instanceof Map)) {
       throw new FormatException(
@@ -179,7 +178,7 @@ class HostedSource extends Source {
       throw new FormatException("The 'name' key must have a string value.");
     }
 
-    return new Pair(name, description.get("url", this.defaultUrl));
+    return name;
   }
 }
 module.exports.HostedSource = HostedSource;
