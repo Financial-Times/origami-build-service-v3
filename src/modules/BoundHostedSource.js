@@ -98,6 +98,9 @@ class BoundHostedSource extends CachedSource {
               this.memoizeManifest(id, manifest);
               results.push(id);
             }
+
+            // If no versions are found, make a request for a specific version
+            // so that we can get a better error message from DynamoDB
             if (count == 0) {
               await mapper.get(
                 Object.assign(new ManifestDynamo(), {
