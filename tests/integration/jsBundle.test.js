@@ -40,11 +40,11 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get("/v3/bundles/js");
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -59,11 +59,11 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get("/v3/bundles/js?modules");
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -76,11 +76,11 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get("/v3/bundles/js?modules=,,");
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -93,11 +93,11 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(`/v3/bundles/js?modules=!1`);
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -114,11 +114,11 @@ describe("/v3/bundles/js", function() {
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -135,11 +135,11 @@ describe("/v3/bundles/js", function() {
       );
       proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       const window = doesNotThrowInBrowserEnvironment(response.text);
@@ -154,11 +154,11 @@ describe("/v3/bundles/js", function() {
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -174,11 +174,11 @@ describe("/v3/bundles/js", function() {
 
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -193,11 +193,11 @@ describe("/v3/bundles/js", function() {
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -215,11 +215,11 @@ describe("/v3/bundles/js", function() {
 
       proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "public, max-age=86400, stale-if-error=604800, stale-while-revalidate=300000",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       const window = doesNotThrowInBrowserEnvironment(response.text);
@@ -235,11 +235,11 @@ describe("/v3/bundles/js", function() {
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       doesThrowInBrowserEnvironment(
@@ -257,11 +257,11 @@ describe("/v3/bundles/js", function() {
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
-        response.headers["cache-control"],
+        response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
       );
       proclaim.deepEqual(
-        response.headers["content-type"],
+        response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
       // TODO: Is this a potential XSS?
