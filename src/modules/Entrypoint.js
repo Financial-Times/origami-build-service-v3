@@ -51,12 +51,7 @@ class Entrypoint {
    */
   async acquireDependencies(type = GET) {
     const result = await resolveVersions(type, this.cache, this.root);
-    const stopwatch = process.hrtime();
-    console.log("packages", result.packages.map(p => p.name).join(" "));
     await Promise.all(result.packages.map(id => this._get(id)));
-    console.log(
-      `Installing dependencies took ${process.hrtime(stopwatch)} seconds.`,
-    );
   }
   /**
    * Makes sure the package at `id` is locally available.
