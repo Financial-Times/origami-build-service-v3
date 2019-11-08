@@ -1,22 +1,12 @@
 "use strict";
 
 const execa = require("execa");
-const decompress = require("decompress");
 const fs = require("fs").promises;
-const os = require("os");
-const path = require("path");
-const rimraf = require("rimraf");
-const { promisify } = require("util");
-const rmrf = promisify(rimraf);
-const tar = require("tar");
 
 module.exports = getProductionCodeFor;
 
 /**
- * Fetches the tarball for the version from GitHub.
- * Unpacks the tarball.
- * Removes the docs/test/demos/resources/examples/img folders.
- * Creates and returns a new tarball of the folders and files that are left.
+ * Fetches the tarball for the version from npm.
  *
  * @param {string} name The name of the component.
  * @param {string} version The version of the component whose code you want.
