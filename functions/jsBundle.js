@@ -7,6 +7,8 @@ const { jsBundle } = require("../src/jsBundle");
 
 const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
   try {
+    // This await is required to make the Promise rejection from
+    // jsBundle be turned into a thrown error that we can catch.
     return await jsBundle(event.queryStringParameters);
   } catch (err) {
     console.error(err);
