@@ -278,26 +278,6 @@ class BoundHostedSource extends CachedSource {
 
     return url.replace(/[<>:"\\/|?*%]/g, replacer);
   }
-
-  /**
-   * Parses `id` into its server, package name, and version components, then
-   * converts that to a Uri given `pattern`.
-   *
-   * Ensures the package name is properly URL encoded.
-   *
-   * @param {import('./PackageName').PackageId} id
-   * @param {(server: string, $package: string, version: string) => string} pattern
-   * @returns {import('url').URL}
-   * @memberof BoundHostedSource
-   */
-  _makeVersionUrl(id, pattern) {
-    const parsed = this.source._parseDescription(id.description);
-    const server = parsed.last;
-    const $package = parsed.first;
-    const version = encodeURIComponent(id.version.toString());
-
-    return new URL(pattern(server, $package, version));
-  }
 }
 
 module.exports.BoundHostedSource = BoundHostedSource;
