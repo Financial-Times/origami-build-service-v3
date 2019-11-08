@@ -7,6 +7,7 @@ const { ApplicationException } = require("./HOME");
 const { PackageDetail } = require("./PackageDetail");
 const { PackageNotFoundCause } = require("./PackageNotFoundCause");
 const { Pair } = require("./Pair");
+
 /**
  * An exception indicating that version solving failed.
  *
@@ -66,25 +67,63 @@ class SolveFailure extends ApplicationException {
   }
 }
 
-/// A class that writes a human-readable description of the cause of a
-/// `SolveFailure`.
-///
-/// See https://github.com/dart-lang/pub/tree/master/doc/solver.md#error-reporting
-/// for details on how this algorithm works.
+/**
+ * A class that writes a human-readable description of the cause of a
+ * `SolveFailure`.
+ *
+ * See https://github.com/dart-lang/pub/tree/master/doc/solver.md#error-reporting
+ * for details on how this algorithm works.
+ *
+ * @class _Writer
+ */
 class _Writer {
+  /**
+   * Creates an instance of _Writer.
+   * @param {import('./Incompatibility').Incompatibility} _root
+   * @memberof _Writer
+   */
   constructor(_root) {
+    /**
+     * The number of times each [Incompatibility] appears in [_root]'s derivation
+     * tree.
+     *
+     * When an [Incompatibility] is used in multiple derivations, we need to give
+     * it a number so we can refer back to it later on.
+     * @type {import('immutable').Map<import('./Incompatibility').Incompatibility, number>}
+     */
     this._derivations = Map();
+
+    /**
+     * A map from incompatibilities to the line numbers that were written for
+     * those incompatibilities.
+     * @type {import('immutable').Map<import('./Incompatibility').Incompatibility, number>}
+     */
     this._lineNumbers = Map();
+
+    /**
+     * The lines in the proof.
+     * Each line is a message/number pair. The message describes a single
+     * incompatibility, and why its terms are incompatible. The number is
+     * optional and indicates the explicit number that should be associated with
+     * the line so it can be referred to later on.
+     * @type {Array<import('./Pair').Pair<string, number | null>>}
+     */
     this._lines = [];
     this._root = _root;
     this._countDerivations(_root);
   }
-  /// Populates `_derivations` for `incompatibility` and its transitive causes.
+
+  /**
+   * Populates `_derivations` for `incompatibility` and its transitive causes.
+   *
+   * @param {import('./Incompatibility').Incompatibility} incompatibility
+   * @memberof _Writer
+   */
   _countDerivations(incompatibility) {
     if (this._derivations.has(incompatibility)) {
       this._derivations = this._derivations.set(
         incompatibility,
-        this._derivations.get(incompatibility) + 1,
+        this._derivations.get(incompatibility, 1) + 1,
       );
     } else {
       this._derivations = this._derivations.set(incompatibility, 1);
@@ -95,6 +134,7 @@ class _Writer {
       }
     }
   }
+
   write() {
     let buffer = "";
     const wroteLine = false;
@@ -134,12 +174,20 @@ class _Writer {
 
     return buffer.toString();
   }
-  /// Writes `message` to `_lines`.
-  ///
-  /// The `message` should describe `incompatibility` and how it was derived (if
-  /// applicable). If `numbered` is true, this will associate a line number with
-  /// `incompatibility` and `message` so that the message can be easily referred
-  /// to later.
+
+  /**
+   * Writes `message` to `_lines`.
+   *
+   * The `message` should describe `incompatibility` and how it was derived (if
+   * applicable). If `numbered` is true, this will associate a line number with
+   * `incompatibility` and `message` so that the message can be easily referred
+   * to later.
+   *
+   * @param {import('./Incompatibility').Incompatibility} incompatibility
+   * @param {string} message
+   * @param {boolean} [numbered=false]
+   * @memberof _Writer
+   */
   _write(incompatibility, message, numbered = false) {
     if (numbered) {
       const number = this._lineNumbers.size + 1;
@@ -149,18 +197,27 @@ class _Writer {
       this._lines.push(new Pair(message, null));
     }
   }
-  /// Writes a proof of `incompatibility` to `_lines`.
-  ///
-  /// If `conclusion` is `true`, `incompatibility` represents the last of a
-  /// linear series of derivations. It should be phrased accordingly and given a
-  /// line number.
-  ///
-  /// The `detailsForIncompatibility` controls the amount of detail that should
-  /// be written for each package when converting `incompatibility` to a string.
+
+  /**
+   * Writes a proof of `incompatibility` to `_lines`.
+   *
+   * If `conclusion` is `true`, `incompatibility` represents the last of a
+   * linear series of derivations. It should be phrased accordingly and given a
+   * line number.
+   *
+   * The `detailsForIncompatibility` controls the amount of detail that should
+   * be written for each package when converting `incompatibility` to a string.
+   *
+   * * @param {import('./Incompatibility').Incompatibility} incompatibility
+   * @param {import('immutable').Map<string, import('./PackageDetail').PackageDetail>} detailsForIncompatibility
+   * @param {boolean} [conclusion=false]
+   * @memberof _Writer
+   */
   _visit(incompatibility, detailsForIncompatibility, conclusion = false) {
     // Add explicit numbers for incompatibilities that are written far away
     // from their successors or that are used for multiple derivations.
-    const numbered = conclusion || this._derivations.get(incompatibility) > 1;
+    const numbered =
+      conclusion || this._derivations.get(incompatibility, 0) > 1;
     const conjunction =
       conclusion || incompatibility == this._root ? "So," : "And";
     const incompatibilityString = incompatibility.toString(
@@ -253,7 +310,7 @@ class _Writer {
         this._write(
           incompatibility,
           "Because " +
-            ext.andToString(derived, detailsForCause, null, derivedLine) +
+            ext.andToString(derived, detailsForCause, undefined, derivedLine) +
             `, ${incompatibilityString}.`,
           numbered,
         );
@@ -301,35 +358,42 @@ class _Writer {
       );
     }
   }
-  /// Returns whether we can collapse the derivation of `incompatibility`.
-  ///
-  /// If `incompatibility` is only used to derive one other incompatibility,
-  /// it may make sense to skip that derivation and just derive the second
-  /// incompatibility directly from three causes. This is usually clear enough
-  /// to the user, and makes the proof much terser.
-  ///
-  /// For example, instead of writing
-  ///
-  ///     ... foo ^1.0.0 requires bar ^1.0.0.
-  ///     And, because bar ^1.0.0 depends on baz ^1.0.0, foo ^1.0.0 requires
-  ///       baz ^1.0.0.
-  ///     And, because baz ^1.0.0 depends on qux ^1.0.0, foo ^1.0.0 requires
-  ///       qux ^1.0.0.
-  ///     ...
-  ///
-  /// we collapse the two derivations into a single line and write
-  ///
-  ///     ... foo ^1.0.0 requires bar ^1.0.0.
-  ///     And, because bar ^1.0.0 depends on baz ^1.0.0 which depends on
-  ///       qux ^1.0.0, foo ^1.0.0 requires qux ^1.0.0.
-  ///     ...
-  ///
-  /// If this returns `true`, `incompatibility` has one external predecessor
-  /// and one derived predecessor.
+
+  /**
+   * Returns whether we can collapse the derivation of `incompatibility`.
+   *
+   * If `incompatibility` is only used to derive one other incompatibility,
+   * it may make sense to skip that derivation and just derive the second
+   * incompatibility directly from three causes. This is usually clear enough
+   * to the user, and makes the proof much terser.
+   *
+   * For example, instead of writing
+   *
+   *     ... foo ^1.0.0 requires bar ^1.0.0.
+   *     And, because bar ^1.0.0 depends on baz ^1.0.0, foo ^1.0.0 requires
+   *       baz ^1.0.0.
+   *     And, because baz ^1.0.0 depends on qux ^1.0.0, foo ^1.0.0 requires
+   *       qux ^1.0.0.
+   *     ...
+   *
+   * we collapse the two derivations into a single line and write
+   *
+   *     ... foo ^1.0.0 requires bar ^1.0.0.
+   *     And, because bar ^1.0.0 depends on baz ^1.0.0 which depends on
+   *       qux ^1.0.0, foo ^1.0.0 requires qux ^1.0.0.
+   *     ...
+   *
+   * If this returns `true`, `incompatibility` has one external predecessor
+   * and one derived predecessor.
+   *
+   * * @param {import('./Incompatibility').Incompatibility} incompatibility
+   * @returns {boolean}
+   * @memberof _Writer
+   */
   _isCollapsible(incompatibility) {
     // If `incompatibility` is used for multiple derivations, it will need a
     // line number and so will need to be written explicitly.
-    if (this._derivations.get(incompatibility) > 1) {
+    if (this._derivations.get(incompatibility, 0) > 1) {
       return false;
     }
     const cause = incompatibility.cause;
@@ -358,20 +422,34 @@ class _Writer {
 
     return !this._lineNumbers.has(complex);
   }
-  // Returns whether or not `cause`'s incompatibility can be represented in a
-  // single line without requiring a multi-line derivation.
+
+  /**
+   * Returns whether or not `cause`'s incompatibility can be represented in a
+   * single line without requiring a multi-line derivation.
+   *
+   * @param {import('./ConflictCause').ConflictCause} cause
+   * @returns {boolean}
+   * @memberof _Writer
+   */
   _isSingleLine(cause) {
     return (
       !(cause.conflict.cause instanceof ConflictCause) &&
       !(cause.other.cause instanceof ConflictCause)
     );
   }
-  /// Returns the amount of detail needed for each package to accurately
-  /// describe `cause`.
-  ///
-  /// If the same package name appears in both of `cause`'s incompatibilities
-  /// but each has a different source, those incompatibilities should explicitly
-  /// print their sources, and similarly for differing descriptions.
+
+  /**
+   * Returns the amount of detail needed for each package to accurately
+   * describe `cause`.
+   *
+   * If the same package name appears in both of `cause`'s incompatibilities
+   * but each has a different source, those incompatibilities should explicitly
+   * print their sources, and similarly for differing descriptions.
+   *
+   * @param {import('./ConflictCause').ConflictCause} cause
+   * @returns {import('immutable').Map<string, import('./PackageDetail').PackageDetail>}
+   * @memberof _Writer
+   */
   _detailsForCause(cause) {
     let conflictPackages = Map();
     for (const term of cause.conflict.terms) {
