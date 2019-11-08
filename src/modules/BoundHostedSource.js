@@ -11,6 +11,7 @@ const { Package } = require("./Package");
 const { Manifest } = require("./Manifest");
 const { ManifestDynamo } = require("./ManifestDynamo");
 const { mapper } = require("./ManifestMapper");
+const log = require("./log");
 
 /**
  * The `BoundSource` for `HostedSource`.
@@ -67,7 +68,7 @@ class BoundHostedSource extends CachedSource {
         ref,
         (async () => {
           const $package = this.source._parseDescription(ref.description);
-          console.log(`Get versions from ${$package}.`);
+          log(`Get versions from ${$package}.`);
           const results = [];
           try {
             let count = 0;
@@ -213,7 +214,7 @@ class BoundHostedSource extends CachedSource {
    * @memberof BoundHostedSource
    */
   async _download($package, version, destPath) {
-    console.log(`Downloading ${$package} ${version}...`);
+    log(`Downloading ${$package} ${version}...`);
     // Download and extract the archive to a temp directory.
     const tempDir = await this.systemCache.createTempDir();
     const response = await mapper.get(
