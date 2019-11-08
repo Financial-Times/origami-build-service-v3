@@ -185,10 +185,7 @@ class BoundHostedSource extends CachedSource {
    * @memberof BoundHostedSource
    */
   async getCachedPackages() {
-    const cacheDir = path.join(
-      this.systemCacheRoot,
-      this._urlToDirectory(this.source.defaultUrl),
-    );
+    const cacheDir = path.join(this.systemCacheRoot);
     if (!(await dirExists(cacheDir))) {
       return [];
     }

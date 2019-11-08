@@ -24,16 +24,6 @@ class HostedSource extends Source {
   }
 
   /**
-   * Gets the default URL for the package server for hosted dependencies.
-   *
-   * @type {string}
-   * @memberof HostedSource
-   */
-  get defaultUrl() {
-    return "https://pub.dartlang.org";
-  }
-
-  /**
    *
    *
    * @param {import('./SystemCache').SystemCache} systemCache
