@@ -248,14 +248,11 @@ class BoundHostedSource extends CachedSource {
    *
    * @param {Error} error
    * @param {string} [$package]
-   * @param {string} [url]
    * @memberof BoundHostedSource
    */
-  _throwFriendlyError(error, $package, url) {
-    if (error instanceof ItemNotFoundException) {
-      throw new PackageNotFoundException(
-        `could not find package ${$package} at ${url}`,
-      );
+  _throwFriendlyError(error, $package) {
+    if (error.name === "ItemNotFoundException") {
+      throw new PackageNotFoundException(`could not find package ${$package}`);
     } else {
       // Otherwise re-throw the original exception.
       throw error;
