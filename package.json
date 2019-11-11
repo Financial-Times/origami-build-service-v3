@@ -51,5 +51,8 @@
     "serverless-sentry-lib": "^1.1.2",
     "utf8": "^3.0.0",
     "validate-npm-package-name": "^3.0.0"
+  },
+  "volta": {
+    "node": "10.17.0"
   }
 }
