@@ -2,7 +2,7 @@
 
 const { Map } = require("immutable");
 const validateNpmPackageName = require("validate-npm-package-name");
-const { UserException } = require("./modules/HOME");
+const { UserException } = require("./modules/home");
 
 /**
  * Used to ensure all module names in the modules query parameter conform to the package.json specification.

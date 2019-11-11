@@ -2,8 +2,8 @@
 
 const fs = require("fs").promises;
 const path = require("path");
-const { FormatException } = require("./HOME");
-const { VersionConstraint } = require("./Version");
+const { FormatException } = require("./home");
+const { VersionConstraint } = require("./version");
 
 /**
  * Creates a package.json file within `bundleLocation` with the `modules` as the dependencies.

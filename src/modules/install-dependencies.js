@@ -3,8 +3,8 @@
 const path = require("path");
 const os = require("os");
 const fs = require("fs").promises;
-const { Entrypoint } = require("./Entrypoint");
-const { SystemCache } = require("./SystemCache");
+const { Entrypoint } = require("./entrypoint");
+const { SystemCache } = require("./system-cache");
 
 /**
  * Installs the dependencies for the package.json file locatde at `location`

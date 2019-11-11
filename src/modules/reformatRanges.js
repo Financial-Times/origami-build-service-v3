@@ -1,12 +1,12 @@
 "use strict";
 
-const { ConflictCause } = require("./ConflictCause");
-const { equalsWithoutPreRelease } = require("./HOME");
-const { Incompatibility } = require("./Incompatibility");
-const { Pair } = require("./Pair");
-const { Term } = require("./Term");
-const { Version } = require("./Version");
-const { VersionRange } = require("./Version");
+const { ConflictCause } = require("./conflict-cause");
+const { equalsWithoutPreRelease } = require("./home");
+const { Incompatibility } = require("./incompatibility");
+const { Pair } = require("./pair");
+const { Term } = require("./term");
+const { Version } = require("./version");
+const { VersionRange } = require("./version");
 
 /**
  * Replaces version ranges in `incompatibility` and its causes with more
@@ -24,7 +24,7 @@ const { VersionRange } = require("./Version");
  * bound on the last pre-release version that actually exists
  * (`<=2.0.0-dev.1`).
  *
- * @param {import('immutable').Map<import('./PackageName').PackageRef, import('./PackageLister').PackageLister>} packageListers
+ * @param {import('immutable').Map<import('./package-name').PackageRef, import('./package-lister').PackageLister>} packageListers
  * @param {Incompatibility} incompatibility
  * @returns {Incompatibility}
  */
@@ -47,8 +47,8 @@ function reformatRanges(packageListers, incompatibility) {
 /**
  * Returns `term` with the upper and lower bounds of its package range reformatted if necessary.
  *
- * @param {import('immutable').Map<import('./PackageName').PackageRef, import('./PackageLister').PackageLister>} packageListers
- * @param {import('./Term').Term} term
+ * @param {import('immutable').Map<import('./package-name').PackageRef, import('./package-lister').PackageLister>} packageListers
+ * @param {import('./term').Term} term
  * @returns
  */
 function _reformatTerm(packageListers, term) {
@@ -93,9 +93,9 @@ function _reformatTerm(packageListers, term) {
 /**
  * Returns the new minimum version to use for `range`, or `null` if it doesn't need to be reformatted.
  *
- * @param {import('./PackageName').PackageId[]} versions
- * @param {import('./Version').VersionRange} range
- * @returns {import('./Version').Version | null}
+ * @param {import('./package-name').PackageId[]} versions
+ * @param {import('./version').VersionRange} range
+ * @returns {import('./version').Version | null}
  */
 function _reformatMin(versions, range) {
   if (range.min == null) {
@@ -121,9 +121,9 @@ function _reformatMin(versions, range) {
  * Returns the new maximum version to use for `range` and whether that maximum
  * is inclusive, or `null` if it doesn't need to be reformatted.
  *
- * @param {import('./PackageName').PackageId[]} versions
- * @param {import('./Version').VersionRange} range
- * @returns {import('./Pair').Pair | null}
+ * @param {import('./package-name').PackageId[]} versions
+ * @param {import('./version').VersionRange} range
+ * @returns {import('./pair').Pair | null}
  */
 function _reformatMax(versions, range) {
   if (range.max == null) {
@@ -159,8 +159,8 @@ function _reformatMax(versions, range) {
  * We can't use the `collection` package's `lowerBound()` function here because
  * `version` isn't the same as `ids`' element type.
  *
- * @param {import('./PackageName').PackageId[]} ids
- * @param {import('./Version').Version} version
+ * @param {import('./package-name').PackageId[]} ids
+ * @param {import('./version').Version} version
  * @returns
  */
 function _lowerBound(ids, version) {
@@ -185,8 +185,8 @@ function _lowerBound(ids, version) {
  *
  * Otherwise, returns it as-is.
  *
- * @param {import('immutable').Map<import('./PackageName').PackageRef, import('./PackageLister').PackageLister>} packageListers
- * @param {import('./ConflictCause').ConflictCause | import('./IncompatibilityCause').IncompatibilityCause} cause
+ * @param {import('immutable').Map<import('./package-name').PackageRef, import('./package-lister').PackageLister>} packageListers
+ * @param {import('./conflict-cause').ConflictCause | import('./incompatibility-cause').IncompatibilityCause} cause
  * @returns
  */
 function _reformatCause(packageListers, cause) {

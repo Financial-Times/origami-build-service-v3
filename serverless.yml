@@ -110,17 +110,17 @@ plugins:
   - serverless-s3-remover
 
 functions:
-  jsBundle:
-    handler: ./functions/jsBundle.handler
+  create-javascript-bundle:
+    handler: ./functions/create-javascript-bundle.handler
     events:
      - http:
          path: /v3/bundles/js
          method: get
-  update_origami_component_list:
-    handler: ./functions/update_origami_component_list.handler
+  update-origami-component-list:
+    handler: ./functions/update-origami-component-list.handler
     events:
       - http:
-          path: /v3/update_origami_component_list
+          path: /v3/update-origami-component-list
           method: get
       - schedule: rate(1 day)
 
