@@ -4,7 +4,6 @@ const { ArgumentError } = require("./home");
 const { CachedSource } = require("./cached-source");
 const { Package } = require("./package");
 const { resolveVersions } = require("./resolveVersions");
-const { GET } = require("./solve-type");
 const path = require("path");
 
 /**
@@ -49,14 +48,12 @@ class Entrypoint {
 
   /**
    * Gets all dependencies of the `root` package.
-   * Performs version resolution according to `SolveType`.
    *
-   * @param {import("./solve-type").GET} type
    * @memberof Entrypoint
    * @returns {Promise<void>}
    */
-  async acquireDependencies(type = GET) {
-    const result = await resolveVersions(type, this.cache, this.root);
+  async acquireDependencies() {
+    const result = await resolveVersions(this.cache, this.root);
     await Promise.all(result.packages.map(id => this._get(id)));
   }
   /**

@@ -32,12 +32,11 @@ class VersionSolver {
   /**
    * Creates an instance of VersionSolver.
    *
-   * @param {import('./solve-type').GET} _type
    * @param {import('./system-cache').SystemCache} _systemCache
    * @param {import('./package').Package} _root
    * @memberof VersionSolver
    */
-  constructor(_type, _systemCache, _root) {
+  constructor(_systemCache, _root) {
     /**
      * All known incompatibilities, indexed by package name.
      * Each incompatibility is indexed by each package it refers to, and so may
@@ -56,11 +55,6 @@ class VersionSolver {
      * @type {import("immutable").Map<import('./package-name').PackageRef, import('./package-lister').PackageLister>}
      */
     this._packageListers = Map();
-    /**
-     * The type of version solve being performed.
-     * @type {import('./solve-type').GET}
-     */
-    this._type = _type;
     /**
      * The system cache in which packages are stored.
      * @type {import('./system-cache').SystemCache}
