@@ -331,7 +331,7 @@ class VersionConstraint {
 
       return List([constraint]);
     });
-    if (flattened.isEmpty()()) {
+    if (flattened.isEmpty()) {
       return VersionConstraint.empty;
     }
     if (flattened.some(constraint => constraint.isAny())) {
@@ -355,7 +355,7 @@ class VersionConstraint {
     for (const constraint of ranges) {
       // Merge this constraint with the previous one, but only if they touch.
       if (
-        merged.isEmpty()() ||
+        merged.isEmpty() ||
         (!merged.last().allowsAny(constraint) &&
           !areAdjacent(merged.last(), constraint))
       ) {
@@ -632,7 +632,7 @@ class VersionRange extends VersionConstraint {
       !includeMax &&
       max != null &&
       !max.isPreRelease &&
-      max.build.isEmpty()() &&
+      max.build.isEmpty() &&
       (min == null || !min.isPreRelease || !equalsWithoutPreRelease(min, max))
     ) {
       max = max.firstPreRelease;
@@ -1050,7 +1050,7 @@ class VersionRange extends VersionConstraint {
           current = difference;
         }
       }
-      if (ranges.isEmpty()()) {
+      if (ranges.isEmpty()) {
         return current;
       }
 
@@ -1151,7 +1151,7 @@ class VersionRange extends VersionConstraint {
             equalsWithoutPreRelease(this.min, this.max);
           if (
             !this.max.isPreRelease &&
-            this.max.build.isEmpty()() &&
+            this.max.build.isEmpty() &&
             !minIsPreReleaseOfMax
           ) {
             buffer += "-∞";
@@ -1756,10 +1756,10 @@ class Version extends VersionRange {
         return comparison;
       }
       // Builds always come after no build string.
-      if (this.build.isEmpty()() && !other.build.isEmpty()()) {
+      if (this.build.isEmpty() && !other.build.isEmpty()) {
         return -1;
       }
-      if (other.build.isEmpty()() && !this.build.isEmpty()()) {
+      if (other.build.isEmpty() && !this.build.isEmpty()) {
         return 1;
       }
 
@@ -2012,7 +2012,7 @@ class VersionUnion extends VersionConstraint {
         theirCurrent = theirRanges.next().value;
       }
     }
-    if (newRanges.isEmpty()()) {
+    if (newRanges.isEmpty()) {
       return VersionConstraint.empty;
     }
     if (newRanges.size == 1) {
@@ -2112,7 +2112,7 @@ class VersionUnion extends VersionConstraint {
         }
       }
     }
-    if (newRanges.isEmpty()()) {
+    if (newRanges.isEmpty()) {
       return VersionConstraint.empty;
     }
     if (newRanges.size == 1) {

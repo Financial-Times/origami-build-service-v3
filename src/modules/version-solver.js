@@ -109,7 +109,7 @@ class VersionSolver {
    */
   _propagate($package) {
     let changed = Set([$package]);
-    while (!changed.isEmpty()()) {
+    while (!changed.isEmpty()) {
       const $package = changed.first();
       changed = changed.remove($package);
       // Iterate in reverse because conflict resolution tends to produce more
