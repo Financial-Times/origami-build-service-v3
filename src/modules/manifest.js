@@ -147,7 +147,11 @@ class Manifest {
     }
     const name = this.fields.get("name");
     if (name == null) {
-      throw new ManifestException('Missing the required "name" field.');
+      throw new ManifestException(
+        `The manifest is missing the "name" field, which should be a string. The manifest was "${JSON.stringify(
+          this.fields,
+        )}".`,
+      );
     } else if (typeof name != "string") {
       throw new ManifestException('"name" field must be a string.');
     }
