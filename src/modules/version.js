@@ -334,7 +334,7 @@ class VersionConstraint {
     if (flattened.isEmpty()) {
       return VersionConstraint.empty;
     }
-    if (flattened.some(constraint => constraint.isAny)) {
+    if (flattened.some(constraint => constraint.isAny())) {
       return VersionConstraint.any;
     }
     // Only allow Versions and VersionRanges here so we can more easily reason
@@ -391,7 +391,7 @@ class VersionConstraint {
    * @readonly
    * @memberof VersionConstraint
    */
-  get isAny() {
+  isAny() {
     throw new Error("unimplemented");
   }
 
@@ -499,7 +499,7 @@ class _EmptyVersion extends VersionConstraint {
    * @readonly
    * @memberof _EmptyVersion
    */
-  get isAny() {
+  isAny() {
     return false;
   }
 
@@ -705,7 +705,7 @@ class VersionRange extends VersionConstraint {
    * @readonly
    * @memberof VersionRange
    */
-  get isAny() {
+  isAny() {
     return this.min == null && this.max == null;
   }
 
@@ -1271,7 +1271,7 @@ class Version extends VersionRange {
    * @readonly
    * @memberof VersionUnion
    */
-  get isAny() {
+  isAny() {
     return false;
   }
 
@@ -1911,7 +1911,7 @@ class VersionUnion extends VersionConstraint {
    * @readonly
    * @memberof VersionUnion
    */
-  get isAny() {
+  isAny() {
     return false;
   }
 

@@ -174,7 +174,7 @@ class Incompatibility {
     }
     if (this.terms.length == 1) {
       const term = this.terms[0];
-      if (term.constraint.isAny) {
+      if (term.constraint.isAny()) {
         return `${this._terseRef(term, details)} is ${
           term.isPositive ? "forbidden" : "required"
         }`;
@@ -189,10 +189,10 @@ class Incompatibility {
       const term2 = this.terms[this.terms.length - 1];
       if (term1.isPositive == term2.isPositive) {
         if (term1.isPositive) {
-          const package1 = term1.constraint.isAny
+          const package1 = term1.constraint.isAny()
             ? this._terseRef(term1, details)
             : this._terse(term1, details);
-          const package2 = term2.constraint.isAny
+          const package2 = term2.constraint.isAny()
             ? this._terseRef(term2, details)
             : this._terse(term2, details);
 
@@ -562,7 +562,7 @@ class Incompatibility {
    * @memberof Incompatibility
    */
   _terse(term, details, allowEvery = false) {
-    if (allowEvery && term.constraint.isAny) {
+    if (allowEvery && term.constraint.isAny()) {
       return `every version of ${this._terseRef(term, details)}`;
     } else {
       return term.package.toString(

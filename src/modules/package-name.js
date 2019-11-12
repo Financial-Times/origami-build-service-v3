@@ -306,7 +306,7 @@ class PackageRange extends PackageName {
     if (this.isRoot()) {
       return false;
     }
-    if (!this.constraint.isAny) {
+    if (!this.constraint.isAny()) {
       return true;
     }
 
