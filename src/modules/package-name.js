@@ -3,7 +3,6 @@
 const { hash, is } = require("immutable");
 // const { HostedSource } = require("./hosted-source");
 const { PackageDetail } = require("./package-detail");
-const { Version } = require("./version");
 const { VersionConstraint } = require("./version");
 const { VersionRange } = require("./version");
 
@@ -18,38 +17,12 @@ class PackageName {
    * @param {string} name
    * @param {import('./source').Source | null} source
    * @param {*} description
-   * @param {boolean} isMagic
    * @memberof PackageName
    */
-  constructor(name, source, description, isMagic) {
+  constructor(name, source, description) {
     this.name = name;
     this.source = source;
     this.description = description;
-    this.isMagic = isMagic;
-  }
-
-  /**
-   * @static
-   * @param {string} name
-   * @param {import('./source').Source | null} source
-   * @param {*} description
-   * @returns {PackageName}
-   * @memberof PackageName
-   */
-  static _(name, source, description) {
-    return new PackageName(name, source, description, false);
-  }
-
-  /**
-   *
-   *
-   * @static
-   * @param {string} name
-   * @returns {PackageName}
-   * @memberof PackageName
-   */
-  static _magic(name) {
-    return new PackageName(name, null, null, true);
   }
 
   /**
@@ -59,7 +32,7 @@ class PackageName {
    * @memberof PackageName
    */
   get isRoot() {
-    return this.source == null && !this.isMagic;
+    return this.source == null;
   }
 
   /**
@@ -69,9 +42,7 @@ class PackageName {
    * @memberof PackageName
    */
   toRef() {
-    return this.isMagic
-      ? PackageRef.magic(this.name)
-      : new PackageRef(this.name, this.source, this.description);
+    return new PackageRef(this.name, this.source, this.description);
   }
 
   /**
@@ -177,24 +148,11 @@ class PackageId extends PackageName {
    * @param {import('./source').Source | null} source
    * @param{import('./version').Version} version
    * @param {*} description
-   * @param {boolean} [isMagic]
    * @memberof PackageId
    */
-  constructor(name, source, version, description, isMagic = false) {
-    super(name, source, description, isMagic);
+  constructor(name, source, version, description) {
+    super(name, source, description);
     this.version = version;
-  }
-
-  /**
-   * Creates an ID for a magic package (see `isMagic`).
-   *
-   * @static
-   * @param {string} name
-   * @returns {PackageId}
-   * @memberof PackageId
-   */
-  static magic(name) {
-    return new PackageId(name, null, Version.none, null, true);
   }
 
   /**
@@ -247,9 +205,6 @@ class PackageId extends PackageName {
    */
   toString(detail) {
     detail = detail ? detail : PackageDetail.defaults;
-    if (this.isMagic) {
-      return this.name;
-    }
     let buffer = this.name;
     if (detail.showVersion != null ? detail.showVersion : !this.isRoot) {
       buffer += ` ${this.version}`;
@@ -288,22 +243,11 @@ class PackageRange extends PackageName {
    * @param {import('./source').Source | null} source
    * @param {VersionConstraint} constraint
    * @param {*} description
-   * @param {boolean} [isMagic]
    * @memberof PackageRange
    */
-  constructor(name, source, constraint, description, isMagic = false) {
-    super(name, source, description, isMagic);
+  constructor(name, source, constraint, description) {
+    super(name, source, description);
     this.constraint = constraint;
-  }
-
-  /**
-   * @static
-   * @param {string} name
-   * @returns {PackageRange}
-   * @memberof PackageRange
-   */
-  static magic(name) {
-    return new PackageRange(name, null, Version.none, null, true);
   }
 
   /**
@@ -330,9 +274,6 @@ class PackageRange extends PackageName {
    */
   toString(detail) {
     detail = detail ? detail : PackageDetail.defaults;
-    if (this.isMagic) {
-      return this.name;
-    }
     let buffer = this.name;
     if (
       detail.showVersion != null
@@ -460,17 +401,7 @@ class PackageRef extends PackageName {
   static root($package) {
     return new PackageRef($package.name, null, $package.name);
   }
-  /**
-   * Creates a reference to a magic package (see `isMagic`).
-   *
-   * @static
-   * @param {string} name
-   * @returns {PackageRef}
-   * @memberof PackageRef
-   */
-  static magic(name) {
-    return new PackageRef(name, null, null, true);
-  }
+
   /**
    * Creates an instance of PackageRef.
    * Creates a reference to a package with the given `name`, `source`, and
@@ -483,11 +414,10 @@ class PackageRef extends PackageName {
    * @param {string} name
    * @param {import('./source').Source | null} source
    * @param {*} description
-   * @param {boolean} [isMagic]
    * @memberof PackageRef
    */
-  constructor(name, source, description, isMagic = false) {
-    super(name, source, description, isMagic);
+  constructor(name, source, description) {
+    super(name, source, description);
   }
 
   /**
@@ -496,7 +426,7 @@ class PackageRef extends PackageName {
    */
   toString(/*detail*/) {
     // detail = detail ? detail : PackageDetail.defaults;
-    if (this.isMagic || this.isRoot) {
+    if (this.isRoot) {
       return this.name;
     }
     const buffer = this.name;
