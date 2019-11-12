@@ -4,6 +4,20 @@ const createError = require("http-errors");
 const Raven = require("raven");
 const RavenLambdaWrapper = require("serverless-sentry-lib");
 const { jsBundle } = require("../src/create-javascript-bundle");
+const process = require("process");
+
+process.on("unhandledRejection", function(err) {
+  console.error(err);
+  Raven.captureException(err, function(sendErr) {
+    // This callback fires once the report has been sent to Sentry
+    if (sendErr) {
+      console.error("Failed to send captured exception to Sentry");
+    } else {
+      console.log("Captured exception and sent to Sentry successfully");
+    }
+  });
+  process.exit(1);
+});
 
 const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
   try {
