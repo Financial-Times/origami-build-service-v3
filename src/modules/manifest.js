@@ -84,16 +84,7 @@ class Manifest {
   static fromMap(fields, _sources, expectedName) {
     // If `expectedName` is passed, ensure that the actual 'name' field exists
     // and matches the expectation.
-    if (expectedName == null) {
-      return new this(
-        fields.get("name"),
-        undefined,
-        undefined,
-        fields,
-        _sources,
-      );
-    }
-    if (fields.get("name") == expectedName) {
+    if (expectedName == null || fields.get("name") == expectedName) {
       return new this(
         fields.get("name"),
         undefined,
