@@ -3,7 +3,7 @@
     "build": "tsc -p .",
     "dev": "set -a && . .env && set +a && DEBUG=obs,obs:* serverless offline",
     "lint": "npx eslint .",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "npm run build && npm run test:unit && npm run test:integration",
     "test:integration": "mocha --require dotenv/config tests/integration --recursive",
     "test:unit": "mocha --require dotenv/config tests/unit --recursive"
   },
