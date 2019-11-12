@@ -631,9 +631,9 @@ class VersionRange extends VersionConstraint {
       !alwaysIncludeMaxPreRelease &&
       !includeMax &&
       max != null &&
-      !max.isPreRelease &&
+      !max.isPreRelease() &&
       max.build.isEmpty() &&
-      (min == null || !min.isPreRelease || !equalsWithoutPreRelease(min, max))
+      (min == null || !min.isPreRelease() || !equalsWithoutPreRelease(min, max))
     ) {
       max = max.firstPreRelease();
     }
@@ -1147,10 +1147,10 @@ class VersionRange extends VersionConstraint {
           // indicate that actually does allow pre-release versions.
           const minIsPreReleaseOfMax =
             this.min != null &&
-            this.min.isPreRelease &&
+            this.min.isPreRelease() &&
             equalsWithoutPreRelease(this.min, this.max);
           if (
-            !this.max.isPreRelease &&
+            !this.max.isPreRelease() &&
             this.max.build.isEmpty() &&
             !minIsPreReleaseOfMax
           ) {
@@ -1293,7 +1293,7 @@ class Version extends VersionRange {
    * @readonly
    * @memberof Version
    */
-  get isPreRelease() {
+  isPreRelease() {
     return this.preRelease.size != 0;
   }
 
@@ -1363,10 +1363,10 @@ class Version extends VersionRange {
   static prioritize(a, b) {
     // Sort all prerelease versions after all normal versions. This way
     // the solver will prefer stable packages over unstable ones.
-    if (a.isPreRelease && !b.isPreRelease) {
+    if (a.isPreRelease() && !b.isPreRelease()) {
       return -1;
     }
-    if (!a.isPreRelease && b.isPreRelease) {
+    if (!a.isPreRelease() && b.isPreRelease()) {
       return 1;
     }
 
@@ -1388,10 +1388,10 @@ class Version extends VersionRange {
    * @memberof Version
    */
   static antiprioritize(a, b) {
-    if (a.isPreRelease && !b.isPreRelease) {
+    if (a.isPreRelease() && !b.isPreRelease()) {
       return -1;
     }
-    if (!a.isPreRelease && b.isPreRelease) {
+    if (!a.isPreRelease() && b.isPreRelease()) {
       return 1;
     }
 
@@ -1444,8 +1444,8 @@ class Version extends VersionRange {
     for (const version of versions) {
       if (
         primary == null ||
-        (!version.isPreRelease && primary.isPreRelease) ||
-        (version.isPreRelease == primary.isPreRelease &&
+        (!version.isPreRelease() && primary.isPreRelease()) ||
+        (version.isPreRelease() == primary.isPreRelease() &&
           version.greaterThan(primary))
       ) {
         primary = version;
@@ -1689,10 +1689,10 @@ class Version extends VersionRange {
         return compareNumbers(this.patch, other.patch);
       }
       // Pre-releases always come before no pre-release string.
-      if (!this.isPreRelease && other.isPreRelease) {
+      if (!this.isPreRelease() && other.isPreRelease()) {
         return 1;
       }
-      if (!other.isPreRelease && this.isPreRelease) {
+      if (!other.isPreRelease() && this.isPreRelease()) {
         return -1;
       }
       const comparison = this._compareLists(this.preRelease, other.preRelease);

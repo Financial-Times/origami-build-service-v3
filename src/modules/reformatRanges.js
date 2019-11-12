@@ -132,12 +132,12 @@ function _reformatMax(versions, range) {
   if (range.includeMax) {
     return null;
   }
-  if (range.max.isPreRelease) {
+  if (range.max.isPreRelease()) {
     return null;
   }
   if (
     range.min != null &&
-    range.min.isPreRelease &&
+    range.min.isPreRelease() &&
     equalsWithoutPreRelease(range.min, range.max)
   ) {
     return null;

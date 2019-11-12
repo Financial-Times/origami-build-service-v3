@@ -338,7 +338,7 @@ class PackageRange extends PackageName {
     }
     if (
       is(range.max, range.min.nextBreaking().firstPreRelease()) ||
-      (range.min.isPreRelease && is(range.max, range.min.nextBreaking()))
+      (range.min.isPreRelease() && is(range.max, range.min.nextBreaking()))
     ) {
       return this.withConstraint(VersionConstraint.compatibleWith(range.min));
     } else {

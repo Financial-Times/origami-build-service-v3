@@ -207,7 +207,7 @@ class PackageLister {
       if (!constraint.allows(id.version)) {
         continue;
       }
-      if (!id.version.isPreRelease) {
+      if (!id.version.isPreRelease()) {
         return id;
       }
       version = version != null ? version : id;
