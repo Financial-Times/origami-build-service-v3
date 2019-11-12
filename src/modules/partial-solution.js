@@ -222,7 +222,7 @@ class PartialSolution {
         continue;
       }
       if (
-        !assignment.package.isRoot &&
+        !assignment.package.isRoot() &&
         !assignment.package.samePackage(term.package)
       ) {
         // not foo from hosted has no bearing on foo from git

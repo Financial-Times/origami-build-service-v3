@@ -467,7 +467,7 @@ class VersionSolver {
      */
     const manifests = {};
     for (const id of decisions) {
-      if (id.isRoot) {
+      if (id.isRoot()) {
         manifests[id.name] = this._root.manifest;
       } else {
         manifests[id.name] = await this._systemCache.hosted().describe(id);
@@ -535,7 +535,7 @@ class VersionSolver {
     if (!this._packageListers.has(ref)) {
       this._packageListers = this._packageListers.set(
         ref,
-        ref.isRoot
+        ref.isRoot()
           ? PackageLister.root(this._root)
           : new PackageLister(this._systemCache, ref, null),
       );

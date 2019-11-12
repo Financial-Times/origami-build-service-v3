@@ -28,10 +28,10 @@ class PackageName {
   /**
    * Whether this package is the root package.
    *
-   * @type {boolean}
+   * @returns {boolean}
    * @memberof PackageName
    */
-  get isRoot() {
+  isRoot() {
     return this.source == null;
   }
 
@@ -206,7 +206,7 @@ class PackageId extends PackageName {
   toString(detail) {
     detail = detail ? detail : PackageDetail.defaults;
     let buffer = this.name;
-    if (detail.showVersion != null ? detail.showVersion : !this.isRoot) {
+    if (detail.showVersion != null ? detail.showVersion : !this.isRoot()) {
       buffer += ` ${this.version}`;
     }
 
@@ -303,7 +303,7 @@ class PackageRange extends PackageName {
    * @memberof PackageRange
    */
   get _showVersionConstraint() {
-    if (this.isRoot) {
+    if (this.isRoot()) {
       return false;
     }
     if (!this.constraint.isAny) {
@@ -426,7 +426,7 @@ class PackageRef extends PackageName {
    */
   toString(/*detail*/) {
     // detail = detail ? detail : PackageDetail.defaults;
-    if (this.isRoot) {
+    if (this.isRoot()) {
       return this.name;
     }
     const buffer = this.name;

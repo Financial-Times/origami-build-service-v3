@@ -220,7 +220,7 @@ class Term {
    */
   _compatiblePackage(other) {
     return (
-      this.package.isRoot || other.isRoot || other.samePackage(this.package)
+      this.package.isRoot() || other.isRoot() || other.samePackage(this.package)
     );
   }
 

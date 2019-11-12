@@ -41,7 +41,7 @@ class _RootSource extends BoundSource {
    * @memberof _RootSource
    */
   async getVersions(ref) {
-    assert(ref.isRoot);
+    assert(ref.isRoot());
 
     return Promise.resolve([PackageId.root(this._package)]);
   }
@@ -52,7 +52,7 @@ class _RootSource extends BoundSource {
    * @memberof _RootSource
    */
   async describe(id) {
-    assert(id.isRoot);
+    assert(id.isRoot());
 
     return Promise.resolve(this._package.manifest);
   }

@@ -34,7 +34,7 @@ class BoundSource {
    * @memberof BoundSource
    */
   async getVersions(ref) {
-    if (ref.isRoot) {
+    if (ref.isRoot()) {
       throw new ArgumentError("Cannot get versions for the root package.");
     }
     if (ref.source !== this.source) {
@@ -63,7 +63,7 @@ class BoundSource {
    * @memberof BoundSource
    */
   async describe(id) {
-    if (id.isRoot) {
+    if (id.isRoot()) {
       throw new ArgumentError("Cannot describe the root package.");
     }
     if (id.source !== this.source) {

@@ -30,9 +30,9 @@ class Incompatibility {
     if (
       terms.length != 1 &&
       cause instanceof ConflictCause &&
-      terms.some(term => term.isPositive && term.package.isRoot)
+      terms.some(term => term.isPositive && term.package.isRoot())
     ) {
-      terms = terms.filter(term => !term.isPositive || !term.package.isRoot);
+      terms = terms.filter(term => !term.isPositive || !term.package.isRoot());
     }
     if (
       terms.length == 1 ||
@@ -103,7 +103,7 @@ class Incompatibility {
   get isFailure() {
     return (
       this.terms.length == 0 ||
-      (this.terms.length == 1 && this.terms[0].package.isRoot)
+      (this.terms.length == 1 && this.terms[0].package.isRoot())
     );
   }
 
@@ -166,7 +166,7 @@ class Incompatibility {
       // entrypoint's actual version to make it clear why this failed.
       assert(this.terms.length == 1);
       assert(!this.terms[0].isPositive);
-      assert(this.terms[0].package.isRoot);
+      assert(this.terms[0].package.isRoot());
 
       return `${this.terms[0].package.name} is ${this.terms[0].constraint}`;
     } else if (this.isFailure) {

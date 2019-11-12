@@ -22,7 +22,7 @@ class SolveFailure extends ApplicationError {
    */
   constructor(incompatibility) {
     super();
-    assert(incompatibility.terms[0].package.isRoot);
+    assert(incompatibility.terms[0].package.isRoot());
     this.incompatibility = incompatibility;
   }
 
@@ -453,7 +453,7 @@ class _Writer {
   _detailsForCause(cause) {
     let conflictPackages = Map();
     for (const term of cause.conflict.terms) {
-      if (term.package.isRoot) {
+      if (term.package.isRoot()) {
         continue;
       }
       conflictPackages = conflictPackages.set(term.package.name, term.package);
@@ -461,7 +461,7 @@ class _Writer {
     let details = Map();
     for (const term of cause.other.terms) {
       const conflictPackage = conflictPackages.get(term.package.name);
-      if (term.package.isRoot) {
+      if (term.package.isRoot()) {
         continue;
       }
       if (conflictPackage == null) {

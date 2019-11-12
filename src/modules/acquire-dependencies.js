@@ -40,7 +40,7 @@ async function acquireDependencies(rootDir, cache) {
  * @returns {Promise<void>}
  */
 async function _get(rootDir, cache, id) {
-  if (!id.isRoot) {
+  if (!id.isRoot()) {
     const source = cache.hosted();
     await source.get(id, path.join(rootDir, "node_modules", id.name));
   }

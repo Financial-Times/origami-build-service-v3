@@ -288,7 +288,7 @@ class PackageLister {
 
       const depender = id.toRange();
       this._listedLockedVersion = true;
-      if (id.isRoot) {
+      if (id.isRoot()) {
         const incompatibilities = [];
         for (const range of Object.values(manifest.dependencies)) {
           incompatibilities.push(this._dependency(depender, range));
