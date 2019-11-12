@@ -309,33 +309,33 @@ class Manifest {
    * the max constraint if the original constraint doesn't have an upper
    * bound and it is compatible with `defaultUpperBoundConstraint`.
    *
-   * @param {string} node
+   * @param {string} version
    * @param {import('./version').VersionConstraint=} defaultUpperBoundConstraint
    * @returns {import('./version').VersionConstraint}
    * @memberof Manifest
    */
-  _parseVersionConstraint(node, defaultUpperBoundConstraint) {
-    if (node == null) {
+  _parseVersionConstraint(version, defaultUpperBoundConstraint) {
+    if (version == null) {
       return defaultUpperBoundConstraint != null
         ? defaultUpperBoundConstraint
         : VersionConstraint.any;
     }
-    if (typeof node != "string") {
+    if (typeof version != "string") {
       this._error("A version constraint must be a string.");
     }
-    if (node.includes("git.svc.ft.com:9080/git/origami/")) {
-      node = node.replace(
+    if (version.includes("git.svc.ft.com:9080/git/origami/")) {
+      version = version.replace(
         /https?:\/\/git\.svc\.ft\.com:9080\/git\/origami\/.*\.git#/,
         "",
       );
     }
-    if (node.includes("github.com/Financial-Times/")) {
-      node = node.replace(
+    if (version.includes("github.com/Financial-Times/")) {
+      version = version.replace(
         /https?:\/\/github\.com\/Financial-Times\/.*\.git#/,
         "",
       );
     }
-    let constraint = VersionConstraint.parse(node);
+    let constraint = VersionConstraint.parse(version);
     if (
       defaultUpperBoundConstraint != null &&
       constraint instanceof VersionRange &&
