@@ -218,7 +218,7 @@ class Manifest {
    * map of dependency names to dependencies.
    *
    * @param {string} field
-   * @param {import('immutable').Map<string, string | import('immutable').Map<any, any>>} node
+   * @param {import('immutable').Map<string, string>} node
    * @returns {Object.<string, import('./package-name').PackageRange>}
    * @memberof Manifest
    */
