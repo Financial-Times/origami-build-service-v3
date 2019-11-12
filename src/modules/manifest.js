@@ -113,7 +113,14 @@ class Manifest {
    * @memberof Manifest
    */
   static parse(contents, sources, expectedName) {
-    const manifestNode = fromJS(JSON.parse(contents));
+    let manifestNode;
+    try {
+      manifestNode = fromJS(JSON.parse(contents));
+    } catch {
+      throw new ManifestException(
+        `The manifest must be a JSON object. The manifest was "${contents}".`,
+      );
+    }
     let manifestMap;
     if (manifestNode.size == 0) {
       manifestMap = Map();
