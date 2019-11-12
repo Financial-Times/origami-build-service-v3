@@ -1298,62 +1298,6 @@ class Version extends VersionRange {
   }
 
   /**
-   * Gets the next major version number that follows this one.
-   *
-   * If this version is a pre-release of a major version release (i.e. the
-   * minor and patch versions are zero), then it just strips the pre-release
-   * suffix. Otherwise, it increments the major version and resets the minor
-   * and patch.
-   *
-   * @returns {Version}
-   * @readonly
-   * @memberof Version
-   */
-  get nextMajor() {
-    if (this.isPreRelease && this.minor == 0 && this.patch == 0) {
-      return new Version(this.major, this.minor, this.patch);
-    }
-
-    return this._incrementMajor();
-  }
-
-  /**
-   * Gets the next minor version number that follows this one.
-   *
-   * If this version is a pre-release of a minor version release (i.e. the
-   * patch version is zero), then it just strips the pre-release suffix.
-   * Otherwise, it increments the minor version and resets the patch.
-   * @returns {Version}
-   * @readonly
-   * @memberof Version
-   */
-  get nextMinor() {
-    if (this.isPreRelease && this.patch == 0) {
-      return new Version(this.major, this.minor, this.patch);
-    }
-
-    return this._incrementMinor();
-  }
-
-  /**
-   * Gets the next patch version number that follows this one.
-   *
-   * If this version is a pre-release, then it just strips the pre-release
-   * suffix. Otherwise, it increments the patch version.
-   *
-   * @returns {Version}
-   * @readonly
-   * @memberof Version
-   */
-  get nextPatch() {
-    if (this.isPreRelease) {
-      return new Version(this.major, this.minor, this.patch);
-    }
-
-    return this._incrementPatch();
-  }
-
-  /**
    * Gets the next breaking version number that follows this one.
    *
    * Increments `major` if it's greater than zero, otherwise `minor`, resets
