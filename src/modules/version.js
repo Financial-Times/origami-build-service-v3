@@ -1,12 +1,6 @@
 "use strict";
 
 /* eslint-disable no-unused-vars */
-const {
-  areAdjacent,
-  COMPATIBLE_WITH,
-  START_COMPARISON,
-  START_VERSION,
-} = require("./home");
 const assert = require("assert");
 const { hash, is, List } = require("immutable");
 const {
@@ -14,13 +8,58 @@ const {
   allowsLower,
   ArgumentError,
   equalsWithoutPreRelease,
-  COMPLETE_VERSION,
   strictlyHigher,
   compareNumbers,
   strictlyLower,
   FormatException,
 } = require("./home");
 const semver = require("semver");
+
+/**
+ * Returns whether `range1` is immediately next to, but not overlapping, `range2`.
+ * @param {import('./version').VersionRange} range1
+ * @param {import('./version').VersionRange} range2
+ * @returns {boolean}
+ */
+const areAdjacent = (range1, range2) => {
+  if (!is(range1.max, range2.min)) {
+    return false;
+  }
+
+  return (
+    (range1.includeMax && !range2.includeMin) ||
+    (!range1.includeMax && range2.includeMin)
+  );
+};
+
+/**
+ *  Regex that matches a version number at the beginning of a string.
+ * @type {RegExp}
+ */
+const START_VERSION = new RegExp(
+  /^/.source + // Start at beginning.
+  /(\d+).(\d+).(\d+)/.source + // Version number.
+  /(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?/.source + // Pre-release.
+    /(\+([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?/.source, // Build.
+);
+
+/**
+ * Like `START_VERSION` but matches the entire string.
+ * @type {RegExp}
+ */
+const COMPLETE_VERSION = new RegExp(START_VERSION.source + /$/.source);
+
+/**
+ * Parses a comparison operator ("<", ">", "<=", or ">=") at the beginning of a string.
+ * @type {RegExp}
+ */
+const START_COMPARISON = /^[<>]=?/;
+
+/**
+ * The "compatible with" operator.
+ * @type {string}
+ */
+const COMPATIBLE_WITH = "^";
 
 /**
  * A `VersionConstraint` is a predicate that can determine whether a given

@@ -162,60 +162,6 @@ const createPackageSymlink = async (
 };
 
 /**
- * @param {string} message
- * @throws {ApplicationException}
- */
-function fail(message) {
-  throw new ApplicationException(message);
-}
-
-/**
- *  Regex that matches a version number at the beginning of a string.
- * @type {RegExp}
- */
-const START_VERSION = new RegExp(
-  /^/.source + // Start at beginning.
-  /(\d+).(\d+).(\d+)/.source + // Version number.
-  /(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?/.source + // Pre-release.
-    /(\+([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?/.source, // Build.
-);
-
-/**
- * Like `START_VERSION` but matches the entire string.
- * @type {RegExp}
- */
-const COMPLETE_VERSION = new RegExp(START_VERSION.source + /$/.source);
-
-/**
- * Parses a comparison operator ("<", ">", "<=", or ">=") at the beginning of a string.
- * @type {RegExp}
- */
-const START_COMPARISON = /^[<>]=?/;
-
-/**
- * The "compatible with" operator.
- * @type {string}
- */
-const COMPATIBLE_WITH = "^";
-
-/**
- * Returns whether `range1` is immediately next to, but not overlapping, `range2`.
- * @param {import('./version').VersionRange} range1
- * @param {import('./version').VersionRange} range2
- * @returns {boolean}
- */
-const areAdjacent = (range1, range2) => {
-  if (!is(range1.max, range2.min)) {
-    return false;
-  }
-
-  return (
-    (range1.includeMax && !range2.includeMin) ||
-    (!range1.includeMax && range2.includeMin)
-  );
-};
-
-/**
  * Returns whether `range1` allows lower versions than `range2`.
  * @param {import('./version').VersionRange} range1
  * @param {import('./version').VersionRange} range2
@@ -381,12 +327,6 @@ module.exports.FileException = FileException;
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
-module.exports.fail = fail;
-module.exports.START_VERSION = START_VERSION;
-module.exports.COMPLETE_VERSION = COMPLETE_VERSION;
-module.exports.START_COMPARISON = START_COMPARISON;
-module.exports.COMPATIBLE_WITH = COMPATIBLE_WITH;
-module.exports.areAdjacent = areAdjacent;
 module.exports.allowsLower = allowsLower;
 module.exports.allowsHigher = allowsHigher;
 module.exports.strictlyLower = strictlyLower;
