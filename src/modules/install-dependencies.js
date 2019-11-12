@@ -13,8 +13,10 @@ const { SystemCache } = require("./system-cache");
  * @param {String} location
  * @returns {Promise<void>}
  */
-module.exports = async function installDependencies(location) {
-  const systemCacheDirectory = path.join(os.tmpdir(), "pubgrub-cache");
+module.exports = async function installDependencies(
+  location,
+  systemCacheDirectory = path.join(os.tmpdir(), "pubgrub-cache"),
+) {
   await fs.mkdir(systemCacheDirectory, { recursive: true });
   const systemcache = new SystemCache(systemCacheDirectory);
 
