@@ -122,12 +122,12 @@ class Manifest {
       );
     }
     let manifestMap;
-    if (manifestNode.size == 0) {
-      manifestMap = Map();
-    } else if (manifestNode) {
+    if (manifestNode instanceof Map) {
       manifestMap = Map(manifestNode);
     } else {
-      throw new ManifestException("The manifest must be a JSON object.");
+      throw new ManifestException(
+        `The manifest must be a JSON object. The manifest was "${contents}".`,
+      );
     }
 
     return Manifest.fromMap(manifestMap, sources, expectedName);
