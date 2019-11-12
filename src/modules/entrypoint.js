@@ -1,5 +1,6 @@
 "use strict";
 
+const { ArgumentError } = require("./home");
 const { CachedSource } = require("./cached-source");
 const { Package } = require("./package");
 const { resolveVersions } = require("./resolveVersions");
@@ -36,6 +37,11 @@ class Entrypoint {
    * @memberof Entrypoint
    */
   constructor(rootDir, cache) {
+    if (!path.isAbsolute(rootDir)) {
+      throw new ArgumentError(
+        `rootDir needs to be an absolute path. rootDir is "${rootDir}".`,
+      );
+    }
     this.rootDir = rootDir;
     this.cache = cache;
     this.root = Package.load(rootDir, cache.sources);
