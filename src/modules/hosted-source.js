@@ -165,14 +165,10 @@ class HostedSource extends Source {
       return description;
     }
     if (!(description instanceof Map)) {
-      throw new FormatError(
-        "The description must be a package name or map.",
-      );
+      throw new FormatError("The description must be a package name or map.");
     }
     if (!description.has("name")) {
-      throw new FormatError(
-        "The description map must contain a 'name' key.",
-      );
+      throw new FormatError("The description map must contain a 'name' key.");
     }
     const name = description.get("name");
     if (typeof name != "string") {
