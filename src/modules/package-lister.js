@@ -76,7 +76,7 @@ class PackageLister {
     // package.
     const _locked = PackageId.root($package);
 
-    return new this(null, _ref, _locked, _source);
+    return new PackageLister(null, _ref, _locked, _source);
   }
 
   /**

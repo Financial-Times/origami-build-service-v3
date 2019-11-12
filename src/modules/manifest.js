@@ -85,7 +85,7 @@ class Manifest {
     // If `expectedName` is passed, ensure that the actual 'name' field exists
     // and matches the expectation.
     if (expectedName == null || fields.get("name") == expectedName) {
-      return new this(
+      return new Manifest(
         fields.get("name"),
         undefined,
         undefined,

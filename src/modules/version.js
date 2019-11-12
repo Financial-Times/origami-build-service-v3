@@ -1890,7 +1890,7 @@ class VersionUnion extends VersionConstraint {
    * @memberof VersionUnion
    */
   static fromRanges(ranges) {
-    return new this(ranges);
+    return new VersionUnion(ranges);
   }
 
   /**

@@ -37,7 +37,7 @@ class PackageName {
    * @memberof PackageName
    */
   static _(name, source, description) {
-    return new this(name, source, description, false);
+    return new PackageName(name, source, description, false);
   }
 
   /**
@@ -49,7 +49,7 @@ class PackageName {
    * @memberof PackageName
    */
   static _magic(name) {
-    return new this(name, null, null, true);
+    return new PackageName(name, null, null, true);
   }
 
   /**
@@ -194,7 +194,7 @@ class PackageId extends PackageName {
    * @memberof PackageId
    */
   static magic(name) {
-    return new this(name, null, Version.none, null, true);
+    return new PackageId(name, null, Version.none, null, true);
   }
 
   /**
@@ -206,7 +206,7 @@ class PackageId extends PackageName {
    * @memberof PackageId
    */
   static root($package) {
-    return new this($package.name, null, $package.version, $package.name);
+    return new PackageId($package.name, null, $package.version, $package.name);
   }
 
   /**
@@ -303,7 +303,7 @@ class PackageRange extends PackageName {
    * @memberof PackageRange
    */
   static magic(name) {
-    return new this(name, null, Version.none, null, true);
+    return new PackageRange(name, null, Version.none, null, true);
   }
 
   /**
@@ -315,7 +315,12 @@ class PackageRange extends PackageName {
    * @memberof PackageRange
    */
   static root($package) {
-    return new this($package.name, null, $package.version, $package.name);
+    return new PackageRange(
+      $package.name,
+      null,
+      $package.version,
+      $package.name,
+    );
   }
 
   /**
@@ -453,7 +458,7 @@ class PackageRef extends PackageName {
    * @memberof PackageRef
    */
   static root($package) {
-    return new this($package.name, null, $package.name);
+    return new PackageRef($package.name, null, $package.name);
   }
   /**
    * Creates a reference to a magic package (see `isMagic`).
@@ -464,7 +469,7 @@ class PackageRef extends PackageName {
    * @memberof PackageRef
    */
   static magic(name) {
-    return new this(name, null, null, true);
+    return new PackageRef(name, null, null, true);
   }
   /**
    * Creates an instance of PackageRef.

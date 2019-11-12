@@ -52,7 +52,7 @@ class Assignment extends Term {
    * @memberof Assignment
    */
   static derivation($package, isPositive, cause, decisionLevel, index) {
-    return new this($package, isPositive, decisionLevel, index, cause);
+    return new Assignment($package, isPositive, decisionLevel, index, cause);
   }
 
   /**

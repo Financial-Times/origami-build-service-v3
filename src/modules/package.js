@@ -35,7 +35,7 @@ class Package {
   static load(dir, source) {
     const manifest = Manifest.load(dir, source);
 
-    return new this(manifest, dir);
+    return new Package(manifest, dir);
   }
 
   /**
