@@ -3,11 +3,9 @@
 const directoryExists = require("directory-exists");
 const fs = require("fs").promises;
 const { is } = require("immutable");
-const os = require("os");
 const path = require("path");
 const process = require("process");
 const url = require("url");
-const HOME = os.homedir();
 const URL = url.URL;
 const log = require("./log");
 
@@ -312,7 +310,6 @@ async function minByAsync(values, orderBy) {
   }
 }
 
-module.exports.HOME = HOME;
 module.exports.URL = URL;
 module.exports.compareNumbers = compareNumbers;
 module.exports.ArgumentError = ArgumentError;

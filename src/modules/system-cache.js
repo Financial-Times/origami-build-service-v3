@@ -3,7 +3,8 @@
 const fs = require("fs").promises;
 const { Map } = require("immutable");
 const path = require("path");
-const { ArgumentError, HOME } = require("./home");
+const { ArgumentError } = require("./home");
+const os = require("os");
 const { Package } = require("./package");
 const { SourceRegistry } = require("./source-registry");
 const { UnknownSource } = require("./unknown-source");
@@ -130,5 +131,5 @@ class SystemCache {
  * @type {string}
  * @memberof SystemCache
  */
-SystemCache.defaultDir = path.join(HOME, "/.jake-cache");
+SystemCache.defaultDir = path.join(os.homedir(), "/.jake-cache");
 module.exports.SystemCache = SystemCache;
