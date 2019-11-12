@@ -147,7 +147,7 @@ function _reformatMax(versions, range) {
 
   return previous != null && equalsWithoutPreRelease(previous, range.max)
     ? new Pair(previous, true)
-    : new Pair(range.max.firstPreRelease, false);
+    : new Pair(range.max.firstPreRelease(), false);
 }
 
 /**

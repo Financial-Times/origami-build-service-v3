@@ -635,7 +635,7 @@ class VersionRange extends VersionConstraint {
       max.build.isEmpty() &&
       (min == null || !min.isPreRelease || !equalsWithoutPreRelease(min, max))
     ) {
-      max = max.firstPreRelease;
+      max = max.firstPreRelease();
     }
     if (this.min == null) {
       this.min = min;
@@ -1379,7 +1379,7 @@ class Version extends VersionRange {
    * @readonly
    * @memberof Version
    */
-  get firstPreRelease() {
+  firstPreRelease() {
     return new Version(this.major, this.minor, this.patch, "0");
   }
 
@@ -1841,7 +1841,7 @@ class CompatibleWithVersionRange extends VersionRange {
    * @memberof CompatibleWithVersionRange
    */
   constructor(version) {
-    super(version, version.nextBreaking.firstPreRelease, true, false);
+    super(version, version.nextBreaking.firstPreRelease(), true, false);
   }
 
   /**
