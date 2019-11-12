@@ -268,7 +268,7 @@ class VersionConstraint {
    *
    * Versions are considered backward compatible with `version` if they
    * are greater than or equal to `version`, but less than the next breaking
-   * version (`Version.nextBreaking`) of `version`.
+   * version (`Version.nextBreaking()`) of `version`.
    *
    * @static
    * @param {Version} version
@@ -1364,7 +1364,7 @@ class Version extends VersionRange {
    * @readonly
    * @memberof Version
    */
-  get nextBreaking() {
+  nextBreaking() {
     if (this.major == 0) {
       return this._incrementMinor();
     }
@@ -1841,7 +1841,7 @@ class CompatibleWithVersionRange extends VersionRange {
    * @memberof CompatibleWithVersionRange
    */
   constructor(version) {
-    super(version, version.nextBreaking.firstPreRelease(), true, false);
+    super(version, version.nextBreaking().firstPreRelease(), true, false);
   }
 
   /**
