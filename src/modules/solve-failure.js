@@ -148,7 +148,7 @@ class _Writer {
     }
     // Only add line numbers if the derivation actually needs to refer to a line
     // by number.
-    const padding = this._lineNumbers.isEmpty()
+    const padding = this._lineNumbers.isEmpty()()
       ? 0
       : `(${this._lineNumbers.valueSeq().last()}) `.length;
     let lastWasEmpty = false;

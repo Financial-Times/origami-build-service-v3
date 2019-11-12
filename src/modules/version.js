@@ -322,7 +322,7 @@ class VersionConstraint {
    */
   static unionOf(constraints) {
     const flattened = constraints.flatMap(constraint => {
-      if (constraint.isEmpty) {
+      if (constraint.isEmpty()) {
         return List([]);
       }
       if (constraint instanceof VersionUnion) {
@@ -331,7 +331,7 @@ class VersionConstraint {
 
       return List([constraint]);
     });
-    if (flattened.isEmpty()) {
+    if (flattened.isEmpty()()) {
       return VersionConstraint.empty;
     }
     if (flattened.some(constraint => constraint.isAny())) {
@@ -355,7 +355,7 @@ class VersionConstraint {
     for (const constraint of ranges) {
       // Merge this constraint with the previous one, but only if they touch.
       if (
-        merged.isEmpty() ||
+        merged.isEmpty()() ||
         (!merged.last().allowsAny(constraint) &&
           !areAdjacent(merged.last(), constraint))
       ) {
@@ -379,7 +379,7 @@ class VersionConstraint {
    * @readonly
    * @memberof VersionConstraint
    */
-  get isEmpty() {
+  isEmpty() {
     throw new Error("unimplemented");
   }
 
@@ -488,7 +488,7 @@ class _EmptyVersion extends VersionConstraint {
    * @returns {boolean}
    * @memberof _EmptyVersion
    */
-  get isEmpty() {
+  isEmpty() {
     return true;
   }
 
@@ -521,7 +521,7 @@ class _EmptyVersion extends VersionConstraint {
    * @memberof _EmptyVersion
    */
   allowsAll(other) {
-    return other.isEmpty;
+    return other.isEmpty();
   }
 
   /**
@@ -632,7 +632,7 @@ class VersionRange extends VersionConstraint {
       !includeMax &&
       max != null &&
       !max.isPreRelease &&
-      max.build.isEmpty() &&
+      max.build.isEmpty()() &&
       (min == null || !min.isPreRelease || !equalsWithoutPreRelease(min, max))
     ) {
       max = max.firstPreRelease;
@@ -694,7 +694,7 @@ class VersionRange extends VersionConstraint {
    * @returns {boolean}
    * @memberof VersionRange
    */
-  get isEmpty() {
+  isEmpty() {
     return false;
   }
 
@@ -745,7 +745,7 @@ class VersionRange extends VersionConstraint {
    * @memberof VersionRange
    */
   allowsAll(other) {
-    if (other.isEmpty) {
+    if (other.isEmpty()) {
       return true;
     }
     if (other instanceof Version) {
@@ -768,7 +768,7 @@ class VersionRange extends VersionConstraint {
    * @memberof VersionRange
    */
   allowsAny(other) {
-    if (other.isEmpty) {
+    if (other.isEmpty()) {
       return false;
     }
     if (other instanceof Version) {
@@ -791,7 +791,7 @@ class VersionRange extends VersionConstraint {
    * @memberof VersionRange
    */
   intersect(other) {
-    if (other.isEmpty) {
+    if (other.isEmpty()) {
       return other;
     }
     if (other instanceof VersionUnion) {
@@ -936,7 +936,7 @@ class VersionRange extends VersionConstraint {
    * @memberof VersionRange
    */
   difference(other) {
-    if (other.isEmpty) {
+    if (other.isEmpty()) {
       return this;
     }
     if (other instanceof Version) {
@@ -1038,7 +1038,7 @@ class VersionRange extends VersionConstraint {
           break;
         }
         const difference = current.difference(range);
-        if (difference.isEmpty) {
+        if (difference.isEmpty()) {
           return VersionConstraint.empty;
         } else if (difference instanceof VersionUnion) {
           // If `range` split `current` in half, we only need to continue
@@ -1050,7 +1050,7 @@ class VersionRange extends VersionConstraint {
           current = difference;
         }
       }
-      if (ranges.isEmpty()) {
+      if (ranges.isEmpty()()) {
         return current;
       }
 
@@ -1151,7 +1151,7 @@ class VersionRange extends VersionConstraint {
             equalsWithoutPreRelease(this.min, this.max);
           if (
             !this.max.isPreRelease &&
-            this.max.build.isEmpty() &&
+            this.max.build.isEmpty()() &&
             !minIsPreReleaseOfMax
           ) {
             buffer += "-∞";
@@ -1282,7 +1282,7 @@ class Version extends VersionRange {
    * @returns {boolean}
    * @memberof Version
    */
-  get isEmpty() {
+  isEmpty() {
     return false;
   }
 
@@ -1654,7 +1654,7 @@ class Version extends VersionRange {
    * @memberof Version
    */
   allowsAll(other) {
-    return other.isEmpty || is(other, this);
+    return other.isEmpty() || is(other, this);
   }
 
   /**
@@ -1756,10 +1756,10 @@ class Version extends VersionRange {
         return comparison;
       }
       // Builds always come after no build string.
-      if (this.build.isEmpty() && !other.build.isEmpty()) {
+      if (this.build.isEmpty()() && !other.build.isEmpty()()) {
         return -1;
       }
-      if (other.build.isEmpty() && !this.build.isEmpty()) {
+      if (other.build.isEmpty()() && !this.build.isEmpty()()) {
         return 1;
       }
 
@@ -1900,7 +1900,7 @@ class VersionUnion extends VersionConstraint {
    * @returns {boolean}
    * @memberof VersionUnion
    */
-  get isEmpty() {
+  isEmpty() {
     return false;
   }
 
@@ -2000,7 +2000,7 @@ class VersionUnion extends VersionConstraint {
     let theirCurrent = theirRanges.next().value;
     while (ourCurrent != null && theirCurrent != null) {
       const intersection = ourCurrent.intersect(theirCurrent);
-      if (!intersection.isEmpty) {
+      if (!intersection.isEmpty()) {
         newRanges = newRanges.push(intersection);
       }
       // Move the constraint with the lower max value forward. This ensures that
@@ -2012,7 +2012,7 @@ class VersionUnion extends VersionConstraint {
         theirCurrent = theirRanges.next().value;
       }
     }
-    if (newRanges.isEmpty()) {
+    if (newRanges.isEmpty()()) {
       return VersionConstraint.empty;
     }
     if (newRanges.size == 1) {
@@ -2091,7 +2091,7 @@ class VersionUnion extends VersionConstraint {
         if (!theirNextRange()) {
           break;
         }
-      } else if (difference.isEmpty) {
+      } else if (difference.isEmpty()) {
         if (!ourNextRange(false)) {
           break;
         }
@@ -2112,7 +2112,7 @@ class VersionUnion extends VersionConstraint {
         }
       }
     }
-    if (newRanges.isEmpty()) {
+    if (newRanges.isEmpty()()) {
       return VersionConstraint.empty;
     }
     if (newRanges.size == 1) {
@@ -2132,7 +2132,7 @@ class VersionUnion extends VersionConstraint {
    * @memberof VersionUnion
    */
   _rangesFor(constraint) {
-    if (constraint.isEmpty) {
+    if (constraint.isEmpty()) {
       return List();
     }
     if (constraint instanceof VersionUnion) {

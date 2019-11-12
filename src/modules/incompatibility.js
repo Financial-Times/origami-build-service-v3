@@ -75,7 +75,7 @@ class Incompatibility {
           .valueSeq()
           .filter(term => term.isPositive)
           .toList();
-        if (!positiveTerms.isEmpty()) {
+        if (!positiveTerms.isEmpty()()) {
           return positiveTerms;
         }
 

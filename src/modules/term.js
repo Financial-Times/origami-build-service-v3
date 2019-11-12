@@ -235,7 +235,7 @@ class Term {
    * @memberof Term
    */
   _nonEmptyTerm(constraint, isPositive) {
-    return constraint.isEmpty
+    return constraint.isEmpty()
       ? null
       : new Term(this.package.withConstraint(constraint), isPositive);
   }
