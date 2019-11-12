@@ -104,7 +104,7 @@ function _reformatMin(versions, range) {
   if (!range.includeMin) {
     return null;
   }
-  if (!range.min.isFirstPreRelease) {
+  if (!range.min.isFirstPreRelease()) {
     return null;
   }
   const index = _lowerBound(versions, range.min);

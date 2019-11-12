@@ -1137,7 +1137,7 @@ class VersionRange extends VersionConstraint {
         buffer += this.max;
       } else {
         buffer += "<";
-        if (this.max.isFirstPreRelease) {
+        if (this.max.isFirstPreRelease()) {
           // Since `"<${max}"` would parse the same as `"<${max}-0"`, we just emit
           // `<${max}` to avoid confusing "-0" suffixes.
           buffer += `${this.max.major}.${this.max.minor}.${this.max.patch}`;
@@ -1390,7 +1390,7 @@ class Version extends VersionRange {
    * @readonly
    * @memberof Version
    */
-  get isFirstPreRelease() {
+  isFirstPreRelease() {
     return this.preRelease.size == 1 && this.preRelease.first() == 0;
   }
 
