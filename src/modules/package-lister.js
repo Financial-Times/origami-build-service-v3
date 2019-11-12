@@ -57,11 +57,7 @@ class PackageLister {
     /**
      * @type {import('./bound-source').BoundSource | undefined}
      */
-    this._source = source
-      ? source
-      : cache && _ref.source
-      ? cache.source(_ref.source)
-      : undefined;
+    this._source = source ? source : cache ? cache.hosted() : undefined;
   }
 
   /**

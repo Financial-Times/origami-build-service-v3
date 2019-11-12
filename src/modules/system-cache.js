@@ -1,7 +1,6 @@
 "use strict";
 
 const fs = require("fs").promises;
-const { Map } = require("immutable");
 const path = require("path");
 const os = require("os");
 const { Package } = require("./package");
@@ -31,14 +30,10 @@ class SystemCache {
      */
     this.rootDir = rootDir == null ? SystemCache.defaultDir : rootDir;
     /**
-     * @type {import('immutable').Map<import('./source').Source, import('./bound-source').BoundSource>} SystemCache#_boundSources
+     * @type {import('./bound-source').BoundSource} SystemCache#_boundHostedSource
      * @public
      */
-    this._boundSources = Map();
-    this._boundSources = this._boundSources.set(
-      this.hostedSource,
-      this.hostedSource.bind(this),
-    );
+    this._boundHostedSource = this.hostedSource.bind(this);
   }
 
   /**
@@ -47,7 +42,7 @@ class SystemCache {
    * @readonly
    * @memberof SystemCache
    */
-  get tempDir() {
+  tempDir() {
     return path.join(this.rootDir, "_temp");
   }
 
@@ -57,42 +52,22 @@ class SystemCache {
    * @readonly
    * @memberof SystemCache
    */
-  get hosted() {
-    return this.source(this.hostedSource);
-  }
-
-  /**
-   * Returns the version of `source` bound to this cache.
-   *
-   * @param {import('./source').Source} source
-   * @returns {import('./bound-source').BoundSource}
-   * @memberof SystemCache
-   */
-  source(source) {
-    if (!this._boundSources.has(source)) {
-      this._boundSources = this._boundSources.set(source, source.bind(this));
-    }
-
-    return this._boundSources.get(source, source.bind(this));
+  hosted() {
+    return this._boundHostedSource;
   }
 
   /**
    * Loads the package identified by `id`.
-   * Throws an `ArgumentError` if `id` has an invalid source.
    *
    * @param {import('./package-name').PackageId} id
    * @returns {import('./package').Package}
    * @memberof SystemCache
    */
   load(id) {
-    if (id.source) {
-      return Package.load(
-        this.source(id.source).getDirectory(id),
-        this.hostedSource,
-      );
-    } else {
-      throw new Error(`id.source is undefined.`);
-    }
+    return Package.load(
+      this._boundHostedSource.getDirectory(id),
+      this.hostedSource,
+    );
   }
 
   /**
@@ -107,9 +82,9 @@ class SystemCache {
    * @memberof SystemCache
    */
   async createTempDir() {
-    await fs.mkdir(this.tempDir, { recursive: true });
+    await fs.mkdir(this.tempDir(), { recursive: true });
 
-    return fs.mkdtemp(path.join(this.tempDir, "dir"));
+    return fs.mkdtemp(path.join(this.tempDir(), "dir"));
   }
 }
 

@@ -470,13 +470,7 @@ class VersionSolver {
       if (id.isRoot) {
         manifests[id.name] = this._root.manifest;
       } else {
-        if (id.source) {
-          manifests[id.name] = await this._systemCache
-            .source(id.source)
-            .describe(id);
-        } else {
-          throw new Error("id.source is undefined.");
-        }
+        manifests[id.name] = await this._systemCache.hosted().describe(id);
       }
     }
 
