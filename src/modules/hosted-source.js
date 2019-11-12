@@ -2,7 +2,7 @@
 
 const { hash, is, Map } = require("immutable");
 const { BoundHostedSource } = require("./bound-hosted-source");
-const { ArgumentError, FormatException } = require("./home");
+const { ArgumentError, FormatError } = require("./home");
 const URL = require("url").URL;
 const { PackageId } = require("./package-name");
 const { PackageRef } = require("./package-name");
@@ -154,7 +154,7 @@ class HostedSource extends Source {
    * Parses the description for a package.
    *
    * If the package parses correctly, this returns the name. If not,
-   * this throws a descriptive FormatException.
+   * this throws a descriptive FormatError.
    *
    * @param {(string | import('immutable').Map<string, string>)} description
    * @returns {string}
@@ -165,18 +165,18 @@ class HostedSource extends Source {
       return description;
     }
     if (!(description instanceof Map)) {
-      throw new FormatException(
+      throw new FormatError(
         "The description must be a package name or map.",
       );
     }
     if (!description.has("name")) {
-      throw new FormatException(
+      throw new FormatError(
         "The description map must contain a 'name' key.",
       );
     }
     const name = description.get("name");
     if (typeof name != "string") {
-      throw new FormatException("The 'name' key must have a string value.");
+      throw new FormatError("The 'name' key must have a string value.");
     }
 
     return name;

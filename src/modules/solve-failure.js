@@ -3,18 +3,18 @@
 const assert = require("assert");
 const { Map } = require("immutable");
 const { ConflictCause } = require("./conflict-cause");
-const { ApplicationException } = require("./home");
+const { ApplicationError } = require("./home");
 const { PackageDetail } = require("./package-detail");
 const { PackageNotFoundCause } = require("./package-not-found-cause");
 const { Pair } = require("./pair");
 
 /**
- * An exception indicating that version solving failed.
+ * An error indicating that version solving failed.
  *
  * @class SolveFailure
- * @extends {ApplicationException}
+ * @extends {ApplicationError}
  */
-class SolveFailure extends ApplicationException {
+class SolveFailure extends ApplicationError {
   /**
    * Creates an instance of SolveFailure.
    * @param {import('./incompatibility').Incompatibility} incompatibility
@@ -36,20 +36,20 @@ class SolveFailure extends ApplicationException {
     return this.toString();
   }
   /**
-   * Returns a `PackageNotFoundException` that (transitively) caused this
-   * failure, or `null` if it wasn't caused by a `PackageNotFoundException`.
+   * Returns a `PackageNotFoundError` that (transitively) caused this
+   * failure, or `null` if it wasn't caused by a `PackageNotFoundError`.
    *
-   * If multiple `PackageNotFoundException`s caused the error, it's undefined
+   * If multiple `PackageNotFoundError`s caused the error, it's undefined
    * which one is returned.
    *
-   * @type {import('./home').PackageNotFoundException | null}
+   * @type {import('./home').PackageNotFoundError | null}
    * @memberof SolveFailure
    */
   get packageNotFound() {
     for (const incompatibility of this.incompatibility.externalIncompatibilities()) {
       const cause = incompatibility.cause;
       if (cause instanceof PackageNotFoundCause) {
-        return cause.exception;
+        return cause.error;
       }
     }
 

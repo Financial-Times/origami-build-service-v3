@@ -2,7 +2,7 @@
 
 const { Map, Set } = require("immutable");
 const { ConflictCause } = require("./conflict-cause");
-const { minByAsync, PackageNotFoundException } = require("./home");
+const { minByAsync, PackageNotFoundError } = require("./home");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
 const { PackageLister } = require("./package-lister");
@@ -384,7 +384,7 @@ class VersionSolver {
         $package.constraint,
       );
     } catch (error) {
-      if (error instanceof PackageNotFoundException) {
+      if (error instanceof PackageNotFoundError) {
         this._addIncompatibility(
           new Incompatibility(
             [new Term($package.withConstraint(VersionConstraint.any), true)],

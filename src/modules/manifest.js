@@ -3,7 +3,7 @@
 const fs = require("fs");
 const { fromJS, Map } = require("immutable");
 const path = require("path");
-const { FileException, ManifestException } = require("./home");
+const { FileError, ManifestError } = require("./home");
 const { Version } = require("./version");
 const { VersionConstraint } = require("./version");
 const { VersionRange } = require("./version");
@@ -56,7 +56,7 @@ class Manifest {
   static load(packageDir, sources) {
     const manifestPath = path.join(packageDir, "package.json");
     if (!fs.existsSync(manifestPath)) {
-      throw new FileException(
+      throw new FileError(
         `Could not find a file named "package.json" in "${packageDir}".`,
       );
     }
@@ -77,7 +77,7 @@ class Manifest {
    * @param {import('immutable').Map<any, any>} fields
    * @param {import('./source-registry').SourceRegistry} _sources
    * @param {string=} expectedName
-   * @throws {import('./home').ManifestException}
+   * @throws {import('./home').ManifestError}
    * @returns {Manifest}
    * @memberof Manifest
    */
@@ -93,7 +93,7 @@ class Manifest {
         _sources,
       );
     }
-    throw new ManifestException(
+    throw new ManifestError(
       `"name" field doesn't match expected name "${expectedName}".`,
     );
   }
@@ -109,7 +109,7 @@ class Manifest {
    * @param {import('./source-registry').SourceRegistry} sources
    * @param {string=} expectedName
    * @returns {Manifest}
-   * @throws {import('./home').ManifestException}
+   * @throws {import('./home').ManifestError}
    * @memberof Manifest
    */
   static parse(contents, sources, expectedName) {
@@ -117,7 +117,7 @@ class Manifest {
     try {
       manifestNode = fromJS(JSON.parse(contents));
     } catch {
-      throw new ManifestException(
+      throw new ManifestError(
         `The manifest must be a JSON object. The manifest was "${contents}".`,
       );
     }
@@ -125,7 +125,7 @@ class Manifest {
     if (manifestNode instanceof Map) {
       manifestMap = Map(manifestNode);
     } else {
-      throw new ManifestException(
+      throw new ManifestError(
         `The manifest must be a JSON object. The manifest was "${contents}".`,
       );
     }
@@ -137,7 +137,7 @@ class Manifest {
    * The package's name.
    *
    * @returns {string}
-   * @throws {import('./home').ManifestException}
+   * @throws {import('./home').ManifestError}
    * @readonly
    * @memberof Manifest
    */
@@ -147,13 +147,13 @@ class Manifest {
     }
     const name = this.fields.get("name");
     if (name == null) {
-      throw new ManifestException(
+      throw new ManifestError(
         `The manifest is missing the "name" field, which should be a string. The manifest was "${JSON.stringify(
           this.fields,
         )}".`,
       );
     } else if (typeof name != "string") {
-      throw new ManifestException('"name" field must be a string.');
+      throw new ManifestError('"name" field must be a string.');
     }
     this._name = name;
 
@@ -346,13 +346,13 @@ class Manifest {
   }
 
   /**
-   * Throws a `ManifestException` with the given message.
-   * @throws {import('./home').ManifestException}
+   * Throws a `ManifestError` with the given message.
+   * @throws {import('./home').ManifestError}
    * @param {string} message
    * @memberof Manifest
    */
   _error(message) {
-    throw new ManifestException(message);
+    throw new ManifestError(message);
   }
 }
 module.exports.Manifest = Manifest;

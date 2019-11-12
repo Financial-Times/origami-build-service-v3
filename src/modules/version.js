@@ -11,7 +11,7 @@ const {
   strictlyHigher,
   compareNumbers,
   strictlyLower,
-  FormatException,
+  FormatError,
 } = require("./home");
 const semver = require("semver");
 
@@ -222,7 +222,7 @@ class VersionConstraint {
       const version = matchVersion();
       const newRange = version != null ? version : matchComparison();
       if (newRange == null) {
-        throw new FormatException(
+        throw new FormatError(
           `Could not parse version "${originalText}". Unknown text at "${text}".`,
         );
       }
@@ -244,7 +244,7 @@ class VersionConstraint {
       }
     }
     if (min == null && max == null) {
-      throw new FormatException("Cannot parse an empty string.");
+      throw new FormatError("Cannot parse an empty string.");
     }
     if (min != null && max != null) {
       if (min.greaterThan(max)) {
@@ -1465,7 +1465,7 @@ class Version extends VersionRange {
   static parse(text) {
     const match = COMPLETE_VERSION.exec(text);
     if (match == null) {
-      throw new FormatException(`Could not parse "${text}".`);
+      throw new FormatError(`Could not parse "${text}".`);
     }
     try {
       const major = Number.parseInt(match[1], 10);
@@ -1476,8 +1476,8 @@ class Version extends VersionRange {
 
       return new Version(major, minor, patch, preRelease, build, text);
     } catch (error) {
-      if (error instanceof FormatException) {
-        throw new FormatException(`Could not parse "${text}".`);
+      if (error instanceof FormatError) {
+        throw new FormatError(`Could not parse "${text}".`);
       } else {
         throw error;
       }

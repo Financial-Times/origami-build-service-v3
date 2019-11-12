@@ -158,7 +158,7 @@ class Incompatibility {
       const cause = this.cause;
 
       return `${this._terseRef(this.terms[0], details)} doesn't exist (${
-        cause.exception.message
+        cause.error.message
       })`;
     } else if (this.cause == IncompatibilityCause.unknownSource) {
       assert(this.terms.length == 1);
@@ -515,7 +515,7 @@ class Incompatibility {
     if (latter.cause == IncompatibilityCause.noVersions) {
       buffer += "which doesn't match any versions";
     } else if (this.cause instanceof PackageNotFoundCause) {
-      buffer += `which doesn't exist (${this.cause.exception.message})`;
+      buffer += `which doesn't exist (${this.cause.error.message})`;
     } else {
       buffer += "which is forbidden";
     }

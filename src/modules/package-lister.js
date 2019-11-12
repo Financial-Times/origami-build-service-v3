@@ -6,8 +6,8 @@ const { _RootSource } = require("./_root-source");
 const {
   lowerBound,
   ordered,
-  PackageNotFoundException,
-  ManifestException,
+  PackageNotFoundError,
+  ManifestError,
 } = require("./home");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
@@ -162,7 +162,7 @@ class PackageLister {
       return (await this._versions).filter(id => constraint.allows(id.version))
         .length;
     } catch (error) {
-      if (error instanceof PackageNotFoundException) {
+      if (error instanceof PackageNotFoundError) {
         // If it fails for any reason, just treat that as no versions. This will
         // sort this reference higher so that we can traverse into it and report
         // the error in a user-friendly way.
@@ -178,12 +178,12 @@ class PackageLister {
    * according to the solver's prioritization scheme, or `null` if no versions
    * match.
    *
-   * Throws a `PackageNotFoundException` if this lister's package doesn't
+   * Throws a `PackageNotFoundError` if this lister's package doesn't
    * exist.
    *
    * @param {VersionConstraint} constraint
    * @returns {Promise<import('./package-name').PackageId | null>}
-   * @throws {PackageNotFoundException}
+   * @throws {PackageNotFoundError}
    * @memberof PackageLister
    */
   async bestVersion(constraint) {
@@ -263,7 +263,7 @@ class PackageLister {
         throw new Error("this._source is undefined.");
       }
     } catch (error) {
-      if (error instanceof ManifestException) {
+      if (error instanceof ManifestError) {
         // The lockfile for the manifest couldn't be parsed,
         log(`Failed to parse manifest for ${id}:\n${error}`);
         this._knownInvalidVersions = this._knownInvalidVersions.union(
@@ -276,7 +276,7 @@ class PackageLister {
             IncompatibilityCause.noVersions,
           ),
         ];
-      } else if (error instanceof PackageNotFoundException) {
+      } else if (error instanceof PackageNotFoundError) {
         // We can only get here if the lockfile refers to a specific package
         // version that doesn't exist (probably because it was yanked).
         this._knownInvalidVersions = this._knownInvalidVersions.union(

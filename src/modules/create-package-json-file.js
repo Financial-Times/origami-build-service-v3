@@ -2,7 +2,7 @@
 
 const fs = require("fs").promises;
 const path = require("path");
-const { FormatException } = require("./home");
+const { FormatError } = require("./home");
 const { VersionConstraint } = require("./version");
 
 /**
@@ -17,7 +17,7 @@ module.exports = async function createPackageJsonFile(bundleLocation, modules) {
     try {
       VersionConstraint.parse(value);
     } catch (e) {
-      if (e instanceof FormatException) {
+      if (e instanceof FormatError) {
         reduction.push(
           `The version ${value} in ${key}@${value} is not a valid version.`,
         );
@@ -28,7 +28,7 @@ module.exports = async function createPackageJsonFile(bundleLocation, modules) {
   }, errors);
 
   if (errors.length > 0) {
-    throw new FormatException(
+    throw new FormatError(
       errors.join("\n") +
         "\n" +
         "Please refer to TODO (build service documentation) for what is a valid version.",

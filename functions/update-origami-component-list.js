@@ -32,9 +32,9 @@ module.exports.handler = RavenLambdaWrapper.handler(Raven, async () => {
     Raven.captureException(err, function(sendErr) {
       // This callback fires once the report has been sent to Sentry
       if (sendErr) {
-        console.error("Failed to send captured exception to Sentry");
+        console.error("Failed to send captured error to Sentry");
       } else {
-        console.log("Captured exception and sent to Sentry successfully");
+        console.log("Captured error and sent to Sentry successfully");
       }
     });
 

@@ -1,7 +1,7 @@
 "use strict";
 
 const { Map } = require("immutable");
-const { ArgumentError, PackageNotFoundException } = require("./home");
+const { ArgumentError, PackageNotFoundError } = require("./home");
 
 /**
  * A source bound to a `SystemCache`.
@@ -53,7 +53,7 @@ class BoundSource {
    * This may be called for packages that have not yet been downloaded during
    * the version resolution process. Its results are automatically memoized.
    *
-   * Throws a `DataException` if the pubspec's version doesn't match `id`'s
+   * Throws a `PackageNotFoundError` if the pubspec's version doesn't match `id`'s
    * version.
    *
    * Sources should not override this. Instead, they implement `doDescribe`.
@@ -78,7 +78,7 @@ class BoundSource {
     // Delegate to the overridden one.
     pubspec = await this.doDescribe(id);
     if (pubspec.version !== id.version) {
-      throw new PackageNotFoundException(
+      throw new PackageNotFoundError(
         `the pubspec for ${id} has version ${pubspec.version}`,
       );
     }

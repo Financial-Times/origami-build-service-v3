@@ -11,12 +11,12 @@ class PackageNotFoundCause extends IncompatibilityCause {
   /**
    * Creates an instance of PackageNotFoundCause.
    *
-   * @param {import("./home").PackageNotFoundException} exception
+   * @param {import("./home").PackageNotFoundError} error
    * @memberof PackageNotFoundCause
    */
-  constructor(exception) {
+  constructor(error) {
     super("Package not found");
-    this.exception = exception;
+    this.error = error;
   }
 }
 module.exports.PackageNotFoundCause = PackageNotFoundCause;

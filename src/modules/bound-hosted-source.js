@@ -6,7 +6,7 @@ const { writeFile, rename, mkdir } = require("fs").promises;
 const { fromJS, Map } = require("immutable");
 const path = require("path");
 const { CachedSource } = require("./cached-source");
-const { dirExists, listDir, PackageNotFoundException } = require("./home");
+const { dirExists, listDir, PackageNotFoundError } = require("./home");
 const { Package } = require("./package");
 const { Manifest } = require("./manifest");
 const { ManifestDynamo } = require("./manifest-dynamo");
@@ -258,9 +258,9 @@ class BoundHostedSource extends CachedSource {
    */
   _throwFriendlyError(error, $package) {
     if (error.name === "ItemNotFoundException") {
-      throw new PackageNotFoundException(`could not find package ${$package}`);
+      throw new PackageNotFoundError(`could not find package ${$package}`);
     } else {
-      // Otherwise re-throw the original exception.
+      // Otherwise re-throw the original error.
       throw error;
     }
   }

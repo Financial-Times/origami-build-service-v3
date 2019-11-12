@@ -12,7 +12,7 @@ const createPackageJsonFile = require("./modules/create-package-json-file");
 const installDependencies = require("./modules/install-dependencies");
 const createJavaScriptBundle = require("./modules/bundle-javascript");
 const { SolveFailure } = require("./modules/solve-failure");
-const { UserException, FormatException } = require("./modules/home");
+const { UserError, FormatError } = require("./modules/home");
 
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
@@ -41,8 +41,8 @@ const jsBundle = async (querystring = {}) => {
   } catch (err) {
     if (
       err instanceof SolveFailure ||
-      err instanceof UserException ||
-      err instanceof FormatException
+      err instanceof UserError ||
+      err instanceof FormatError
     ) {
       return {
         body: `throw new Error(${JSON.stringify(

@@ -27,22 +27,22 @@ class ArgumentError extends Error {}
 class StateError extends Error {}
 
 /**
- * @class FormatException
+ * @class FormatError
  * @extends {Error}
  */
-class FormatException extends Error {}
+class FormatError extends Error {}
 
 /**
- * @class PackageNotFoundException
+ * @class PackageNotFoundError
  * @extends {Error}
  */
-class PackageNotFoundException extends Error {}
+class PackageNotFoundError extends Error {}
 
 /**
- * @class ApplicationException
+ * @class ApplicationError
  * @extends {Error}
  */
-class ApplicationException extends Error {}
+class ApplicationError extends Error {}
 
 /**
  * @class UnsupportedError
@@ -51,22 +51,22 @@ class ApplicationException extends Error {}
 class UnsupportedError extends Error {}
 
 /**
- * @class ManifestException
- * @extends {ApplicationException}
+ * @class ManifestError
+ * @extends {ApplicationError}
  */
-class ManifestException extends ApplicationException {}
+class ManifestError extends ApplicationError {}
 
 /**
- * @class UserException
- * @extends {ApplicationException}
+ * @class UserError
+ * @extends {ApplicationError}
  */
-class UserException extends ApplicationException {}
+class UserError extends ApplicationError {}
 
 /**
- * @class FileException
+ * @class FileError
  * @extends {Error}
  */
-class FileException extends Error {}
+class FileError extends Error {}
 
 /**
  * Lists the contents of `dir`.
@@ -311,13 +311,13 @@ async function minByAsync(values, orderBy) {
 module.exports.compareNumbers = compareNumbers;
 module.exports.ArgumentError = ArgumentError;
 module.exports.StateError = StateError;
-module.exports.FormatException = FormatException;
-module.exports.PackageNotFoundException = PackageNotFoundException;
-module.exports.ApplicationException = ApplicationException;
+module.exports.FormatError = FormatError;
+module.exports.PackageNotFoundError = PackageNotFoundError;
+module.exports.ApplicationError = ApplicationError;
 module.exports.UnsupportedError = UnsupportedError;
-module.exports.ManifestException = ManifestException;
-module.exports.UserException = UserException;
-module.exports.FileException = FileException;
+module.exports.ManifestError = ManifestError;
+module.exports.UserError = UserError;
+module.exports.FileError = FileError;
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
