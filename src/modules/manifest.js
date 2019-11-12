@@ -26,10 +26,10 @@ class Manifest {
    * @param {import('./version').Version=} version
    * @param {Array<import('./package-name').PackageRange>=} dependencies
    * @param {import('immutable').Map<any, any>=} fields
-   * @param {import('./source-registry').SourceRegistry=} sources
+   * @param {import('./hosted-source').HostedSource=} source
    * @memberof Manifest
    */
-  constructor(_name, version, dependencies, fields, sources) {
+  constructor(_name, version, dependencies, fields, source) {
     this._version = version;
     /**
      * @type {Object.<string, import('./package-name').PackageRange>}
@@ -39,7 +39,7 @@ class Manifest {
         ? null
         : fromEntries(dependencies.map(range => [range.name, range]));
     this.fields = fields == null ? Map() : Map(fields);
-    this._sources = sources;
+    this._source = source;
     this._name = _name;
   }
 
@@ -49,11 +49,11 @@ class Manifest {
    *
    * @static
    * @param {string} packageDir
-   * @param {import('./source-registry').SourceRegistry} sources
+   * @param {import('./hosted-source').HostedSource} source
    * @returns {Manifest}
    * @memberof Manifest
    */
-  static load(packageDir, sources) {
+  static load(packageDir, source) {
     const manifestPath = path.join(packageDir, "package.json");
     if (!fs.existsSync(manifestPath)) {
       throw new FileError(
@@ -61,7 +61,7 @@ class Manifest {
       );
     }
 
-    return Manifest.parse(fs.readFileSync(manifestPath, "utf-8"), sources);
+    return Manifest.parse(fs.readFileSync(manifestPath, "utf-8"), source);
   }
 
   /**
@@ -75,13 +75,13 @@ class Manifest {
    *
    * @static
    * @param {import('immutable').Map<any, any>} fields
-   * @param {import('./source-registry').SourceRegistry} _sources
+   * @param {import('./hosted-source').HostedSource} _source
    * @param {string=} expectedName
    * @throws {import('./home').ManifestError}
    * @returns {Manifest}
    * @memberof Manifest
    */
-  static fromMap(fields, _sources, expectedName) {
+  static fromMap(fields, _source, expectedName) {
     // If `expectedName` is passed, ensure that the actual 'name' field exists
     // and matches the expectation.
     if (expectedName == null || fields.get("name") == expectedName) {
@@ -90,7 +90,7 @@ class Manifest {
         undefined,
         undefined,
         fields,
-        _sources,
+        _source,
       );
     }
     throw new ManifestError(
@@ -106,13 +106,13 @@ class Manifest {
    *
    * @static
    * @param {string} contents
-   * @param {import('./source-registry').SourceRegistry} sources
+   * @param {import('./hosted-source').HostedSource} source
    * @param {string=} expectedName
    * @returns {Manifest}
    * @throws {import('./home').ManifestError}
    * @memberof Manifest
    */
-  static parse(contents, sources, expectedName) {
+  static parse(contents, source, expectedName) {
     let manifestNode;
     try {
       manifestNode = fromJS(JSON.parse(contents));
@@ -130,7 +130,7 @@ class Manifest {
       );
     }
 
-    return Manifest.fromMap(manifestMap, sources, expectedName);
+    return Manifest.fromMap(manifestMap, source, expectedName);
   }
 
   /**
@@ -251,18 +251,13 @@ class Manifest {
           )}".`,
         );
       }
-      let description;
-      let sourceName;
-      /**
-       * @type {VersionConstraint}
-       */
-      let versionConstraint = new VersionRange();
       if (typeof spec == "string") {
-        if (spec.length > 0 && this._sources) {
-          description = name;
-          sourceName = this._sources.defaultSource().name;
+        if (spec.length > 0 && this._source) {
           try {
-            versionConstraint = this._parseVersionConstraint(spec);
+            const versionConstraint = this._parseVersionConstraint(spec);
+            // Let the source validate the description.
+            const ref = this._source.parseRef(name, name);
+            dependencies[name] = ref.withConstraint(versionConstraint);
           } catch (e) {
             this._error(
               `The manifest's "${field}" field has an entry for "${name}" which is an invalid SemVer string. The manifest was "${JSON.stringify(
@@ -283,13 +278,6 @@ class Manifest {
             this.fields,
           )}".`,
         );
-      }
-      if (this._sources && sourceName) {
-        // Let the source validate the description.
-        const ref = this._sources
-          .get(sourceName)
-          .parseRef(name, description == null ? null : description);
-        dependencies[name] = ref.withConstraint(versionConstraint);
       }
     });
 

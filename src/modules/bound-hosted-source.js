@@ -91,7 +91,7 @@ class BoundHostedSource extends CachedSource {
               );
               const manifest = Manifest.fromMap(
                 manifestMap,
-                this.systemCache.sources,
+                this.systemCache.hostedSource,
                 ref.name,
               );
               const id = this.source.idFor(ref.name, manifest.version);
@@ -149,7 +149,7 @@ class BoundHostedSource extends CachedSource {
       this._throwFriendlyError(error);
     }
 
-    return Manifest.fromMap(manifest, this.systemCache.sources, id.name);
+    return Manifest.fromMap(manifest, this.systemCache.hostedSource, id.name);
   }
 
   /**
@@ -167,7 +167,7 @@ class BoundHostedSource extends CachedSource {
       await this._download($package, id.version, packageDir);
     }
 
-    return Package.load(this.getDirectory(id), this.systemCache.sources);
+    return Package.load(this.getDirectory(id), this.systemCache.hostedSource);
   }
 
   /**
@@ -188,7 +188,7 @@ class BoundHostedSource extends CachedSource {
   }
 
   /**
-   * Gets all of the packages that have been downloaded into the system cache from the default server.
+   * Gets all of the packages that have been downloaded into the system cache.
    *
    * @returns {Promise<Array<Package>>}
    * @memberof BoundHostedSource
@@ -201,7 +201,7 @@ class BoundHostedSource extends CachedSource {
     const entries = await listDir(cacheDir);
 
     return entries.map(entry => {
-      return Package.load(entry, this.systemCache.sources);
+      return Package.load(entry, this.systemCache.hostedSource);
     });
   }
 

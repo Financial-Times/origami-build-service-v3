@@ -5,7 +5,7 @@ const { Map } = require("immutable");
 const path = require("path");
 const os = require("os");
 const { Package } = require("./package");
-const { SourceRegistry } = require("./source-registry");
+const { HostedSource } = require("./hosted-source");
 
 /**
  * The system-wide cache of downloaded packages.
@@ -21,10 +21,10 @@ class SystemCache {
    */
   constructor(rootDir) {
     /**
-     * @type {import('./source-registry').SourceRegistry} SystemCache#sources
+     * @type {import('./hosted-source').HostedSource} SystemCache#sources
      * @public
      */
-    this.sources = new SourceRegistry();
+    this.hostedSource = new HostedSource();
     /**
      * @type {string} SystemCache#rootDir
      * @public
@@ -35,9 +35,10 @@ class SystemCache {
      * @public
      */
     this._boundSources = Map();
-    for (const source of this.sources.all()) {
-      this._boundSources = this._boundSources.set(source, source.bind(this));
-    }
+    this._boundSources = this._boundSources.set(
+      this.hostedSource,
+      this.hostedSource.bind(this),
+    );
   }
 
   /**
@@ -57,17 +58,7 @@ class SystemCache {
    * @memberof SystemCache
    */
   get hosted() {
-    return this.source(this.sources.hosted);
-  }
-
-  /**
-   * The default source bound to this cache.
-   * @returns {import('./bound-source').BoundSource}
-   * @readonly
-   * @memberof SystemCache
-   */
-  defaultSource() {
-    return this.source(this.sources.defaultSource());
+    return this.source(this.hostedSource);
   }
 
   /**
@@ -97,7 +88,7 @@ class SystemCache {
     if (id.source) {
       return Package.load(
         this.source(id.source).getDirectory(id),
-        this.sources,
+        this.hostedSource,
       );
     } else {
       throw new Error(`id.source is undefined.`);

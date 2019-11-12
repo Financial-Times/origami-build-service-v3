@@ -22,7 +22,7 @@ async function acquireDependencies(rootDir, cache) {
       `rootDir needs to be an absolute path. rootDir is "${rootDir}".`,
     );
   }
-  const rootPackage = Package.load(rootDir, cache.sources);
+  const rootPackage = Package.load(rootDir, cache.hostedSource);
   const result = await resolveVersions(cache, rootPackage);
   await Promise.all(result.packages.map(id => _get(rootDir, cache, id)));
 }

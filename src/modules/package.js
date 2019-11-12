@@ -28,12 +28,12 @@ class Package {
    *
    * @static
    * @param {string} dir
-   * @param {import('./source-registry').SourceRegistry} sources
+   * @param {import('./hosted-source').HostedSource} source
    * @returns {Package}
    * @memberof Package
    */
-  static load(dir, sources) {
-    const manifest = Manifest.load(dir, sources);
+  static load(dir, source) {
+    const manifest = Manifest.load(dir, source);
 
     return new this(manifest, dir);
   }

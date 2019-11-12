@@ -41,7 +41,7 @@ class CachedSource extends BoundSource {
   async doDescribe(id) {
     const packageDir = this.getDirectory(id);
     if (fs.existsSync(path.join(packageDir, "package.json"))) {
-      return Manifest.load(packageDir, this.systemCache.sources);
+      return Manifest.load(packageDir, this.systemCache.hostedSource);
     }
 
     return this.describeUncached(id);
