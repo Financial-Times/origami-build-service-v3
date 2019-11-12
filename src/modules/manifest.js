@@ -238,67 +238,57 @@ class Manifest {
         )}".`,
       );
     }
-    const map = Map(node);
-    const nonStringNode = map.findKey((_, key) => typeof key != "string");
+
+    const nonStringNode = node.findKey((_, key) => typeof key != "string");
     if (nonStringNode != null) {
       this._error("A dependency name must be a string.");
     }
-    map.forEach((specNode, nameNode) => {
-      const name = nameNode;
-      let spec = specNode;
+    node.forEach((spec, name) => {
       if (this.fields.get("name") != null && name == this.name) {
-        this._error("A package may not list itself as a dependency.");
+        this._error(
+          `The manifest's "${field}" field has an entry for itself. A manifest may not directly depend on itself. The manifest was "${JSON.stringify(
+            this.fields,
+          )}".`,
+        );
       }
-      let descriptionNode;
+      let description;
       let sourceName;
       /**
        * @type {VersionConstraint}
        */
       let versionConstraint = new VersionRange();
-      if (spec == null) {
-        if (this._sources) {
-          descriptionNode = nameNode;
+      if (typeof spec == "string") {
+        if (spec.length > 0 && this._sources) {
+          description = name;
           sourceName = this._sources.defaultSource.name;
-        }
-      } else if (typeof spec == "string") {
-        if (this._sources) {
-          descriptionNode = nameNode;
-          sourceName = this._sources.defaultSource.name;
-          versionConstraint = this._parseVersionConstraint(spec);
-        }
-      } else if (spec instanceof Map) {
-        spec = Map(spec);
-        const specMap = spec;
-        if (spec.has("version")) {
-          spec = spec.remove("version");
-          versionConstraint = this._parseVersionConstraint(
-            specMap.get("version"),
+          try {
+            versionConstraint = this._parseVersionConstraint(spec);
+          } catch (e) {
+            this._error(
+              `The manifest's "${field}" field has an entry for "${name}" which is an invalid SemVer string. The manifest was "${JSON.stringify(
+                this.fields,
+              )}". ${e.message}`,
+            );
+          }
+        } else {
+          this._error(
+            `The manifest's "${field}" field has an entry for "${name}" which is an empty string. Dependencies can only be defined with SemVer strings. The manifest was "${JSON.stringify(
+              this.fields,
+            )}".`,
           );
         }
-        const sourceNames = spec.keySeq().toList();
-        if (sourceNames.size > 1) {
-          this._error("A dependency may only have one source.");
-        } else if (sourceNames.isEmpty()) {
-          // Default to a hosted dependency if no source is specified.
-          sourceName = "hosted";
-          descriptionNode = nameNode;
-        }
-        sourceName = sourceName != null ? sourceName : sourceNames.first();
-        if (typeof sourceName != "string") {
-          this._error("A source name must be a string.");
-        }
-        descriptionNode =
-          descriptionNode != null ? descriptionNode : specMap.get(sourceName);
       } else {
         this._error(
-          "A dependency specification must be a string or a mapping.",
+          `The manifest's "${field}" field has an entry for "${name}" which is not a string. Dependencies can only be defined with SemVer strings. The manifest was "${JSON.stringify(
+            this.fields,
+          )}".`,
         );
       }
-      if (this._sources) {
+      if (this._sources && sourceName) {
         // Let the source validate the description.
         const ref = this._sources
           .get(sourceName)
-          .parseRef(name, descriptionNode == null ? null : descriptionNode);
+          .parseRef(name, description == null ? null : description);
         dependencies[name] = ref.withConstraint(versionConstraint);
       }
     });
