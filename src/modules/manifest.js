@@ -232,7 +232,11 @@ class Manifest {
       return dependencies;
     }
     if (!(node instanceof Map)) {
-      this._error(`"${field}" field must be a map.`);
+      this._error(
+        `The manifest's "${field}" field, must be a JSON Object. The manifest was "${JSON.stringify(
+          this.fields,
+        )}".`,
+      );
     }
     const map = Map(node);
     const nonStringNode = map.findKey((_, key) => typeof key != "string");
