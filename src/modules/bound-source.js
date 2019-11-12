@@ -47,13 +47,13 @@ class BoundSource {
   }
 
   /**
-   * Loads the (possibly remote) pubspec for the package version identified by
+   * Loads the (possibly remote) manifest for the package version identified by
    * `id`.
    *
    * This may be called for packages that have not yet been downloaded during
    * the version resolution process. Its results are automatically memoized.
    *
-   * Throws a `PackageNotFoundError` if the pubspec's version doesn't match `id`'s
+   * Throws a `PackageNotFoundError` if the manifest's version doesn't match `id`'s
    * version.
    *
    * Sources should not override this. Instead, they implement `doDescribe`.
@@ -71,33 +71,33 @@ class BoundSource {
         `Package ${id} does not use source ${this.source.name}.`,
       );
     }
-    let pubspec = this._manifests.get(id);
-    if (pubspec != null) {
-      return pubspec;
+    let manifest = this._manifests.get(id);
+    if (manifest != null) {
+      return manifest;
     }
     // Delegate to the overridden one.
-    pubspec = await this.doDescribe(id);
-    if (pubspec.version !== id.version) {
+    manifest = await this.doDescribe(id);
+    if (manifest.version !== id.version) {
       throw new PackageNotFoundError(
-        `the pubspec for ${id} has version ${pubspec.version}`,
+        `the manifest for ${id} has version ${manifest.version}`,
       );
     }
-    this._manifests = this._manifests.set(id, pubspec);
+    this._manifests = this._manifests.set(id, manifest);
 
-    return pubspec;
+    return manifest;
   }
 
   /**
-   * Stores `pubspec` so it's returned when `describe` is called with `id`.
+   * Stores `manifest` so it's returned when `describe` is called with `id`.
    *
    * This is notionally protected; it should only be called by subclasses.
    *
    * @param {import('./package-name').PackageId} id
-   * @param {import('./manifest').Manifest} pubspec
+   * @param {import('./manifest').Manifest} manifest
    * @memberof BoundSource
    */
-  memoizeManifest(id, pubspec) {
-    this._manifests = this._manifests.set(id, pubspec);
+  memoizeManifest(id, manifest) {
+    this._manifests = this._manifests.set(id, manifest);
   }
 
   /**
