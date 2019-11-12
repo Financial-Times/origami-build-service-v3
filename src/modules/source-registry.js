@@ -1,6 +1,5 @@
 "use strict";
 
-const { StateError } = require("./home");
 const { HostedSource } = require("./hosted-source");
 
 /**
@@ -56,38 +55,6 @@ class SourceRegistry {
    */
   get hosted() {
     return this._sources.hosted;
-  }
-
-  /**
-   * Sets the default source.
-   * This takes a string, which must be the name of a registered source.
-   *
-   * @param {string} name
-   * @memberof SourceRegistry
-   */
-  setDefault(name) {
-    if (!this._sources.name) {
-      throw new StateError(`Default source ${name} is not in the registry`);
-    }
-    this._default = this._sources.name;
-  }
-
-  /**
-   * Registers a new source.
-   *
-   * This source may not have the same name as a source that's already been
-   * registered.
-   *
-   * @param {import('./source').Source} source
-   * @memberof SourceRegistry
-   */
-  register(source) {
-    if (this._sources[source.name]) {
-      throw new StateError(
-        `Source registry already has a source named ${source.name}`,
-      );
-    }
-    this._sources[source.name] = source;
   }
 
   /**
