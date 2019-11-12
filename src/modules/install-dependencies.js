@@ -3,7 +3,7 @@
 const path = require("path");
 const os = require("os");
 const fs = require("fs").promises;
-const { Entrypoint } = require("./entrypoint");
+const { acquireDependencies } = require("./acquire-dependencies");
 const { SystemCache } = require("./system-cache");
 
 /**
@@ -20,6 +20,5 @@ module.exports = async function installDependencies(
   await fs.mkdir(systemCacheDirectory, { recursive: true });
   const systemcache = new SystemCache(systemCacheDirectory);
 
-  const entrypoint = new Entrypoint(location, systemcache);
-  await entrypoint.acquireDependencies();
+  await acquireDependencies(location, systemcache);
 };
