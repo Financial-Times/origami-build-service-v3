@@ -260,7 +260,7 @@ class Manifest {
       if (typeof spec == "string") {
         if (spec.length > 0 && this._sources) {
           description = name;
-          sourceName = this._sources.defaultSource.name;
+          sourceName = this._sources.defaultSource().name;
           try {
             versionConstraint = this._parseVersionConstraint(spec);
           } catch (e) {

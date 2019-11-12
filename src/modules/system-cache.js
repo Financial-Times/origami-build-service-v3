@@ -35,7 +35,7 @@ class SystemCache {
      * @public
      */
     this._boundSources = Map();
-    for (const source of this.sources.all) {
+    for (const source of this.sources.all()) {
       this._boundSources = this._boundSources.set(source, source.bind(this));
     }
   }
@@ -66,8 +66,8 @@ class SystemCache {
    * @readonly
    * @memberof SystemCache
    */
-  get defaultSource() {
-    return this.source(this.sources.defaultSource);
+  defaultSource() {
+    return this.source(this.sources.defaultSource());
   }
 
   /**

@@ -30,7 +30,7 @@ class SourceRegistry {
    * @readonly
    * @memberof SourceRegistry
    */
-  get defaultSource() {
+  defaultSource() {
     return this._default;
   }
 
@@ -41,7 +41,7 @@ class SourceRegistry {
    * @readonly
    * @memberof SourceRegistry
    */
-  get all() {
+  all() {
     const sources = Object.values(this._sources);
     sources.sort((a, b) => a.name.localeCompare(b.name));
 
