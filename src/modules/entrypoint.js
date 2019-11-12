@@ -51,7 +51,7 @@ class Entrypoint {
    * Gets all dependencies of the `root` package.
    * Performs version resolution according to `SolveType`.
    *
-   * @param {import("./solve-type").GET|import("./solve-type").DOWNGRADE} type
+   * @param {import("./solve-type").GET} type
    * @memberof Entrypoint
    * @returns {Promise<void>}
    */

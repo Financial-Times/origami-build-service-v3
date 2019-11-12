@@ -13,7 +13,6 @@ const { reformatRanges } = require("./reformatRanges");
 const { SetRelation } = require("./set-relation");
 const { SolveFailure } = require("./solve-failure");
 const { SolveResult } = require("./solve-result");
-const { DOWNGRADE } = require("./solve-type");
 const { Term } = require("./term");
 const { UnknownSource } = require("./unknown-source");
 const { Version } = require("./version");
@@ -33,7 +32,7 @@ class VersionSolver {
   /**
    * Creates an instance of VersionSolver.
    *
-   * @param {import('./solve-type').GET|import('./solve-type').DOWNGRADE} _type
+   * @param {import('./solve-type').GET} _type
    * @param {import('./system-cache').SystemCache} _systemCache
    * @param {import('./package').Package} _root
    * @memberof VersionSolver
@@ -59,7 +58,7 @@ class VersionSolver {
     this._packageListers = Map();
     /**
      * The type of version solve being performed.
-     * @type {import('./solve-type').GET|import('./solve-type').DOWNGRADE}
+     * @type {import('./solve-type').GET}
      */
     this._type = _type;
     /**
@@ -567,12 +566,7 @@ class VersionSolver {
         ref,
         ref.isRoot
           ? PackageLister.root(this._root)
-          : new PackageLister(
-              this._systemCache,
-              ref,
-              null,
-              this._type == DOWNGRADE,
-            ),
+          : new PackageLister(this._systemCache, ref, null),
       );
     }
 

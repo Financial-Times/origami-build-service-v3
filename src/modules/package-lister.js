@@ -30,11 +30,10 @@ class PackageLister {
    * @param {(import('./system-cache').SystemCache | null)} cache
    * @param {import('./package-name').PackageRef} _ref
    * @param {import('./package-name').PackageId | null} _locked
-   * @param {boolean} [downgrade]
    * @param {import('./bound-source').BoundSource} [source]
    * @memberof PackageLister
    */
-  constructor(cache, _ref, _locked, downgrade = false, source) {
+  constructor(cache, _ref, _locked, source) {
     /**
      * @type {Object.<string, VersionConstraint>}
      */
@@ -63,10 +62,6 @@ class PackageLister {
       : cache && _ref.source
       ? cache.source(_ref.source)
       : undefined;
-    /**
-     * @type {boolean}
-     */
-    this._isDowngrade = downgrade;
   }
 
   /**
@@ -84,9 +79,8 @@ class PackageLister {
     // boundaries of various constraints, which is useless for the root
     // package.
     const _locked = PackageId.root($package);
-    const _isDowngrade = false;
 
-    return new this(null, _ref, _locked, _isDowngrade, _source);
+    return new this(null, _ref, _locked, _source);
   }
 
   /**
@@ -191,7 +185,7 @@ class PackageLister {
       return this._locked;
     }
     const versions = await this._versions;
-    // If `constraint` has a minimum (or a maximum in downgrade mode), we can
+    // If `constraint` has a minimum, we can
     // bail early once we're past it.
     /**
      * @param {import("./version").Version} _
@@ -199,16 +193,9 @@ class PackageLister {
     // eslint-disable-next-line no-unused-vars
     let isPastLimit = _ => false;
     if (constraint instanceof VersionRange) {
-      if (this._isDowngrade) {
-        const max = constraint.max;
-        if (max != null) {
-          isPastLimit = version => version.greaterThan(max);
-        }
-      } else {
-        const min = constraint.min;
-        if (min != null) {
-          isPastLimit = version => version.lessThan(min);
-        }
+      const min = constraint.min;
+      if (min != null) {
+        isPastLimit = version => version.lessThan(min);
       }
     }
     // Return the most preferable version that matches `constraint`: the latest
@@ -216,7 +203,7 @@ class PackageLister {
     // otherwise.
     let version;
     const v = Array.from(versions);
-    const _versions = this._isDowngrade ? v : v.reverse();
+    const _versions = v.reverse();
     for (const id of _versions) {
       if (isPastLimit != null && isPastLimit(id.version)) {
         break;
