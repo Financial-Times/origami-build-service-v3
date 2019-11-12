@@ -3,11 +3,9 @@
 const fs = require("fs").promises;
 const { Map } = require("immutable");
 const path = require("path");
-const { ArgumentError } = require("./home");
 const os = require("os");
 const { Package } = require("./package");
 const { SourceRegistry } = require("./source-registry");
-const { UnknownSource } = require("./unknown-source");
 
 /**
  * The system-wide cache of downloaded packages.
@@ -96,9 +94,6 @@ class SystemCache {
    * @memberof SystemCache
    */
   load(id) {
-    if (id.source instanceof UnknownSource) {
-      throw new ArgumentError(`Unknown source ${id.source}.`);
-    }
     if (id.source) {
       return Package.load(
         this.source(id.source).getDirectory(id),

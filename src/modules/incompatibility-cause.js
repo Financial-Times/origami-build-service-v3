@@ -48,12 +48,4 @@ IncompatibilityCause.dependency = new IncompatibilityCause("dependency");
  */
 IncompatibilityCause.noVersions = new IncompatibilityCause("no versions");
 
-/**
- * The incompatibility indicates that the package has an unknown source.
- * @type {IncompatibilityCause}
- * @static
- * @memberof IncompatibilityCause
- */
-IncompatibilityCause.unknownSource = new IncompatibilityCause("unknown source");
-
 module.exports.IncompatibilityCause = IncompatibilityCause;

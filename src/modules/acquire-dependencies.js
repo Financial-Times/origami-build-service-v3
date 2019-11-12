@@ -1,7 +1,6 @@
 "use strict";
 
 const { ArgumentError } = require("./home");
-const { CachedSource } = require("./cached-source");
 const { Package } = require("./package");
 const { resolveVersions } = require("./resolveVersions");
 const path = require("path");
@@ -41,11 +40,8 @@ async function acquireDependencies(rootDir, cache) {
  * @returns {Promise<void>}
  */
 async function _get(rootDir, cache, id) {
-  if (id.isRoot) {
-    return;
-  }
-  const source = id.source ? cache.source(id.source) : null;
-  if (source instanceof CachedSource) {
+  if (!id.isRoot && id.source) {
+    const source = cache.source(id.source);
     await source.get(id, path.join(rootDir, "node_modules", id.name));
   }
 }

@@ -14,7 +14,6 @@ const { SetRelation } = require("./set-relation");
 const { SolveFailure } = require("./solve-failure");
 const { SolveResult } = require("./solve-result");
 const { Term } = require("./term");
-const { UnknownSource } = require("./unknown-source");
 const { Version } = require("./version");
 const { VersionConstraint } = require("./version");
 const log = require("./log");
@@ -347,22 +346,6 @@ class VersionSolver {
     const unsatisfied = this._solution.unsatisfied;
     if (unsatisfied.length === 0) {
       return null;
-    }
-
-    // If we require a package from an unknown source, add an incompatibility
-    // that will force a conflict for that package.
-    for (const candidate of unsatisfied) {
-      if (!(candidate.source instanceof UnknownSource)) {
-        continue;
-      }
-      this._addIncompatibility(
-        new Incompatibility(
-          [new Term(candidate.withConstraint(VersionConstraint.any), true)],
-          IncompatibilityCause.unknownSource,
-        ),
-      );
-
-      return candidate.name;
     }
 
     /// Prefer packages with as few remaining versions as possible, so that if a

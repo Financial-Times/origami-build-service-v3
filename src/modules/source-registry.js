@@ -2,7 +2,6 @@
 
 const { StateError } = require("./home");
 const { HostedSource } = require("./hosted-source");
-const { UnknownSource } = require("./unknown-source");
 
 /**
  * A class that keeps track of `Source`s used for getting packages.
@@ -94,22 +93,14 @@ class SourceRegistry {
   /**
    * Returns the source named `name`.
    *
-   * Returns an `UnknownSource` if no source with that name has been
-   * registered. If `name` is null, returns the default source.
+   * If `name` is null, returns the default source.
    *
    * @param {string} name
    * @returns {import('./source').Source}
    * @memberof SourceRegistry
    */
   get(name) {
-    if (name == null) {
-      return this._default;
-    }
-    if (this._sources[name]) {
-      return this._sources[name];
-    }
-
-    return new UnknownSource(name);
+    return this._sources[name];
   }
 }
 module.exports.SourceRegistry = SourceRegistry;

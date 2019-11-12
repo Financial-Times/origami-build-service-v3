@@ -160,11 +160,6 @@ class Incompatibility {
       return `${this._terseRef(this.terms[0], details)} doesn't exist (${
         cause.error.message
       })`;
-    } else if (this.cause == IncompatibilityCause.unknownSource) {
-      assert(this.terms.length == 1);
-      assert(this.terms[0].isPositive);
-
-      return `${this.terms[0].package.name} comes from unknown source "${this.terms[0].package.source}"`;
     } else if (this.cause == IncompatibilityCause.root) {
       // `IncompatibilityCause.root` is only used when a package depends on the
       // entrypoint with an incompatible version, so we want to print the
@@ -492,19 +487,6 @@ class Incompatibility {
         prior.cause == IncompatibilityCause.dependency
           ? " depends on "
           : " requires ";
-    }
-    if (latter.cause == IncompatibilityCause.unknownSource) {
-      const $package = latter.terms[0].package;
-      buffer += `${$package.name} `;
-      if (priorLine != null) {
-        buffer += `(${priorLine}) `;
-      }
-      buffer += `from unknown source "${$package.source}"`;
-      if (latterLine != null) {
-        buffer += ` (${latterLine})`;
-      }
-
-      return buffer.toString();
     }
     buffer += `${this._terse(latter.terms[0], details)}@${
       latter.terms[0].constraint
