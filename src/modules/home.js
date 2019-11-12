@@ -5,8 +5,6 @@ const fs = require("fs").promises;
 const { is } = require("immutable");
 const path = require("path");
 const process = require("process");
-const url = require("url");
-const URL = url.URL;
 const log = require("./log");
 
 /**
@@ -310,7 +308,6 @@ async function minByAsync(values, orderBy) {
   }
 }
 
-module.exports.URL = URL;
 module.exports.compareNumbers = compareNumbers;
 module.exports.ArgumentError = ArgumentError;
 module.exports.StateError = StateError;
