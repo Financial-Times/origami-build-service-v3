@@ -3,16 +3,86 @@
 /* eslint-disable no-unused-vars */
 const assert = require("assert");
 const { hash, is, List } = require("immutable");
-const {
-  allowsHigher,
-  allowsLower,
-  equalsWithoutPreRelease,
-  strictlyHigher,
-  compareNumbers,
-  strictlyLower,
-} = require("./home");
+const { compareNumbers, equalsWithoutPreRelease } = require("./home");
 const { ArgumentError, FormatError } = require("./errors");
 const semver = require("semver");
+
+/**
+ * Returns whether `range1` allows only versions lower than those allowed by `range2`.
+ * @param {import('./version').VersionRange} range1
+ * @param {import('./version').VersionRange} range2
+ * @returns {boolean}
+ */
+const strictlyLower = (range1, range2) => {
+  if (range1.max == null || range2.min == null) {
+    return false;
+  }
+  const comparison = range1.max.compareTo(range2.min);
+  if (comparison == -1) {
+    return true;
+  }
+  if (comparison == 1) {
+    return false;
+  }
+
+  return !range1.includeMax || !range2.includeMin;
+};
+
+/**
+ * Returns whether `range1` allows only versions higher than those allowed by `range2`.
+ * @param {import('./version').VersionRange} range1
+ * @param {import('./version').VersionRange} range2
+ * @returns {boolean}
+ */
+const strictlyHigher = (range1, range2) => strictlyLower(range2, range1);
+
+/**
+ * Returns whether `range1` allows lower versions than `range2`.
+ * @param {import('./version').VersionRange} range1
+ * @param {import('./version').VersionRange} range2
+ * @returns {boolean}
+ */
+const allowsLower = (range1, range2) => {
+  if (range1.min == null) {
+    return range2.min != null;
+  }
+  if (range2.min == null) {
+    return false;
+  }
+  const comparison = range1.min.compareTo(range2.min);
+  if (comparison === -1) {
+    return true;
+  }
+  if (comparison === 1) {
+    return false;
+  }
+
+  return range1.includeMin && !range2.includeMin;
+};
+
+/**
+ * Returns whether `range1` allows higher versions than `range2`.
+ * @param {import('./version').VersionRange} range1
+ * @param {import('./version').VersionRange} range2
+ * @returns {boolean}
+ */
+const allowsHigher = (range1, range2) => {
+  if (range1.max == null) {
+    return range2.max != null;
+  }
+  if (range2.max == null) {
+    return false;
+  }
+  const comparison = range1.max.compareTo(range2.max);
+  if (comparison == 1) {
+    return true;
+  }
+  if (comparison == -1) {
+    return false;
+  }
+
+  return range1.includeMax && !range2.includeMax;
+};
 
 /**
  * Returns whether `range1` is immediately next to, but not overlapping, `range2`.

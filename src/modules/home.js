@@ -104,83 +104,6 @@ const createPackageSymlink = async (
 };
 
 /**
- * Returns whether `range1` allows lower versions than `range2`.
- * @param {import('./version').VersionRange} range1
- * @param {import('./version').VersionRange} range2
- * @returns {boolean}
- */
-const allowsLower = (range1, range2) => {
-  if (range1.min == null) {
-    return range2.min != null;
-  }
-  if (range2.min == null) {
-    return false;
-  }
-  const comparison = range1.min.compareTo(range2.min);
-  if (comparison === -1) {
-    return true;
-  }
-  if (comparison === 1) {
-    return false;
-  }
-
-  return range1.includeMin && !range2.includeMin;
-};
-
-/**
- * Returns whether `range1` allows higher versions than `range2`.
- * @param {import('./version').VersionRange} range1
- * @param {import('./version').VersionRange} range2
- * @returns {boolean}
- */
-const allowsHigher = (range1, range2) => {
-  if (range1.max == null) {
-    return range2.max != null;
-  }
-  if (range2.max == null) {
-    return false;
-  }
-  const comparison = range1.max.compareTo(range2.max);
-  if (comparison == 1) {
-    return true;
-  }
-  if (comparison == -1) {
-    return false;
-  }
-
-  return range1.includeMax && !range2.includeMax;
-};
-
-/**
- * Returns whether `range1` allows only versions lower than those allowed by `range2`.
- * @param {import('./version').VersionRange} range1
- * @param {import('./version').VersionRange} range2
- * @returns {boolean}
- */
-const strictlyLower = (range1, range2) => {
-  if (range1.max == null || range2.min == null) {
-    return false;
-  }
-  const comparison = range1.max.compareTo(range2.min);
-  if (comparison == -1) {
-    return true;
-  }
-  if (comparison == 1) {
-    return false;
-  }
-
-  return !range1.includeMax || !range2.includeMin;
-};
-
-/**
- * Returns whether `range1` allows only versions higher than those allowed by `range2`.
- * @param {import('./version').VersionRange} range1
- * @param {import('./version').VersionRange} range2
- * @returns {boolean}
- */
-const strictlyHigher = (range1, range2) => strictlyLower(range2, range1);
-
-/**
  * Returns whether `version1` is the same as `version2`, ignoring their prereleases.
  * @param {import('./version').Version} version1
  * @param {import('./version').Version} version2
@@ -258,10 +181,6 @@ module.exports.compareNumbers = compareNumbers;
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
-module.exports.allowsLower = allowsLower;
-module.exports.allowsHigher = allowsHigher;
-module.exports.strictlyLower = strictlyLower;
-module.exports.strictlyHigher = strictlyHigher;
 module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
 module.exports.ordered = ordered;
 module.exports.lowerBound = lowerBound;
