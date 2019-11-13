@@ -107,17 +107,7 @@ const equalsWithoutPreRelease = (version1, version2) =>
   is(version1.minor, version2.minor) &&
   is(version1.patch, version2.patch);
 
-/**
- * Returns a list containing the sorted elements of `iter`.
- * @param {Array<string>} iter
- * @returns {Array<string>}
- */
-function ordered(iter) {
-  return iter.sort((a, b) => a.localeCompare(b));
-}
-
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
 module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
-module.exports.ordered = ordered;

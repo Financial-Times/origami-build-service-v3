@@ -3,7 +3,6 @@
 const assert = require("assert");
 const { is } = require("immutable");
 const { _RootSource } = require("./_root-source");
-const { ordered } = require("./home");
 const { PackageNotFoundError, ManifestError } = require("./errors");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
@@ -14,6 +13,15 @@ const { Term } = require("./term");
 const { VersionConstraint } = require("./version");
 const { VersionRange } = require("./version");
 const log = require("./log");
+
+/**
+ * Returns a list containing the sorted elements of `iter`.
+ * @param {Array<string>} iter
+ * @returns {Array<string>}
+ */
+function ordered(iter) {
+  return iter.sort((a, b) => a.localeCompare(b));
+}
 
 /**
  * Returns the first position in `sortedList` that does not compare less than
