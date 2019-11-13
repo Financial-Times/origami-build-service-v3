@@ -715,7 +715,9 @@ class VersionRange extends VersionConstraint {
       max != null &&
       !max.isPreRelease() &&
       max.build.isEmpty() &&
-      (min == null || !min.isPreRelease() || !versionsEqualWithoutPrerelease(min, max))
+      (min == null ||
+        !min.isPreRelease() ||
+        !versionsEqualWithoutPrerelease(min, max))
     ) {
       max = max.firstPreRelease();
     }
@@ -2235,8 +2237,5 @@ VersionConstraint.any = new VersionRange();
 VersionConstraint.empty = new _EmptyVersion();
 
 module.exports.VersionConstraint = VersionConstraint;
-module.exports.CompatibleWithVersionRange = CompatibleWithVersionRange;
 module.exports.Version = Version;
 module.exports.VersionRange = VersionRange;
-module.exports.VersionUnion = VersionUnion;
-module.exports._EmptyVersion = _EmptyVersion;
