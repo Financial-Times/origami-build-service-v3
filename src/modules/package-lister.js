@@ -3,7 +3,7 @@
 const assert = require("assert");
 const { is } = require("immutable");
 const { _RootSource } = require("./_root-source");
-const { lowerBound, ordered } = require("./home");
+const { ordered } = require("./home");
 const { PackageNotFoundError, ManifestError } = require("./errors");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
@@ -14,6 +14,35 @@ const { Term } = require("./term");
 const { VersionConstraint } = require("./version");
 const { VersionRange } = require("./version");
 const log = require("./log");
+
+/**
+ * Returns the first position in `sortedList` that does not compare less than
+ * `value`.
+ *
+ * If the list isn't sorted according to the `compare` function, the result
+ * is unpredictable.
+ *
+ * Returns `sortedList.length` if all the items in `sortedList` compare less
+ * than `value`.
+ *
+ *
+ * @template T
+ * @param {Array<T>} sortedList
+ * @param {T} value
+ * @param {(a: T, b: T) => number} compare
+ * @returns {number}
+ */
+function lowerBound(sortedList, value, compare) {
+  const index = sortedList.findIndex(element => {
+    return compare(element, value) === 0;
+  });
+
+  if (index === -1) {
+    return sortedList.length;
+  } else {
+    return index;
+  }
+}
 
 /**
  * A cache of all the versions of a single package that provides information about those versions to the solver.

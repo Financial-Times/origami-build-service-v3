@@ -116,38 +116,8 @@ function ordered(iter) {
   return iter.sort((a, b) => a.localeCompare(b));
 }
 
-/**
- * Returns the first position in `sortedList` that does not compare less than
- * `value`.
- *
- * If the list isn't sorted according to the `compare` function, the result
- * is unpredictable.
- *
- * Returns `sortedList.length` if all the items in `sortedList` compare less
- * than `value`.
- *
- *
- * @template T
- * @param {Array<T>} sortedList
- * @param {T} value
- * @param {(a: T, b: T) => number} compare
- * @returns {number}
- */
-function lowerBound(sortedList, value, compare) {
-  const index = sortedList.findIndex(element => {
-    return compare(element, value) === 0;
-  });
-
-  if (index === -1) {
-    return sortedList.length;
-  } else {
-    return index;
-  }
-}
-
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
 module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
 module.exports.ordered = ordered;
-module.exports.lowerBound = lowerBound;
