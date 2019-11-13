@@ -7,7 +7,7 @@ frameworkVersion: "=1.57.0"
 provider:
   environment:
     REGION: ${self:provider.region}
-    COMPONENT_TABLE: ${self:service}-components
+    COMPONENT_TABLE: ${self:service}-${self:provider.stage}-components
     MODULE_BUCKET_NAME: ${self:custom.bucketName}
     NPM_WEBHOOK_SECRET_DEV: ${env:NPM_WEBHOOK_SECRET_DEV}
     ORIGAMI_REPO_DATA_KEY_ID: ${env:ORIGAMI_REPO_DATA_KEY_ID}
@@ -63,21 +63,10 @@ custom:
   bucketName: ${self:service}-${self:provider.stage}-modules
   defaultStage: dev
   globalTables: 
-    - 
-      regions: 
-        - eu-west-1
-        - us-west-1
-      tableName: "${self:provider.environment.COMPONENT_TABLE}"
-      tags: 
-        - 
-          Key: systemCode
-          Value: "${self:service}"
-        - 
-          Key: teamDL
-          Value: origami.support@ft.com
-        - 
-          Key: environment
-          Value: "${self:custom.tags.${self:provider.stage}.environment}"
+    createStack: false
+    regions: 
+      - eu-west-1
+      - us-west-1
   output:
     file: ./.${self:provider.stage}-stack.yml
   remover:
@@ -149,3 +138,13 @@ resources:
         BillingMode: PAY_PER_REQUEST
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
+        Tags: 
+          - 
+            Key: systemCode
+            Value: "${self:service}"
+          - 
+            Key: teamDL
+            Value: origami.support@ft.com
+          - 
+            Key: environment
+            Value: "${self:custom.tags.${self:provider.stage}.environment}"

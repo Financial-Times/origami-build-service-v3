@@ -132,7 +132,7 @@ decorateMethod(
 );
 
 ManifestDynamo = decorateClass(
-  [table("origami-build-service-components")],
+  [table(process.env.COMPONENT_TABLE)],
   ManifestDynamo,
 );
 
