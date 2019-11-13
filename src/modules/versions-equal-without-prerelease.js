@@ -6,9 +6,9 @@
  * @param {import('./version').Version} version2
  * @returns {boolean}
  */
-const equalsWithoutPreRelease = (version1, version2) =>
+const versionsEqualWithoutPrerelease = (version1, version2) =>
   version1.major === version2.major &&
   version1.minor === version2.minor &&
   version1.patch === version2.patch;
 
-module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
+module.exports.versionsEqualWithoutPrerelease = versionsEqualWithoutPrerelease;

@@ -3,7 +3,9 @@
 /* eslint-disable no-unused-vars */
 const assert = require("assert");
 const { hash, is, List } = require("immutable");
-const { equalsWithoutPreRelease } = require("./home");
+const {
+  versionsEqualWithoutPrerelease,
+} = require("./versions-equal-without-prerelease");
 const { ArgumentError, FormatError } = require("./errors");
 const semver = require("semver");
 
@@ -713,7 +715,7 @@ class VersionRange extends VersionConstraint {
       max != null &&
       !max.isPreRelease() &&
       max.build.isEmpty() &&
-      (min == null || !min.isPreRelease() || !equalsWithoutPreRelease(min, max))
+      (min == null || !min.isPreRelease() || !versionsEqualWithoutPrerelease(min, max))
     ) {
       max = max.firstPreRelease();
     }
@@ -1228,7 +1230,7 @@ class VersionRange extends VersionConstraint {
           const minIsPreReleaseOfMax =
             this.min != null &&
             this.min.isPreRelease() &&
-            equalsWithoutPreRelease(this.min, this.max);
+            versionsEqualWithoutPrerelease(this.min, this.max);
           if (
             !this.max.isPreRelease() &&
             this.max.build.isEmpty() &&

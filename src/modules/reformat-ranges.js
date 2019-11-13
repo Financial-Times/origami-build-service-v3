@@ -1,7 +1,9 @@
 "use strict";
 
 const { ConflictCause } = require("./conflict-cause");
-const { equalsWithoutPreRelease } = require("./home");
+const {
+  versionsEqualWithoutPrerelease,
+} = require("./versions-equal-without-prerelease");
 const { Incompatibility } = require("./incompatibility");
 const { Pair } = require("./pair");
 const { Term } = require("./term");
@@ -112,7 +114,7 @@ function _reformatMin(versions, range) {
 
   // If there's a real pre-release version of `range.min`, use that as the min.
   // Otherwise, use the release version.
-  return next != null && equalsWithoutPreRelease(range.min, next)
+  return next != null && versionsEqualWithoutPrerelease(range.min, next)
     ? next
     : new Version(range.min.major, range.min.minor, range.min.patch);
 }
@@ -138,14 +140,14 @@ function _reformatMax(versions, range) {
   if (
     range.min != null &&
     range.min.isPreRelease() &&
-    equalsWithoutPreRelease(range.min, range.max)
+    versionsEqualWithoutPrerelease(range.min, range.max)
   ) {
     return null;
   }
   const index = _lowerBound(versions, range.max);
   const previous = index == 0 ? null : versions[index - 1].version;
 
-  return previous != null && equalsWithoutPreRelease(previous, range.max)
+  return previous != null && versionsEqualWithoutPrerelease(previous, range.max)
     ? new Pair(previous, true)
     : new Pair(range.max.firstPreRelease(), false);
 }
