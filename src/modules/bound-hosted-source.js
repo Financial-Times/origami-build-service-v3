@@ -6,13 +6,35 @@ const { writeFile, rename, mkdir } = require("fs").promises;
 const { fromJS, Map } = require("immutable");
 const path = require("path");
 const { CachedSource } = require("./cached-source");
-const { dirExists, listDir } = require("./home");
+const { dirExists } = require("./home");
 const { PackageNotFoundError } = require("./errors");
 const { Package } = require("./package");
 const { Manifest } = require("./manifest");
 const { ManifestDynamo } = require("./manifest-dynamo");
 const { mapper } = require("./manifest-mapper");
 const log = require("./log");
+const fs = require("fs").promises;
+
+/**
+ * Lists the contents of `dir`.
+ * @param {string} dir
+ * @returns {Promise<Array<string>>}
+ */
+const listDir = async dir => {
+  const entries = await fs.readdir(dir, {
+    withFileTypes: true,
+  });
+
+  return entries
+    .filter(entity => {
+      if (entity.name.startsWith(".")) {
+        return false;
+      }
+
+      return true;
+    })
+    .map(entity => entity.name);
+};
 
 /**
  * The `BoundSource` for `HostedSource`.

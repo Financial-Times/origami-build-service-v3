@@ -8,27 +8,6 @@ const process = require("process");
 const log = require("./log");
 
 /**
- * Lists the contents of `dir`.
- * @param {string} dir
- * @returns {Promise<Array<string>>}
- */
-const listDir = async dir => {
-  const entries = await fs.readdir(dir, {
-    withFileTypes: true,
-  });
-
-  return entries
-    .filter(entity => {
-      if (entity.name.startsWith(".")) {
-        return false;
-      }
-
-      return true;
-    })
-    .map(entity => entity.name);
-};
-
-/**
  * Returns whether `dir` exists on the file system.
  *
  * This returns `true` for a symlink only if that symlink is unbroken and
@@ -107,7 +86,6 @@ const equalsWithoutPreRelease = (version1, version2) =>
   is(version1.minor, version2.minor) &&
   is(version1.patch, version2.patch);
 
-module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
 module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
