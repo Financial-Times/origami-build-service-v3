@@ -77,7 +77,7 @@ class Manifest {
    * @param {import('immutable').Map<any, any>} fields
    * @param {import('./hosted-source').HostedSource} _source
    * @param {string=} expectedName
-   * @throws {import('./home').ManifestError}
+   * @throws {import('./errors').ManifestError}
    * @returns {Manifest}
    * @memberof Manifest
    */
@@ -109,7 +109,7 @@ class Manifest {
    * @param {import('./hosted-source').HostedSource} source
    * @param {string=} expectedName
    * @returns {Manifest}
-   * @throws {import('./home').ManifestError}
+   * @throws {import('./errors').ManifestError}
    * @memberof Manifest
    */
   static parse(contents, source, expectedName) {
@@ -137,7 +137,7 @@ class Manifest {
    * The package's name.
    *
    * @returns {string}
-   * @throws {import('./home').ManifestError}
+   * @throws {import('./errors').ManifestError}
    * @readonly
    * @memberof Manifest
    */
@@ -335,7 +335,7 @@ class Manifest {
 
   /**
    * Throws a `ManifestError` with the given message.
-   * @throws {import('./home').ManifestError}
+   * @throws {import('./errors').ManifestError}
    * @param {string} message
    * @memberof Manifest
    */
