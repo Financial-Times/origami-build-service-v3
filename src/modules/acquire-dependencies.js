@@ -2,7 +2,7 @@
 
 const { ArgumentError } = require("./errors");
 const { Package } = require("./package");
-const { resolveVersions } = require("./resolveVersions");
+const { resolveVersions } = require("./resolve-versions");
 const path = require("path");
 
 /**
