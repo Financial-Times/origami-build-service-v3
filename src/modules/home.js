@@ -3,34 +3,7 @@
 const fs = require("fs").promises;
 const { is } = require("immutable");
 const path = require("path");
-const process = require("process");
 const log = require("./log");
-
-/**
- * Creates a new symlink at path `symlink` that points to `target`.
- *
- * Returns a `Future` which completes to the path to the symlink file.
- *
- * If `relative` is true, creates a symlink with a relative path from the
- * symlink to the target. Otherwise, uses the `target` path unmodified.
- *
- * Note that on Windows, only directories may be symlinked to.
- *
- * @param {string} target
- * @param {string} symlink
- * @param {boolean} [relative]
- */
-const createSymlink = async (target, symlink, relative = false) => {
-  if (relative) {
-    // If the directory where we're creating the symlink was itself reached
-    // by traversing a symlink, we want the relative path to be relative to
-    // it's actual location, not the one we went through to get to it.
-    const symlinkDir = path.join(process.cwd(), path.dirname(symlink));
-    target = path.normalize(path.relative(symlinkDir, target));
-  }
-  log(`Creating ${symlink} pointing to ${target}`);
-  await fs.symlink(target, symlink);
-};
 
 /**
  * Creates a new symlink that creates an alias at `symlink` that points to the
@@ -42,23 +15,11 @@ const createSymlink = async (target, symlink, relative = false) => {
  * @param {string} name
  * @param {string} target
  * @param {string} symlink
- * @param {boolean} [isSelfLink]
- * @param {boolean} [relative]
  */
-const createPackageSymlink = async (
-  name,
-  target,
-  symlink,
-  isSelfLink = false,
-  relative = false,
-) => {
-  log(
-    `Creating ${
-      isSelfLink ? "self" : ""
-    }link for package '${name}'. From ${symlink}, to ${target}.`,
-  );
+const createPackageSymlink = async (name, target, symlink) => {
+  log(`Creating link for package '${name}'. From ${symlink}, to ${target}.`);
   await fs.mkdir(path.parse(symlink).dir, { recursive: true });
-  await createSymlink(target, symlink, relative);
+  await fs.symlink(target, symlink);
 };
 
 /**
