@@ -6,7 +6,7 @@ const { writeFile, rename, mkdir } = require("fs").promises;
 const { fromJS, Map } = require("immutable");
 const path = require("path");
 const { CachedSource } = require("./cached-source");
-const { dirExists } = require("./home");
+const directoryExists = require("directory-exists");
 const { PackageNotFoundError } = require("./errors");
 const { Package } = require("./package");
 const { Manifest } = require("./manifest");
@@ -218,7 +218,7 @@ class BoundHostedSource extends CachedSource {
    */
   async getCachedPackages() {
     const cacheDir = path.join(this.systemCacheRoot);
-    if (!(await dirExists(cacheDir))) {
+    if (!(await directoryExists(cacheDir))) {
       return [];
     }
     const entries = await listDir(cacheDir);

@@ -3,8 +3,9 @@
 const fs = require("fs");
 const path = require("path");
 const { BoundSource } = require("./bound-source");
-const { createPackageSymlink, dirExists } = require("./home");
+const { createPackageSymlink } = require("./home");
 const { Manifest } = require("./manifest");
+const directoryExists = require("directory-exists");
 
 /**
  * Base class for a `BoundSource` that installs packages into pub's
@@ -66,7 +67,7 @@ class CachedSource extends BoundSource {
    * @memberof CachedSource
    */
   async isInSystemCache(id) {
-    return dirExists(this.getDirectory(id));
+    return directoryExists(this.getDirectory(id));
   }
 
   /**

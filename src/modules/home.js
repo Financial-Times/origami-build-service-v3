@@ -1,24 +1,10 @@
 "use strict";
 
-const directoryExists = require("directory-exists");
 const fs = require("fs").promises;
 const { is } = require("immutable");
 const path = require("path");
 const process = require("process");
 const log = require("./log");
-
-/**
- * Returns whether `dir` exists on the file system.
- *
- * This returns `true` for a symlink only if that symlink is unbroken and
- * points to a directory.
- *
- * @param {string} dir
- * @returns {Promise<boolean>}
- */
-const dirExists = async dir => {
-  return directoryExists(dir);
-};
 
 /**
  * Creates a new symlink at path `symlink` that points to `target`.
@@ -86,6 +72,5 @@ const equalsWithoutPreRelease = (version1, version2) =>
   is(version1.minor, version2.minor) &&
   is(version1.patch, version2.patch);
 
-module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
 module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
