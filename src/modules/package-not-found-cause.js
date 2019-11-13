@@ -11,7 +11,7 @@ class PackageNotFoundCause extends IncompatibilityCause {
   /**
    * Creates an instance of PackageNotFoundCause.
    *
-   * @param {import("./home").PackageNotFoundError} error
+   * @param {import("./errors").PackageNotFoundError} error
    * @memberof PackageNotFoundCause
    */
   constructor(error) {

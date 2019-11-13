@@ -2,7 +2,7 @@
 
 const fs = require("fs").promises;
 const path = require("path");
-const { FormatError } = require("./home");
+const { FormatError } = require("./errors");
 const { VersionConstraint } = require("./version");
 
 /**

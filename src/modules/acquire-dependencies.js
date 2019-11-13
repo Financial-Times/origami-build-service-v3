@@ -1,6 +1,6 @@
 "use strict";
 
-const { ArgumentError } = require("./home");
+const { ArgumentError } = require("./errors");
 const { Package } = require("./package");
 const { resolveVersions } = require("./resolveVersions");
 const path = require("path");

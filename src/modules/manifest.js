@@ -3,7 +3,7 @@
 const fs = require("fs");
 const { fromJS, Map } = require("immutable");
 const path = require("path");
-const { FileError, ManifestError } = require("./home");
+const { FileError, ManifestError } = require("./errors");
 const { Version } = require("./version");
 const { VersionConstraint } = require("./version");
 const { VersionRange } = require("./version");

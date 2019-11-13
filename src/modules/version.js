@@ -6,13 +6,12 @@ const { hash, is, List } = require("immutable");
 const {
   allowsHigher,
   allowsLower,
-  ArgumentError,
   equalsWithoutPreRelease,
   strictlyHigher,
   compareNumbers,
   strictlyLower,
-  FormatError,
 } = require("./home");
+const { ArgumentError, FormatError } = require("./errors");
 const semver = require("semver");
 
 /**

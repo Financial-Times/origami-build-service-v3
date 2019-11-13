@@ -3,7 +3,7 @@
 const assert = require("assert");
 const { Map } = require("immutable");
 const { ConflictCause } = require("./conflict-cause");
-const { ApplicationError } = require("./home");
+const { ApplicationError } = require("./errors");
 const { PackageDetail } = require("./package-detail");
 const { PackageNotFoundCause } = require("./package-not-found-cause");
 const { Pair } = require("./pair");
@@ -42,7 +42,7 @@ class SolveFailure extends ApplicationError {
    * If multiple `PackageNotFoundError`s caused the error, it's undefined
    * which one is returned.
    *
-   * @type {import('./home').PackageNotFoundError | null}
+   * @type {import('./errors').PackageNotFoundError | null}
    * @memberof SolveFailure
    */
   get packageNotFound() {

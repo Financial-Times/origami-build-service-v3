@@ -3,12 +3,8 @@
 const assert = require("assert");
 const { is } = require("immutable");
 const { _RootSource } = require("./_root-source");
-const {
-  lowerBound,
-  ordered,
-  PackageNotFoundError,
-  ManifestError,
-} = require("./home");
+const { lowerBound, ordered } = require("./home");
+const { PackageNotFoundError, ManifestError } = require("./errors");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
 const { PackageId } = require("./package-name");

@@ -1,7 +1,7 @@
 "use strict";
 
 const { Map } = require("immutable");
-const { ArgumentError, PackageNotFoundError } = require("./home");
+const { ArgumentError, PackageNotFoundError } = require("./errors");
 
 /**
  * A source bound to a `SystemCache`.

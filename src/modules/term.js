@@ -1,6 +1,6 @@
 "use strict";
 
-const { ArgumentError } = require("./home");
+const { ArgumentError } = require("./errors");
 const { SetRelation } = require("./set-relation");
 /**
  * A statement about a package which is true or false for a given selection of

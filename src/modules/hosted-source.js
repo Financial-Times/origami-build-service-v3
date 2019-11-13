@@ -2,7 +2,7 @@
 
 const { hash, is, Map } = require("immutable");
 const { BoundHostedSource } = require("./bound-hosted-source");
-const { ArgumentError, FormatError } = require("./home");
+const { ArgumentError, FormatError } = require("./errors");
 const URL = require("url").URL;
 const { PackageId } = require("./package-name");
 const { PackageRef } = require("./package-name");

@@ -2,7 +2,8 @@
 
 const { Map, Set } = require("immutable");
 const { ConflictCause } = require("./conflict-cause");
-const { minByAsync, PackageNotFoundError } = require("./home");
+const { minByAsync } = require("./home");
+const { PackageNotFoundError } = require("./errors");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
 const { PackageLister } = require("./package-lister");

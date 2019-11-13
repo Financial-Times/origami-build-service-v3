@@ -12,7 +12,7 @@ const createPackageJsonFile = require("./modules/create-package-json-file");
 const installDependencies = require("./modules/install-dependencies");
 const createJavaScriptBundle = require("./modules/bundle-javascript");
 const { SolveFailure } = require("./modules/solve-failure");
-const { UserError, FormatError } = require("./modules/home");
+const { UserError, FormatError } = require("./modules/errors");
 
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });

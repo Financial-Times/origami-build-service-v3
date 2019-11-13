@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const { BoundSource } = require("./bound-source");
-const { UnsupportedError } = require("./home");
+const { UnsupportedError } = require("./errors");
 const { PackageId } = require("./package-name");
 
 /**

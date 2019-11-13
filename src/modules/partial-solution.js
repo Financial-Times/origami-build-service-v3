@@ -3,7 +3,7 @@
 const assert = require("assert");
 const { Map, Set } = require("immutable");
 const { Assignment } = require("./assignment");
-const { StateError } = require("./home");
+const { StateError } = require("./errors");
 const { SetRelation } = require("./set-relation");
 /**
  * A list of `Assignment`s that represent the solver's current best guess about
