@@ -152,31 +152,6 @@ function lowerBound(sortedList, value, compare) {
   }
 }
 
-/**
- * Like `minBy`, but with an asynchronous `orderBy` callback.
- *
- * @template S
- * @param {Array<S>} values
- * @param {(element: S) => Promise<number>} orderBy
- * @returns {Promise<S>}
- */
-async function minByAsync(values, orderBy) {
-  let minValue;
-  let minOrderBy;
-  for (const element of values) {
-    const elementOrderBy = await orderBy(element);
-    if (minOrderBy == null || compareNumbers(elementOrderBy, minOrderBy) < 0) {
-      minValue = element;
-      minOrderBy = elementOrderBy;
-    }
-  }
-  if (minValue) {
-    return minValue;
-  } else {
-    throw new Error(`minValue is undefined.`);
-  }
-}
-
 module.exports.compareNumbers = compareNumbers;
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
@@ -184,4 +159,3 @@ module.exports.createPackageSymlink = createPackageSymlink;
 module.exports.equalsWithoutPreRelease = equalsWithoutPreRelease;
 module.exports.ordered = ordered;
 module.exports.lowerBound = lowerBound;
-module.exports.minByAsync = minByAsync;

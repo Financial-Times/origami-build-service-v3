@@ -2,7 +2,6 @@
 
 const { Map, Set } = require("immutable");
 const { ConflictCause } = require("./conflict-cause");
-const { minByAsync } = require("./home");
 const { PackageNotFoundError } = require("./errors");
 const { Incompatibility } = require("./incompatibility");
 const { IncompatibilityCause } = require("./incompatibility-cause");
@@ -18,6 +17,31 @@ const { Term } = require("./term");
 const { Version } = require("./version");
 const { VersionConstraint } = require("./version");
 const log = require("./log");
+
+/**
+ * Like `minBy`, but with an asynchronous `orderBy` callback.
+ *
+ * @template S
+ * @param {Array<S>} values
+ * @param {(element: S) => Promise<number>} orderBy
+ * @returns {Promise<S>}
+ */
+async function minByAsync(values, orderBy) {
+  let minValue;
+  let minOrderBy;
+  for (const element of values) {
+    const elementOrderBy = await orderBy(element);
+    if (minOrderBy == null || elementOrderBy < minOrderBy) {
+      minValue = element;
+      minOrderBy = elementOrderBy;
+    }
+  }
+  if (minValue) {
+    return minValue;
+  } else {
+    throw new Error(`minValue is undefined.`);
+  }
+}
 
 /**
  * The version solver that finds a set of package versions that satisfy the
