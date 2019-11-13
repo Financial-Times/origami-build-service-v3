@@ -3,9 +3,20 @@
 /* eslint-disable no-unused-vars */
 const assert = require("assert");
 const { hash, is, List } = require("immutable");
-const { compareNumbers, equalsWithoutPreRelease } = require("./home");
+const { equalsWithoutPreRelease } = require("./home");
 const { ArgumentError, FormatError } = require("./errors");
 const semver = require("semver");
+
+/**
+ * returns 1 if a is bigger than b.
+ * return -1 is a is smaller than b
+ * returns 0 if a is the same as b.
+ *
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+const compareNumbers = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
 /**
  * Returns whether `range1` allows only versions lower than those allowed by `range2`.

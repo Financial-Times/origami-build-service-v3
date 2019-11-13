@@ -8,13 +8,6 @@ const process = require("process");
 const log = require("./log");
 
 /**
- * @param {number} a
- * @param {number} b
- * @returns {number}
- */
-const compareNumbers = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
-
-/**
  * Lists the contents of `dir`.
  * @param {string} dir
  * @returns {Promise<Array<string>>}
@@ -152,7 +145,6 @@ function lowerBound(sortedList, value, compare) {
   }
 }
 
-module.exports.compareNumbers = compareNumbers;
 module.exports.listDir = listDir;
 module.exports.dirExists = dirExists;
 module.exports.createPackageSymlink = createPackageSymlink;
