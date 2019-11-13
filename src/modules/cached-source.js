@@ -1,11 +1,28 @@
 "use strict";
 
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 const { BoundSource } = require("./bound-source");
-const { createPackageSymlink } = require("./home");
 const { Manifest } = require("./manifest");
 const directoryExists = require("directory-exists");
+const log = require("./log");
+
+/**
+ * Creates a new symlink that creates an alias at `symlink` that points to the
+ * `target`.
+ *
+ * If `relative` is true, creates a symlink with a relative path from the
+ * symlink to the target. Otherwise, uses the `target` path unmodified.
+ *
+ * @param {string} name
+ * @param {string} target
+ * @param {string} symlink
+ */
+const createPackageSymlink = async (name, target, symlink) => {
+  log(`Creating link for package '${name}'. From ${symlink}, to ${target}.`);
+  await fs.mkdir(path.parse(symlink).dir, { recursive: true });
+  await fs.symlink(target, symlink);
+};
 
 /**
  * Base class for a `BoundSource` that installs packages into pub's
@@ -40,8 +57,9 @@ class CachedSource extends BoundSource {
    * @memberof CachedSource
    */
   async doDescribe(id) {
-    const packageDir = this.getDirectory(id);
-    if (fs.existsSync(path.join(packageDir, "package.json"))) {
+    if (await this.isInSystemCache(id)) {
+      const packageDir = this.getDirectory(id);
+
       return Manifest.load(packageDir, this.systemCache.hostedSource);
     }
 
