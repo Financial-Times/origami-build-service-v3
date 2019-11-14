@@ -29,6 +29,39 @@ custom:
   additionalStacks:
     permanent:
       Resources:
+        ComponentsDynamoDBTable:
+          Type: 'AWS::DynamoDB::Table'
+          Properties:
+            TableName: ${self:provider.environment.COMPONENT_TABLE}
+            AttributeDefinitions:
+              -
+                AttributeName: name
+                AttributeType: S
+              -
+                AttributeName: version
+                AttributeType: S
+            KeySchema:
+              -
+                AttributeName: name
+                KeyType: HASH # partition key
+              -
+                AttributeName: version
+                KeyType: RANGE # sort key
+            PointInTimeRecoverySpecification:
+              PointInTimeRecoveryEnabled: true
+            BillingMode: PAY_PER_REQUEST
+            StreamSpecification:
+              StreamViewType: NEW_AND_OLD_IMAGES
+            Tags: 
+              - 
+                Key: systemCode
+                Value: "${self:service}"
+              - 
+                Key: teamDL
+                Value: origami.support@ft.com
+              - 
+                Key: environment
+                Value: "${self:custom.tags.${self:provider.stage}.environment}"
         S3ModuleBucketPolicy:
           Type: 'AWS::S3::BucketPolicy'
           Properties:
@@ -62,11 +95,6 @@ custom:
       - '*/*'
   bucketName: ${self:service}-${self:provider.stage}-modules
   defaultStage: dev
-  globalTables: 
-    createStack: false
-    regions: 
-      - eu-west-1
-      - us-west-1
   output:
     file: ./.${self:provider.stage}-stack.yml
   remover:
@@ -81,6 +109,12 @@ custom:
       version: 'git'
   serverless-offline:
     dontPrintOutput: false
+  scriptHooks:
+    after:deploy:deploy: >-
+      aws dynamodb create-global-table
+      --global-table-name ${self:provider.environment.COMPONENT_TABLE}
+      --replication-group RegionName=eu-west-1 RegionName=us-west-1
+      --region eu-west-1; echo done
   tags:
     dev:
       environment: t
@@ -97,6 +131,7 @@ plugins:
   - serverless-create-global-dynamodb-table
   - serverless-plugin-additional-stacks
   - serverless-s3-remover
+  - serverless-scriptable-plugin
 
 functions:
   create-javascript-bundle:
@@ -112,39 +147,3 @@ functions:
           path: /v3/update-origami-component-list
           method: get
       - schedule: rate(1 day)
-
-resources:
-  Resources:
-    ComponentsDynamoDBTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: ${self:provider.environment.COMPONENT_TABLE}
-        AttributeDefinitions:
-          -
-            AttributeName: name
-            AttributeType: S
-          -
-            AttributeName: version
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: name
-            KeyType: HASH # partition key
-          -
-            AttributeName: version
-            KeyType: RANGE # sort key
-        PointInTimeRecoverySpecification:
-          PointInTimeRecoveryEnabled: true
-        BillingMode: PAY_PER_REQUEST
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        Tags: 
-          - 
-            Key: systemCode
-            Value: "${self:service}"
-          - 
-            Key: teamDL
-            Value: origami.support@ft.com
-          - 
-            Key: environment
-            Value: "${self:custom.tags.${self:provider.stage}.environment}"

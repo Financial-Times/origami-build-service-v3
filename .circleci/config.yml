@@ -44,9 +44,9 @@ jobs:
       - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage dev --package .serverless-package
+      - run: npx serverless deploy additionalstacks --conceal --stage dev
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region us-west-1 --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage dev
       - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
@@ -60,9 +60,9 @@ jobs:
       - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage qa --package .serverless-package
+      - run: npx serverless deploy additionalstacks --conceal --stage qa
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region us-west-1 --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage qa
       - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_QA
@@ -76,9 +76,9 @@ jobs:
       - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage prod --package .serverless-package
+      - run: npx serverless deploy additionalstacks --conceal --stage prod
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region us-west-1 --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage prod
       - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_PROD
