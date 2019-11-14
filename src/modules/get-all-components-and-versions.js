@@ -49,10 +49,12 @@ module.exports = async function getAllComponentsAndVersions({
   const result = [];
   log("Getting list of components");
   const components = new Set(
-    (await listRepos({
-      type: ["module", "imageset"],
-      status: ["active", "maintained", "experimental", "deprecated"],
-    }))
+    (
+      await listRepos({
+        type: ["module", "imageset"],
+        status: ["active", "maintained", "experimental", "deprecated"],
+      })
+    )
       .filter(({ name }) => {
         if (
           name.startsWith("o-comment") ||
