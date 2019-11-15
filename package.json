@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "tsc -p .",
-    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:* serverless offline",
+    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:* serverless offline start",
     "lint": "npx eslint .",
     "test": "npm run build && npm run test:unit && npm run test:integration",
     "test:integration": "mocha --require dotenv/config tests/integration --recursive",
@@ -21,6 +21,7 @@
     "serverless": "1.57.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-create-global-dynamodb-table": "JakeChampion/serverless-create-global-dynamodb-table#patch-2",
+    "serverless-dynamodb-local": "^0.2.38",
     "serverless-offline": "^5.12.0",
     "serverless-plugin-additional-stacks": "^1.2.0",
     "serverless-s3-remover": "^0.6.0",

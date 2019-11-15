@@ -1,0 +1,6 @@
+[{
+    "name": "@financial-times/o-buttons",
+    "version": "5.16.7",
+    "codeLocation": "@financial-times/o-buttons@'5.16.7'.tgz",
+    "dependencies": "{\"@financial-times/o-colors\": \"^4.3.0\",\"@financial-times/o-icons\": \">=4.5.0 <6\",\"@financial-times/o-normalise\": \"^1.2.0\",\"@financial-times/o-brand\": \">=2.3.0 <4\"}"
+}]
