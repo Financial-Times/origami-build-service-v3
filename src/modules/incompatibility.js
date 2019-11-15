@@ -272,15 +272,6 @@ class Incompatibility {
     if (requiresThrough != null) {
       return requiresThrough;
     }
-    // const requiresForbidden = this._tryRequiresForbidden(
-    //   other,
-    //   details,
-    //   thisLine,
-    //   otherLine,
-    // );
-    // if (requiresForbidden != null) {
-    //   return requiresForbidden;
-    // }
     let buffer = this.toString(details);
     if (thisLine != null) {
       buffer += ` ${thisLine}`;
@@ -428,80 +419,6 @@ class Incompatibility {
       .filter(term => !term.isPositive)
       .map(term => this._terse(term, details))
       .join(" or ");
-    if (latterLine != null) {
-      buffer += ` (${latterLine})`;
-    }
-
-    return buffer;
-  }
-
-  /**
-   * If "`this` and `other`" can be expressed as "X requires Y which is
-   * forbidden", this returns that expression.
-   *
-   * Otherwise, this returns `null`.
-   *
-   * @param {Incompatibility} other
-   * @param {import('immutable').Map<string, import('./package-detail').PackageDetail>} [details]
-   * @param {number} [thisLine]
-   * @param {number} [otherLine]
-   * @returns {string | null}
-   * @memberof Incompatibility
-   */
-  _tryRequiresForbidden(other, details, thisLine, otherLine) {
-    if (this.terms.length != 1 && other.terms.length != 1) {
-      return null;
-    }
-    let prior;
-    let latter;
-    let priorLine;
-    let latterLine;
-    if (this.terms.length == 1) {
-      prior = other;
-      latter = this;
-      priorLine = otherLine;
-      latterLine = thisLine;
-    } else {
-      prior = this;
-      latter = other;
-      priorLine = thisLine;
-      latterLine = otherLine;
-    }
-    const negative = prior._singleTermWhere(term => !term.isPositive);
-    if (negative == null) {
-      return null;
-    }
-    if (!negative.inverse.satisfies(latter.terms[0])) {
-      return null;
-    }
-    const positives = prior.terms.filter(term => term.isPositive);
-    let buffer = "";
-    if (positives.length > 1) {
-      const priorString = positives
-        .map(term => this._terse(term, details))
-        .join(" or ");
-      buffer += `if ${priorString} then `;
-    } else {
-      buffer += this._terse(positives[0], details, true);
-      buffer +=
-        prior.cause == IncompatibilityCause.dependency
-          ? " depends on "
-          : " requires ";
-    }
-    buffer += `${this._terse(latter.terms[0], details)}@${
-      latter.terms[0].constraint
-    } `;
-    if (priorLine != null) {
-      buffer += `(${priorLine}) `;
-    }
-    if (latter.cause == IncompatibilityCause.noVersions) {
-      buffer += "which doesn't match any versions";
-    } else if (this.cause instanceof PackageNotFoundCause) {
-      buffer += `which doesn't exist (${this.cause.error.message})`;
-    } else {
-      console.log(this.cause);
-      buffer += "which is forbidden";
-    }
     if (latterLine != null) {
       buffer += ` (${latterLine})`;
     }
