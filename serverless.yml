@@ -117,6 +117,9 @@ custom:
   remover:
      buckets:
        - ${self:custom.bucketName}
+  s3:
+    port: 8080
+    directory: ./s3
   sentry:
     dsn: ${env:SENTRY_DSN}
     organization: ${env:SENTRY_ORGANISATION}
@@ -142,6 +145,7 @@ custom:
 
 
 plugins:
+  - serverless-s3-local
   - serverless-dynamodb-local
   - serverless-apigw-binary
   - serverless-sentry

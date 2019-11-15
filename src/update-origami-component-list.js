@@ -40,7 +40,13 @@ module.exports = async function updateOrigamiComponentList({
     // }
     try {
       const code = await getProductionCodeFor(name, version);
-      const s3 = new AWS.S3();
+      const s3 = process.env.IS_OFFLINE
+        ? new AWS.S3({
+            accessKeyId: "S3RVER",
+            secretAccessKey: "S3RVER",
+            endpoint: "http://localhost:8080",
+          })
+        : new AWS.S3();
       if (!process.env.MODULE_BUCKET_NAME) {
         throw new Error(
           "Environment variable $MODULE_BUCKET_NAME does not exist.",

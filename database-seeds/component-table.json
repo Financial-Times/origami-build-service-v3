@@ -1,6 +1,11 @@
 [{
-    "name": "@financial-times/o-buttons",
-    "version": "5.16.7",
-    "codeLocation": "@financial-times/o-buttons@'5.16.7'.tgz",
-    "dependencies": "{\"@financial-times/o-colors\": \"^4.3.0\",\"@financial-times/o-icons\": \">=4.5.0 <6\",\"@financial-times/o-normalise\": \"^1.2.0\",\"@financial-times/o-brand\": \">=2.3.0 <4\"}"
+    "name": "component-who-depends-on-a-thing-which-does-not-exist",
+    "version": "1.0.0",
+    "codeLocation": "component-who-depends-on-a-thing-which-does-not-exist@'1.0.0'.tgz",
+    "dependencies": "{\"a-thing-which-does-not-exist\": \"^4\"}"
+},{
+    "name": "component-with-no-dependencies",
+    "version": "1.0.0",
+    "codeLocation": "component-with-no-dependencies@'1.0.0'.tgz",
+    "dependencies": "{}"
 }]
