@@ -268,7 +268,7 @@ describe("install-dependencies", function() {
       } catch (e) {
         proclaim.equal(
           e.message,
-          "Because install-dependencies-test depends on jakedash@* which doesn't exist (could not find package jakedash), version solving failed.\n",
+          "Because jakedash doesn't exist (could not find package jakedash) and install-dependencies-test depends on jakedash, version solving failed.\n",
         );
       }
     });
@@ -290,7 +290,7 @@ describe("install-dependencies", function() {
       } catch (e) {
         proclaim.equal(
           e.message,
-          "Because install-dependencies-test depends on @financial-times/o-buttons@1111111.0.0 which doesn't match any versions, version solving failed.\n",
+          "Because no versions of @financial-times/o-buttons match 1111111.0.0 and install-dependencies-test depends on @financial-times/o-buttons, version solving failed.\n",
         );
       }
     });
