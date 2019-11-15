@@ -13,7 +13,7 @@ jobs:
       - run: sudo ~/project/.circleci/install_terraform.sh
       - aws-cli/install
       - aws-cli/setup:
-          aws-region: eu-west-1
+          configure-default-region: false
       - run: terraform fmt -check=true fastly/terraform/
 
   lint:
@@ -49,7 +49,7 @@ jobs:
       - run: sudo ~/project/.circleci/install_terraform.sh
       - aws-cli/install
       - aws-cli/setup:
-          aws-region: eu-west-1
+          configure-default-region: false
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage dev --package .serverless-package
       - run: npx serverless deploy additionalstacks --conceal --stage dev --region eu-west-1
       - run: npx serverless deploy additionalstacks --conceal --stage dev --region us-west-1 --stack permanent-dynamo
@@ -69,7 +69,7 @@ jobs:
       - run: sudo ~/project/.circleci/install_terraform.sh
       - aws-cli/install
       - aws-cli/setup:
-          aws-region: eu-west-1
+          configure-default-region: false
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage qa --package .serverless-package
       - run: npx serverless deploy additionalstacks --conceal --stage qa --region eu-west-1
       - run: npx serverless deploy additionalstacks --conceal --stage qa --region us-west-1 --stack permanent-dynamo
@@ -89,7 +89,7 @@ jobs:
       - run: sudo ~/project/.circleci/install_terraform.sh
       - aws-cli/install
       - aws-cli/setup:
-          aws-region: eu-west-1
+          configure-default-region: false
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage prod --package .serverless-package
       - run: npx serverless deploy additionalstacks --conceal --stage prod --region eu-west-1
       - run: npx serverless deploy additionalstacks --conceal --stage prod --region us-west-1 --stack permanent-dynamo
