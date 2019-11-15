@@ -39,7 +39,7 @@ module.exports = async function createPackageJsonFile(bundleLocation, modules) {
     path.join(bundleLocation, "./package.json"),
     JSON.stringify({
       dependencies: modules,
-      name: "o-bundle",
+      name: "your bundle",
       version: "1.0.0",
     }),
     "utf-8",

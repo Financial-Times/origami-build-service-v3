@@ -272,15 +272,15 @@ class Incompatibility {
     if (requiresThrough != null) {
       return requiresThrough;
     }
-    const requiresForbidden = this._tryRequiresForbidden(
-      other,
-      details,
-      thisLine,
-      otherLine,
-    );
-    if (requiresForbidden != null) {
-      return requiresForbidden;
-    }
+    // const requiresForbidden = this._tryRequiresForbidden(
+    //   other,
+    //   details,
+    //   thisLine,
+    //   otherLine,
+    // );
+    // if (requiresForbidden != null) {
+    //   return requiresForbidden;
+    // }
     let buffer = this.toString(details);
     if (thisLine != null) {
       buffer += ` ${thisLine}`;
@@ -499,6 +499,7 @@ class Incompatibility {
     } else if (this.cause instanceof PackageNotFoundCause) {
       buffer += `which doesn't exist (${this.cause.error.message})`;
     } else {
+      console.log(this.cause);
       buffer += "which is forbidden";
     }
     if (latterLine != null) {

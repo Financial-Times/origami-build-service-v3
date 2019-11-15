@@ -281,7 +281,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "Origami Build Service returned an error: Because o-bundle depends on o-jake-does-not-exist@* which doesn't exist (could not find package o-jake-does-not-exist), version solving failed.\n",
+        "Origami Build Service returned an error: Because your bundle depends on o-jake-does-not-exist@* which doesn't exist (could not find package o-jake-does-not-exist), version solving failed.\n",
       );
     });
   });
@@ -295,7 +295,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "Origami Build Service returned an error: Because o-bundle depends on @financial-times/o-banner@1111111.0.0 which doesn't match any versions, version solving failed.\n",
+        "Origami Build Service returned an error: Because your bundle depends on @financial-times/o-banner@1111111.0.0 which doesn't match any versions, version solving failed.\n",
       );
     });
   });
