@@ -79,7 +79,7 @@ custom:
                     - ${self:provider.role}
                   Action: s3:PutObject
                   Resource:
-                  - arn:aws:s3:::${self:custom.additionalStacks.permanent.Resources.S3ModuleBucket.Properties.BucketName}/*
+                  - arn:aws:s3:::${self:custom.additionalStacks.permanent-s3.Resources.S3ModuleBucket.Properties.BucketName}/*
                 - Sid: AllowOnlyApplicationToGetObject
                   Effect: Allow
                   Principal:
@@ -87,7 +87,7 @@ custom:
                     - ${self:provider.role}
                   Action: s3:PutObject
                   Resource:
-                  - arn:aws:s3:::${self:custom.additionalStacks.permanent.Resources.S3ModuleBucket.Properties.BucketName}/*
+                  - arn:aws:s3:::${self:custom.additionalStacks.permanent-s3.Resources.S3ModuleBucket.Properties.BucketName}/*
         S3ModuleBucket:
           Type: 'AWS::S3::Bucket'
           Properties:
