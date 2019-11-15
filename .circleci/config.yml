@@ -50,7 +50,7 @@ jobs:
       - aws-cli/install
       - aws-cli/setup:
           configure-default-region: false
-      - run: NODE_ENV=production npm run build &&  npx serverless package --stage dev --package .serverless-package
+      - run: npx serverless package --stage dev --package .serverless-package
       - run: npx serverless deploy additionalstacks --conceal --stage dev --region eu-west-1
       - run: npx serverless deploy additionalstacks --conceal --stage dev --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region eu-west-1 --package .serverless-package
@@ -70,7 +70,7 @@ jobs:
       - aws-cli/install
       - aws-cli/setup:
           configure-default-region: false
-      - run: NODE_ENV=production npm run build &&  npx serverless package --stage qa --package .serverless-package
+      - run: npx serverless package --stage qa --package .serverless-package
       - run: npx serverless deploy additionalstacks --conceal --stage qa --region eu-west-1
       - run: npx serverless deploy additionalstacks --conceal --stage qa --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region eu-west-1 --package .serverless-package
@@ -90,7 +90,7 @@ jobs:
       - aws-cli/install
       - aws-cli/setup:
           configure-default-region: false
-      - run: NODE_ENV=production npm run build &&  npx serverless package --stage prod --package .serverless-package
+      - run: npx serverless package --stage prod --package .serverless-package
       - run: npx serverless deploy additionalstacks --conceal --stage prod --region eu-west-1
       - run: npx serverless deploy additionalstacks --conceal --stage prod --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region eu-west-1 --package .serverless-package

@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "build": "tsc -p .",
     "dev": "set -a && . .env && set +a && DEBUG=obs,obs:* serverless offline start",
     "lint": "npx eslint .",
-    "test": "npm run build && npm run test:unit && npm run test:integration",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "npm run typecheck && npm run test:unit && npm run test:integration",
     "test:integration": "mocha --require dotenv/config tests/integration --recursive",
     "test:unit": "mocha --require dotenv/config tests/unit --recursive"
   },
