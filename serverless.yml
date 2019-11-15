@@ -27,7 +27,7 @@ provider:
 
 custom:
   additionalStacks:
-    permanent:
+    permanent-dynamo:
       Resources:
         ComponentsDynamoDBTable:
           Type: 'AWS::DynamoDB::Table'
@@ -62,6 +62,8 @@ custom:
               - 
                 Key: environment
                 Value: "${self:custom.tags.${self:provider.stage}.environment}"
+    permanent-s3:
+      Resources:
         S3ModuleBucketPolicy:
           Type: 'AWS::S3::BucketPolicy'
           Properties:

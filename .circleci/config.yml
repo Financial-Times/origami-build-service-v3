@@ -44,7 +44,8 @@ jobs:
       - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage dev --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage dev
+      - run: npx serverless deploy additionalstacks --conceal --stage dev --region eu-west-1
+      - run: npx serverless deploy additionalstacks --conceal --stage dev --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf
@@ -60,7 +61,8 @@ jobs:
       - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage qa --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage qa
+      - run: npx serverless deploy additionalstacks --conceal --stage qa --region eu-west-1
+      - run: npx serverless deploy additionalstacks --conceal --stage qa --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
@@ -76,7 +78,8 @@ jobs:
       - run: npm i
       - run: sudo ~/project/.circleci/install_terraform.sh
       - run: NODE_ENV=production npm run build &&  npx serverless package --stage prod --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage prod
+      - run: npx serverless deploy additionalstacks --conceal --stage prod --region eu-west-1
+      - run: npx serverless deploy additionalstacks --conceal --stage prod --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
