@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:* serverless offline start",
+    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:*,serverless,serverless:* serverless deploy --stage dev --service obs-local",
     "lint": "npx eslint .",
     "typecheck": "tsc -p . --noEmit",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",
@@ -20,11 +20,9 @@
     "proclaim": "^3.6.0",
     "serverless": "1.57.0",
     "serverless-apigw-binary": "^0.4.4",
-    "serverless-create-global-dynamodb-table": "JakeChampion/serverless-create-global-dynamodb-table#patch-2",
-    "serverless-dynamodb-local": "^0.2.38",
-    "serverless-offline": "^5.12.0",
+    "serverless-deployment-bucket": "^1.1.0",
+    "serverless-localstack": "^0.4.20",
     "serverless-plugin-additional-stacks": "^1.2.0",
-    "serverless-s3-local": "^0.5.3",
     "serverless-s3-remover": "^0.6.0",
     "serverless-scriptable-plugin": "^1.0.4",
     "serverless-sentry": "^1.2.0",
@@ -55,8 +53,5 @@
     "serverless-sentry-lib": "^1.1.2",
     "utf8": "^3.0.0",
     "validate-npm-package-name": "^3.0.0"
-  },
-  "volta": {
-    "node": "10.17.0"
   }
 }

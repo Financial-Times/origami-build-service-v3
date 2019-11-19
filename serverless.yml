@@ -1,10 +1,13 @@
-service: origami-build-service
+service: ${opt:service, 'origami-build-service'}
 #app: your-app-name
 #tenant: your-tenant-name
 
 frameworkVersion: "=1.57.0"
 
 provider:
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
   environment:
     REGION: ${self:provider.region}
     COMPONENT_TABLE: ${self:service}-${self:provider.stage}-components
@@ -14,13 +17,13 @@ provider:
     ORIGAMI_REPO_DATA_SECRET_KEY: ${env:ORIGAMI_REPO_DATA_SECRET_KEY}
     SENTRY_DSN: ${env:SENTRY_DSN}
   name: aws
-  region: ${opt:region, 'eu-west-1'}
+  region: ${opt:region, 'us-east-1'}
   role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/ApplicationRoleFor_${self:service}
   runtime: nodejs10.x
-  stackTags:
-    systemCode: ${self:service}
-    teamDL: origami.support@ft.com
-    environment: ${self:custom.tags.${self:provider.stage}.environment}
+  # stackTags:
+    # systemCode: ${self:service}
+    # teamDL: origami.support@ft.com
+    # environment: ${self:custom.tags.${self:provider.stage}.environment}
   stage: ${opt:stage, self:custom.defaultStage}
   timeout: 30 # The default is 6 seconds. Note: API Gateway current maximum is 30 seconds
   versionFunctions: false # Optional function versioning
@@ -91,35 +94,16 @@ custom:
         S3ModuleBucket:
           Type: 'AWS::S3::Bucket'
           Properties:
-            BucketName: ${self:custom.bucketName}
-  apigwBinary:
-    types:
-      - '*/*'
+            BucketName: ${self:custom.bucketName}  
   bucketName: ${self:service}-${self:provider.stage}-modules
   defaultStage: dev
-  dynamodb:
-    stages:
-      - dev
-    start:
-      port: 8000
-      inMemory: true
-      migrate: true
-      seed: true
-    migration:
-      dir: offline/migrations
-    seed:
-      test:
-        sources:
-          - table: ${self:provider.environment.COMPONENT_TABLE}
-            sources: [./database-seeds/component-table.json]
-  output:
-    file: ./.${self:provider.stage}-stack.yml
+  localstack:
+    # autostart: true
+    debug: true
+    host: http://localhost
   remover:
      buckets:
        - ${self:custom.bucketName}
-  s3:
-    port: 8080
-    directory: ./s3
   sentry:
     dsn: ${env:SENTRY_DSN}
     organization: ${env:SENTRY_ORGANISATION}
@@ -127,43 +111,37 @@ custom:
     authToken: ${env:SENTRY_AUTH_TOKEN}
     release:
       version: 'git'
-  serverless-offline:
-    dontPrintOutput: false
   scriptHooks:
     after:deploy:deploy: >-
-      aws dynamodb create-global-table
+      if [ "${self:custom.tags.${self:provider.stage}.environment}" != "d" ]; then aws dynamodb create-global-table
       --global-table-name ${self:provider.environment.COMPONENT_TABLE}
       --replication-group RegionName=eu-west-1 RegionName=us-west-1
-      --region eu-west-1; echo done
+      --region eu-west-1; echo done; else echo "Did not create global table as running in development mode"; fi
   tags:
     dev:
-      environment: t
+      environment: d
     qa:
       environment: t
     prod:
       environment: p
 
-
 plugins:
-  - serverless-s3-local
-  - serverless-dynamodb-local
-  - serverless-apigw-binary
-  - serverless-sentry
-  - serverless-create-global-dynamodb-table
+  - serverless-localstack
+  - serverless-deployment-bucket # has to be after serverless-localstack
   - serverless-plugin-additional-stacks
+  - serverless-sentry
   - serverless-s3-remover
   - serverless-scriptable-plugin
-  - serverless-offline
 
 functions:
   create-javascript-bundle:
-    handler: ./functions/create-javascript-bundle.handler
+    handler: functions/create-javascript-bundle.handler
     events:
      - http:
          path: /v3/bundles/js
          method: get
   update-origami-component-list:
-    handler: ./functions/update-origami-component-list.handler
+    handler: functions/update-origami-component-list.handler
     events:
       - http:
           path: /v3/update-origami-component-list
