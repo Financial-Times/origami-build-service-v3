@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:*,serverless,serverless:* serverless deploy --stage dev --service obs-local",
+    "dev": "set -a && . .env && set +a && DEBUG=obs,obs:*,serverless,serverless:* serverless deploy --stage local --service obs-local",
     "lint": "npx eslint .",
     "typecheck": "tsc -p . --noEmit",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",

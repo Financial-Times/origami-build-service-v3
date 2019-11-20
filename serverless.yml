@@ -106,6 +106,8 @@ custom:
     linting: false
   defaultStage: dev
   localstack:
+    stages:
+      - local
     autostart: true
     debug: true
     host: http://localhost
