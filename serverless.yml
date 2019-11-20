@@ -130,6 +130,8 @@ custom:
   tags:
     dev:
       environment: d
+    local:
+      environment: d
     qa:
       environment: t
     prod:
