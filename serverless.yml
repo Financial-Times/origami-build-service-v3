@@ -28,6 +28,9 @@ provider:
   timeout: 30 # The default is 6 seconds. Note: API Gateway current maximum is 30 seconds
   versionFunctions: false # Optional function versioning
 
+package:
+  individually: true
+
 custom:
   additionalStacks:
     permanent-dynamo:
@@ -96,6 +99,11 @@ custom:
           Properties:
             BucketName: ${self:custom.bucketName}  
   bucketName: ${self:service}-${self:provider.stage}-modules
+  bundle:
+    sourcemaps: true
+    caching: true
+    stats: false
+    linting: false
   defaultStage: dev
   localstack:
     autostart: true
@@ -126,6 +134,7 @@ custom:
       environment: p
 
 plugins:
+  - serverless-bundle
   - serverless-localstack
   - serverless-deployment-bucket # has to be after serverless-localstack
   - serverless-plugin-additional-stacks
