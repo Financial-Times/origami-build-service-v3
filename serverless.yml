@@ -20,10 +20,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
   role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/ApplicationRoleFor_${self:service}
   runtime: nodejs10.x
-  # stackTags:
-    # systemCode: ${self:service}
-    # teamDL: origami.support@ft.com
-    # environment: ${self:custom.tags.${self:provider.stage}.environment}
+  stackTags:
+    systemCode: ${self:service}
+    teamDL: origami.support@ft.com
+    environment: ${self:custom.tags.${self:provider.stage}.environment}
   stage: ${opt:stage, self:custom.defaultStage}
   timeout: 30 # The default is 6 seconds. Note: API Gateway current maximum is 30 seconds
   versionFunctions: false # Optional function versioning
