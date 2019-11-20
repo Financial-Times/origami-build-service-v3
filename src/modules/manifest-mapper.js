@@ -3,13 +3,13 @@
 let { DataMapper } = require("@aws/dynamodb-data-mapper");
 let DynamoDB = require("aws-sdk/clients/dynamodb");
 let process = require("process");
-
+const useLocal = process.env.NODE_ENV !== "production";
 let client;
 
-if (process.env.IS_OFFLINE) {
+if (useLocal) {
   client = new DynamoDB({
-    region: "localhost",
-    endpoint: "http://localhost:8000",
+    region: process.env.AWS_REGION,
+    endpoint: "http://localhost:4569",
   });
 } else {
   client = new DynamoDB({

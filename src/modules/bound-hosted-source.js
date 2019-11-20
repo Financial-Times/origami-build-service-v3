@@ -247,11 +247,16 @@ class BoundHostedSource extends CachedSource {
     const a = await this.systemCache.createTempDir();
     const tarPath = path.join(a, `${$package}@${version}.tar.gz`);
     await mkdir(path.dirname(tarPath), { recursive: true });
-    const s3 = process.env.IS_OFFLINE
+    const useLocal = process.env.NODE_ENV !== "production";
+    const s3 = useLocal
       ? new AWS.S3({
-          accessKeyId: "S3RVER",
-          secretAccessKey: "S3RVER",
-          endpoint: "http://localhost:8080",
+          /**
+           * Including this option gets localstack to more closely match the defaults for
+           * live S3. If you omit this, you will need to add the bucketName to the start
+           * of the `Key` property.
+           */
+          endpoint: "http://localhost:4572",
+          s3ForcePathStyle: true,
         })
       : new AWS.S3();
     if (!process.env.MODULE_BUCKET_NAME) {
