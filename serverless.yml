@@ -16,6 +16,7 @@ provider:
     ORIGAMI_REPO_DATA_KEY_ID: ${env:ORIGAMI_REPO_DATA_KEY_ID}
     ORIGAMI_REPO_DATA_SECRET_KEY: ${env:ORIGAMI_REPO_DATA_SECRET_KEY}
     SENTRY_DSN: ${env:SENTRY_DSN}
+    STAGE: ${self:provider.stage}
   name: aws
   region: ${opt:region, 'us-east-1'}
   role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/ApplicationRoleFor_${self:service}

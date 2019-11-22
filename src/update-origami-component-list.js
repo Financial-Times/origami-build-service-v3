@@ -41,7 +41,7 @@ module.exports = async function updateOrigamiComponentList({
     try {
       const code = await getProductionCodeFor(name, version);
       const localhost = process.env.LOCALSTACK_HOSTNAME || "localhost";
-      const useLocal = Boolean(process.env.LOCALSTACK_HOSTNAME);
+      const useLocal = process.env.STAGE === "local";
       const s3 = useLocal
         ? new AWS.S3({
             /**
