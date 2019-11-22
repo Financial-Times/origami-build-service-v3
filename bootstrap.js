@@ -1,7 +1,5 @@
 "use strict";
 
-const dotenv = require("dotenv");
-dotenv.config();
 const AWS = require("aws-sdk");
 const execa = require("execa");
 const path = require("path");
@@ -10,6 +8,9 @@ const { ManifestDynamo } = require("./src/modules/manifest-dynamo");
 const { mapper } = require("./src/modules/manifest-mapper");
 // const log = require("./src/modules/log");
 const fs = require("fs").promises;
+const util = require("util");
+const rimraf = require("rimraf");
+const rmrf = util.promisify(rimraf);
 
 process.on("unhandledRejection", function(err) {
   console.error(err);
@@ -49,13 +50,23 @@ async function bootstrap() {
       shell: true,
     });
 
-    const code = await fs.readFile(
-      path.join(packagesFolder, packageDirectory, filename),
+    const npmPackagePath = path.join(
+      packagesFolder,
+      packageDirectory,
+      filename,
     );
+    const code = await fs.readFile(npmPackagePath);
+    await rmrf(npmPackagePath);
 
     const { name, version, dependencies } = JSON.parse(
       await fs.readFile(pkgJsonPath, "utf-8"),
     );
+
+    if (!process.env.MODULE_BUCKET_NAME) {
+      throw new Error(
+        "Environment variable $MODULE_BUCKET_NAME does not exist.",
+      );
+    }
 
     const codeLocation = `${name}@'${version}'.tgz`;
     const params = {
