@@ -101,11 +101,14 @@ custom:
   bucketName: ${self:service}-${self:provider.stage}-modules
   defaultStage: local
   localstack:
+    host: http://localhost
+    autostart: true
     stages:
       - local
-    # autostart: true
-    # debug: true
-    host: http://localhost
+    lambda:
+      mountCode: true # Enable this flag should improve performance
+    docker:
+      sudo: false # Enable this flag to run "docker ..." commands as sudo
   remover:
      buckets:
        - ${self:custom.bucketName}
