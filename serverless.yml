@@ -118,15 +118,15 @@ custom:
       version: 'git'
   scriptHooks:
     after:deploy:deploy: >-
-      if [ "${self:custom.tags.${self:provider.stage}.environment}" != "d" ]; then aws dynamodb create-global-table
+      if [ "${self:custom.tags.${self:provider.stage}.environment}" != "l" ]; then aws dynamodb create-global-table
       --global-table-name ${self:provider.environment.COMPONENT_TABLE}
       --replication-group RegionName=eu-west-1 RegionName=us-west-1
-      --region eu-west-1; echo done; else echo "Did not create global table as running in development mode"; fi
+      --region eu-west-1; echo done; else echo "Did not create global table as running in local mode"; fi
   tags:
     dev:
       environment: d
     local:
-      environment: d
+      environment: l
     qa:
       environment: t
     prod:
