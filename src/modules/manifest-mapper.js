@@ -1,15 +1,18 @@
 "use strict";
 
-let { DataMapper } = require("@aws/dynamodb-data-mapper");
-let DynamoDB = require("aws-sdk/clients/dynamodb");
-let process = require("process");
-const useLocal = process.env.NODE_ENV !== "production";
+const { DataMapper } = require("@aws/dynamodb-data-mapper");
+const DynamoDB = require("aws-sdk/clients/dynamodb");
+const process = require("process");
+const useLocal =
+  Boolean(process.env.LOCALSTACK_HOSTNAME) ||
+  process.env.NODE_ENV !== "production";
 let client;
 
 if (useLocal) {
+  const localhost = process.env.LOCALSTACK_HOSTNAME || "localhost";
   client = new DynamoDB({
     region: process.env.AWS_REGION,
-    endpoint: "http://localhost:4569",
+    endpoint: `http://${localhost}:4569`,
   });
 } else {
   client = new DynamoDB({
