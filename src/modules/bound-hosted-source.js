@@ -247,7 +247,7 @@ class BoundHostedSource extends CachedSource {
     const a = await this.systemCache.createTempDir();
     const tarPath = path.join(a, `${$package}@${version}.tar.gz`);
     await mkdir(path.dirname(tarPath), { recursive: true });
-    const useLocal = Boolean(process.env.LOCALSTACK_HOSTNAME);
+    const useLocal = process.env.STAGE === "local";
     const localhost = process.env.LOCALSTACK_HOSTNAME || "localhost";
     let s3;
     if (useLocal) {

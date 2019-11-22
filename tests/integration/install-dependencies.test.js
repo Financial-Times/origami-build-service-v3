@@ -20,7 +20,7 @@ process.on("unhandledRejection", function(err) {
   process.exit(1);
 });
 
-describe("install-dependencies", function() {
+describe.skip("install-dependencies", function() {
   beforeEach(async function() {
     await fs.mkdir(testDirectory, { recursive: true });
     await fs.mkdir(cacheDirectory, { recursive: true });
