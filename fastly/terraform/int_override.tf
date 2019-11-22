@@ -77,7 +77,7 @@ resource "fastly_service_v1" "app" {
 
   vcl {
     name    = "prepend_path_with_lambda_stage.vcl"
-    content = "sub prepend_path_with_lambda_stage {set bereq.url = \"/dev\" bereq.url;}"
+    content = "sub prepend_path_with_lambda_stage {set bereq.url = \"/int\" bereq.url;}"
   }
 
   vcl {
