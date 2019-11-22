@@ -7,10 +7,10 @@ resource "fastly_service_v1" "app" {
 
   backend {
     name                  = "eu"
-    address               = "s4do6a2900.execute-api.eu-west-1.amazonaws.com"
+    address               = "oj8h4lckjk.execute-api.eu-west-1.amazonaws.com"
     port                  = 443
     ssl_cert_hostname     = "*.execute-api.eu-west-1.amazonaws.com"
-    ssl_sni_hostname      = "s4do6a2900.execute-api.eu-west-1.amazonaws.com"
+    ssl_sni_hostname      = "oj8h4lckjk.execute-api.eu-west-1.amazonaws.com"
     auto_loadbalance      = false
     connect_timeout       = 5000
     first_byte_timeout    = 120000
@@ -21,10 +21,10 @@ resource "fastly_service_v1" "app" {
 
   backend {
     name                  = "eu_without_healthcheck"
-    address               = "s4do6a2900.execute-api.eu-west-1.amazonaws.com"
+    address               = "oj8h4lckjk.execute-api.eu-west-1.amazonaws.com"
     port                  = 443
     ssl_cert_hostname     = "*.execute-api.eu-west-1.amazonaws.com"
-    ssl_sni_hostname      = "s4do6a2900.execute-api.eu-west-1.amazonaws.com"
+    ssl_sni_hostname      = "oj8h4lckjk.execute-api.eu-west-1.amazonaws.com"
     auto_loadbalance      = false
     connect_timeout       = 5000
     first_byte_timeout    = 120000
@@ -34,10 +34,10 @@ resource "fastly_service_v1" "app" {
 
   backend {
     name                  = "us"
-    address               = "t1tnjy1ch5.execute-api.us-west-1.amazonaws.com"
+    address               = "fc6opfckgj.execute-api.us-west-1.amazonaws.com"
     port                  = 443
     ssl_cert_hostname     = "*.execute-api.us-west-1.amazonaws.com"
-    ssl_sni_hostname      = "t1tnjy1ch5.execute-api.us-west-1.amazonaws.com"
+    ssl_sni_hostname      = "fc6opfckgj.execute-api.us-west-1.amazonaws.com"
     auto_loadbalance      = false
     connect_timeout       = 5000
     first_byte_timeout    = 120000
@@ -48,10 +48,10 @@ resource "fastly_service_v1" "app" {
 
   backend {
     name                  = "us_without_healthcheck"
-    address               = "t1tnjy1ch5.execute-api.us-west-1.amazonaws.com"
+    address               = "fc6opfckgj.execute-api.us-west-1.amazonaws.com"
     port                  = 443
     ssl_cert_hostname     = "*.execute-api.us-west-1.amazonaws.com"
-    ssl_sni_hostname      = "t1tnjy1ch5.execute-api.us-west-1.amazonaws.com"
+    ssl_sni_hostname      = "fc6opfckgj.execute-api.us-west-1.amazonaws.com"
     auto_loadbalance      = false
     connect_timeout       = 5000
     first_byte_timeout    = 120000
@@ -64,7 +64,7 @@ resource "fastly_service_v1" "app" {
     action      = "set"
     type        = "request"
     destination = "http.EU_Host"
-    source      = "\"s4do6a2900.execute-api.eu-west-1.amazonaws.com\""
+    source      = "\"oj8h4lckjk.execute-api.eu-west-1.amazonaws.com\""
   }
 
   header {
@@ -72,7 +72,7 @@ resource "fastly_service_v1" "app" {
     action      = "set"
     type        = "request"
     destination = "http.US_Host"
-    source      = "\"t1tnjy1ch5.execute-api.us-west-1.amazonaws.com\""
+    source      = "\"fc6opfckgj.execute-api.us-west-1.amazonaws.com\""
   }
 
   vcl {
