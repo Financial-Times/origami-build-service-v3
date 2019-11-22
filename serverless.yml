@@ -19,7 +19,7 @@ provider:
   name: aws
   region: ${opt:region, 'us-east-1'}
   role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/ApplicationRoleFor_${self:service}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stackTags:
     systemCode: ${self:service}
     teamDL: origami.support@ft.com
@@ -103,8 +103,8 @@ custom:
   localstack:
     stages:
       - local
-    autostart: true
-    debug: true
+    # autostart: true
+    # debug: true
     host: http://localhost
   remover:
      buckets:
