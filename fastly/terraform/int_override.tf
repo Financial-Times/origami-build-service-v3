@@ -1,5 +1,5 @@
 resource "fastly_service_v1" "app" {
-  name = "Origami Build Service v3 Development"
+  name = "Origami Build Service v3 Integration"
 
   domain {
     name = "origami-build-service-v3-dev.in.ft.com"

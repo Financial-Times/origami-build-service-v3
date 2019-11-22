@@ -32,15 +32,15 @@ jobs:
       - run: npm i
       - run: npm run test:unit
 
-  integration_test_dev:
+  integration_test_int:
     docker:
       - image: circleci/node:10
     steps:
       - checkout
       - run: npm i
-      - run: COMPONENT_TABLE="origami-build-service-dev-components" HOST="https://origami-build-service-v3-dev.in.ft.com" npm run test:integration
+      - run: COMPONENT_TABLE="origami-build-service-int-components" HOST="https://origami-build-service-v3-dev.in.ft.com" npm run test:integration
 
-  deploy_dev:
+  deploy_int:
     docker:
       - image: circleci/node:10
     steps:
@@ -50,11 +50,11 @@ jobs:
       - aws-cli/install
       - aws-cli/setup:
           configure-default-region: false
-      - run: npx serverless package --stage dev --package .serverless-package
-      - run: npx serverless deploy additionalstacks --conceal --stage dev --region eu-west-1
-      - run: npx serverless deploy additionalstacks --conceal --stage dev --region us-west-1 --stack permanent-dynamo
-      - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region eu-west-1 --package .serverless-package
-      - run: npx serverless deploy --skip-additionalstacks --conceal --stage dev --region us-west-1 --package .serverless-package
+      - run: npx serverless package --stage int --package .serverless-package
+      - run: npx serverless deploy additionalstacks --conceal --stage int --region eu-west-1
+      - run: npx serverless deploy additionalstacks --conceal --stage int --region us-west-1 --stack permanent-dynamo
+      - run: npx serverless deploy --skip-additionalstacks --conceal --stage int --region eu-west-1 --package .serverless-package
+      - run: npx serverless deploy --skip-additionalstacks --conceal --stage int --region us-west-1 --package .serverless-package
       - run: rm -f terraform.tfstate fastly/terraform/qa_override.tf fastly/terraform/production_override.tf
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_DEV terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_DEV
@@ -75,7 +75,7 @@ jobs:
       - run: npx serverless deploy additionalstacks --conceal --stage qa --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage qa --region us-west-1 --package .serverless-package
-      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
+      - run: rm -f terraform.tfstate fastly/terraform/int_override.tf fastly/terraform/production_override.tf
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_QA
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_QA terraform apply --auto-approve fastly/terraform
@@ -95,7 +95,7 @@ jobs:
       - run: npx serverless deploy additionalstacks --conceal --stage prod --region us-west-1 --stack permanent-dynamo
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region eu-west-1 --package .serverless-package
       - run: npx serverless deploy --skip-additionalstacks --conceal --stage prod --region us-west-1 --package .serverless-package
-      - run: rm -f terraform.tfstate fastly/terraform/dev_override.tf fastly/terraform/production_override.tf
+      - run: rm -f terraform.tfstate fastly/terraform/int_override.tf fastly/terraform/production_override.tf
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform init fastly/terraform/
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform import -config=fastly/terraform fastly_service_v1.app $FASTLY_SERVICE_ID_PROD
       - run: FASTLY_API_KEY=$FASTLY_API_KEY_PROD terraform apply --auto-approve fastly/terraform
@@ -106,7 +106,7 @@ workflows:
       - lint_terraform
       - lint
       - unit_test
-      - deploy_dev:
+      - deploy_int:
           requires:
             - lint
             - unit_test
@@ -117,13 +117,13 @@ workflows:
                 - master
       - change-api/release-log:
           requires:
-            - deploy_dev
+            - deploy_int
           systemCode: 'origami-build-service-v3'
           environment: 'dev'
           slackChannels: 'origami-deploys'
-      - integration_test_dev:
+      - integration_test_int:
           requires:
-            - deploy_dev
+            - deploy_int
       - deploy_staging:
           requires:
             - lint
