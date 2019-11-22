@@ -1,5 +1,5 @@
 {
-    "name": "o-jake",
+    "name": "component-with-no-dependencies",
     "version": "1.0.0",
     "main": "index.js"
 }
