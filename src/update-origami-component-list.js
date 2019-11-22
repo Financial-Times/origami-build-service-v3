@@ -40,7 +40,8 @@ module.exports = async function updateOrigamiComponentList({
     // }
     try {
       const code = await getProductionCodeFor(name, version);
-      const useLocal = process.env.NODE_ENV !== "production";
+      const localhost = process.env.LOCALSTACK_HOSTNAME || "localhost";
+      const useLocal = Boolean(process.env.LOCALSTACK_HOSTNAME);
       const s3 = useLocal
         ? new AWS.S3({
             /**
@@ -48,7 +49,7 @@ module.exports = async function updateOrigamiComponentList({
              * live S3. If you omit this, you will need to add the bucketName to the start
              * of the `Key` property.
              */
-            endpoint: "http://localhost:4572",
+            endpoint: `http://${localhost}:4572`,
             s3ForcePathStyle: true,
           })
         : new AWS.S3();
