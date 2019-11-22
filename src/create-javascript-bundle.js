@@ -1,8 +1,3 @@
-"use strict";
-
-const polyfill = require("array.prototype.flatmap");
-polyfill.shim();
-const fs = require("fs").promises;
 const { createEntryFile } = require("./create-entry-file-js");
 const { parseModulesParameter } = require("./parse-modules-parameter");
 const util = require("util");
@@ -12,7 +7,12 @@ const createPackageJsonFile = require("./modules/create-package-json-file");
 const installDependencies = require("./modules/install-dependencies");
 const createJavaScriptBundle = require("./modules/bundle-javascript");
 const { SolveFailure } = require("./modules/solve-failure");
-const { UserError, FormatError } = require("./modules/errors");
+const {
+  UserError,
+  FormatError,
+  PackageNotFoundError,
+  ApplicationError,
+} = require("./modules/errors");
 
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
@@ -39,16 +39,29 @@ const jsBundle = async (querystring = {}) => {
       },
     };
   } catch (err) {
+    console.error(JSON.stringify(err));
     if (
       err instanceof SolveFailure ||
       err instanceof UserError ||
-      err instanceof FormatError
+      err instanceof FormatError ||
+      err instanceof PackageNotFoundError
     ) {
       return {
         body: `throw new Error(${JSON.stringify(
           "Origami Build Service returned an error: " + err.message,
         )})`,
         statusCode: 400,
+        headers: {
+          "Content-Type": "application/javascript;charset=UTF-8",
+          "Cache-Control": "max-age=0, must-revalidate, no-cache, no-store",
+        },
+      };
+    } else if (err instanceof ApplicationError) {
+      return {
+        body: `throw new Error(${JSON.stringify(
+          "Origami Build Service returned an error: " + err.message,
+        )})`,
+        statusCode: 500,
         headers: {
           "Content-Type": "application/javascript;charset=UTF-8",
           "Cache-Control": "max-age=0, must-revalidate, no-cache, no-store",
