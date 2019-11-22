@@ -11,8 +11,8 @@
     "start-localstack-mac": "SERVICES=serverless DEFAULT_REGION=us-east-1 TMPDIR=/private$TMPDIR LAMBDA_EXECUTOR=docker localstack start --docker",
     "typecheck": "tsc -p . --noEmit",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",
-    "test:integration": "mocha --require dotenv/config tests/integration --recursive",
-    "test:unit": "mocha --require dotenv/config tests/unit --recursive"
+    "test:integration": "mocha --require dotenv/config tests/integration --recursive --timeout 30000",
+    "test:unit": "mocha --require dotenv/config tests/unit --recursive --timeout 30000"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
