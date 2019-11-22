@@ -1,12 +1,14 @@
 {
   "scripts": {
     "bootstrap": "node -r esm -r dotenv/config bootstrap.js",
-    "dev": "DEBUG=obs,obs:* node -r dotenv/config ./node_modules/serverless/bin/serverless.js deploy --stage local --service obs",
-    "dev-mac": "npm run linux-container -- npm run package && npm run dev -- --package .serverless-package",
+    "deploy-local": "DEBUG=obs,obs:* node -r dotenv/config ./node_modules/serverless/bin/serverless.js deploy --stage local --service obs",
+    "deploy-local-mac": "npm run linux-container -- npm run package && npm run deploy-local -- --package .serverless-package",
     "install-mac": "npm run linux-container -- npm i",
     "linux-container": "docker run --rm -v \"$PWD\":/var/task lambci/lambda:build-nodejs12.x ",
     "lint": "npx eslint .",
     "package": "DEBUG=obs,obs:* node -r dotenv/config ./node_modules/serverless/bin/serverless.js package --stage local --service obs --package .serverless-package",
+    "start-localstack": "SERVICES=serverless DEFAULT_REGION=us-east-1 LAMBDA_EXECUTOR=docker localstack start --docker",
+    "start-localstack-mac": "SERVICES=serverless DEFAULT_REGION=us-east-1 TMPDIR=/private$TMPDIR LAMBDA_EXECUTOR=docker localstack start --docker",
     "typecheck": "tsc -p . --noEmit",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",
     "test:integration": "mocha --require dotenv/config tests/integration --recursive",
