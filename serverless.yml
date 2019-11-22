@@ -2,7 +2,7 @@ service: ${opt:service, 'origami-build-service'}
 #app: your-app-name
 #tenant: your-tenant-name
 
-frameworkVersion: "=1.57.0"
+frameworkVersion: "=1.58.0"
 
 provider:
   apiGateway:
@@ -99,11 +99,6 @@ custom:
           Properties:
             BucketName: ${self:custom.bucketName}  
   bucketName: ${self:service}-${self:provider.stage}-modules
-  bundle:
-    sourcemaps: true
-    caching: true
-    stats: false
-    linting: false
   defaultStage: dev
   localstack:
     stages:
@@ -136,9 +131,11 @@ custom:
       environment: t
     prod:
       environment: p
+  webpack:
+    includeModules: true # enable auto-packing of external modules
 
 plugins:
-  - serverless-bundle
+  - serverless-webpack
   - serverless-localstack
   - serverless-deployment-bucket # has to be after serverless-localstack
   - serverless-plugin-additional-stacks
