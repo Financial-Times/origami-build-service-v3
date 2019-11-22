@@ -1,3 +1,6 @@
+"use strict";
+
+const fs = require("fs").promises;
 const { createEntryFile } = require("./create-entry-file-js");
 const { parseModulesParameter } = require("./parse-modules-parameter");
 const util = require("util");
