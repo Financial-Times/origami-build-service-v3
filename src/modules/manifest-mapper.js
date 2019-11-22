@@ -3,9 +3,7 @@
 const { DataMapper } = require("@aws/dynamodb-data-mapper");
 const DynamoDB = require("aws-sdk/clients/dynamodb");
 const process = require("process");
-const useLocal =
-  Boolean(process.env.LOCALSTACK_HOSTNAME) ||
-  process.env.NODE_ENV !== "production";
+const useLocal = process.env.STAGE === "local";
 let client;
 
 if (useLocal) {
