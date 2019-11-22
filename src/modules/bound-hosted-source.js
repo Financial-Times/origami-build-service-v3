@@ -7,7 +7,7 @@ const { fromJS, Map } = require("immutable");
 const path = require("path");
 const { CachedSource } = require("./cached-source");
 const directoryExists = require("directory-exists");
-const { PackageNotFoundError } = require("./errors");
+const { PackageNotFoundError, ApplicationError } = require("./errors");
 const { Package } = require("./package");
 const { Manifest } = require("./manifest");
 const { ManifestDynamo } = require("./manifest-dynamo");
@@ -169,7 +169,7 @@ class BoundHostedSource extends CachedSource {
       manifest.set("version", m.version);
       manifest.set("dependencies", fromJS(JSON.parse(m.dependencies || "{}")));
     } catch (error) {
-      this._throwFriendlyError(error);
+      this._throwFriendlyError(error, $package);
     }
 
     return Manifest.fromMap(manifest, this.systemCache.hostedSource, id.name);
@@ -247,37 +247,51 @@ class BoundHostedSource extends CachedSource {
     const a = await this.systemCache.createTempDir();
     const tarPath = path.join(a, `${$package}@${version}.tar.gz`);
     await mkdir(path.dirname(tarPath), { recursive: true });
-    const useLocal = process.env.NODE_ENV !== "production";
-    const s3 = useLocal
-      ? new AWS.S3({
-          /**
-           * Including this option gets localstack to more closely match the defaults for
-           * live S3. If you omit this, you will need to add the bucketName to the start
-           * of the `Key` property.
-           */
-          endpoint: "http://localhost:4572",
-          s3ForcePathStyle: true,
-        })
-      : new AWS.S3();
+    const useLocal = Boolean(process.env.LOCALSTACK_HOSTNAME);
+    const localhost = process.env.LOCALSTACK_HOSTNAME || "localhost";
+    let s3;
+    if (useLocal) {
+      s3 = new AWS.S3({
+        /**
+         * Including this option gets localstack to more closely match the defaults for
+         * live S3. If you omit this, you will need to add the bucketName to the start
+         * of the `Key` property.
+         */
+        endpoint: `http://${localhost}:4572`,
+        s3ForcePathStyle: true,
+      });
+    } else {
+      s3 = new AWS.S3();
+    }
+
     if (!process.env.MODULE_BUCKET_NAME) {
       throw new Error(
         "Environment variable $MODULE_BUCKET_NAME does not exist.",
       );
     }
+
     const params = {
       Bucket: process.env.MODULE_BUCKET_NAME,
       Key: response.codeLocation,
     };
 
-    const { Body: code } = await s3.getObject(params).promise();
-    await writeFile(tarPath, code);
-    await decompress(tarPath, tempDir, {
-      strip: 1,
-    });
-    // Now that the get has succeeded, move it to the real location in the
-    // cache. This ensures that we don't leave half-busted ghost
-    // directories in the user's pub cache if a get fails.
-    await rename(tempDir, destPath);
+    try {
+      const { Body: code } = await s3.getObject(params).promise();
+      await writeFile(tarPath, code);
+    } catch (err) {
+      this._throwFriendlyError(err, response.codeLocation);
+    }
+    try {
+      await decompress(tarPath, tempDir, {
+        strip: 1,
+      });
+      // Now that the get has succeeded, move it to the real location in the
+      // cache. This ensures that we don't leave half-busted ghost
+      // directories in the user's pub cache if a get fails.
+      await rename(tempDir, destPath);
+    } catch (err) {
+      this._throwFriendlyError(err, $package);
+    }
   }
 
   /**
@@ -287,12 +301,16 @@ class BoundHostedSource extends CachedSource {
    * Always throws an error, either the original one or a better one.
    *
    * @param {Error} error
-   * @param {string} [$package]
+   * @param {string} $package
    * @memberof BoundHostedSource
    */
   _throwFriendlyError(error, $package) {
     if (error.name === "ItemNotFoundException") {
       throw new PackageNotFoundError(`could not find package ${$package}`);
+    } else if (error.name === "InvalidAccessKeyId") {
+      throw new ApplicationError(
+        `could not download package ${$package} from S3`,
+      );
     } else {
       // Otherwise re-throw the original error.
       throw error;
