@@ -36,15 +36,15 @@ class UnsupportedError extends Error {}
 
 /**
  * @class ManifestError
- * @extends {ApplicationError}
+ * @extends {Error}
  */
-class ManifestError extends ApplicationError {}
+class ManifestError extends Error {}
 
 /**
  * @class UserError
- * @extends {ApplicationError}
+ * @extends {Error}
  */
-class UserError extends ApplicationError {}
+class UserError extends Error {}
 
 /**
  * @class FileError
