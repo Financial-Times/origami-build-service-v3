@@ -1,5 +1,6 @@
 "use strict";
 
+const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
@@ -44,6 +45,7 @@ function plugins() {
         level: "error",
       },
     }),
+    new webpack.DefinePlugin(slsw.lib.serverless.service.provider.environment),
   ];
 
   return plugins;
