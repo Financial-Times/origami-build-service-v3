@@ -1,15 +1,15 @@
 "use strict";
 
-const AWS = require("aws-sdk");
-const process = require("process");
-const getAllComponentsAndVersions = require("./modules/get-all-components-and-versions");
-const getProductionCodeFor = require("./modules/get-production-code-for");
-const { ManifestDynamo } = require("./modules/manifest-dynamo");
-const { mapper } = require("./modules/manifest-mapper");
-const utf8 = require("utf8");
-const log = require("./modules/log");
+import * as AWS from "aws-sdk";
+import * as process from "process";
+import { getAllComponentsAndVersions } from "./modules/get-all-components-and-versions";
+import { getProductionCodeFor } from "./modules/get-production-code-for";
+import { ManifestDynamo } from "./modules/manifest-dynamo";
+import { mapper } from "./modules/manifest-mapper";
+import * as utf8 from "utf8";
+import { debug as log } from "./modules/log";
 
-module.exports = async function updateOrigamiComponentList({
+export async function updateOrigamiComponentList({
   origamiRepoDataApiKey,
   origamiRepoDataApiSecret,
 }) {
@@ -93,4 +93,4 @@ module.exports = async function updateOrigamiComponentList({
     }
   }
   log("Finished updating components");
-};
+}

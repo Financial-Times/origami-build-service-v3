@@ -1,17 +1,16 @@
 "use strict";
 
-const { hash, is } = require("immutable");
-// const { HostedSource } = require("./hosted-source");
-const { PackageDetail } = require("./package-detail");
-const { VersionConstraint } = require("./version");
-const { VersionRange } = require("./version");
+import { hash, is } from "immutable";
+// import { HostedSource } from "./hosted-source";
+import { PackageDetail } from "./package-detail";
+import { VersionConstraint, VersionRange } from "./version";
 
 /**
  * The base class of `PackageRef`, `PackageId`, and `PackageRange`.
  *
  * @class PackageName
  */
-class PackageName {
+export class PackageName {
   /**
    * Creates an instance of PackageName.
    * @param {string} name
@@ -136,7 +135,7 @@ class PackageName {
  * @class PackageId
  * @extends {PackageName}
  */
-class PackageId extends PackageName {
+export class PackageId extends PackageName {
   /**
    * Creates an instance of PackageId.
    * Creates an ID for a package with the given `name`, `source`, `version`,
@@ -231,7 +230,7 @@ class PackageId extends PackageName {
  * @class PackageRange
  * @extends {PackageName}
  */
-class PackageRange extends PackageName {
+export class PackageRange extends PackageName {
   /**
    * Creates an instance of PackageRange.
    * Creates a reference to package with the given `name`, `source`,
@@ -389,7 +388,7 @@ class PackageRange extends PackageName {
  * @class PackageRef
  * @extends {PackageName}
  */
-class PackageRef extends PackageName {
+export class PackageRef extends PackageName {
   /**
    * Creates a reference to the given root package.
    *
@@ -453,8 +452,3 @@ class PackageRef extends PackageName {
     return other instanceof PackageRef && this.samePackage(other);
   }
 }
-
-module.exports.PackageName = PackageName;
-module.exports.PackageId = PackageId;
-module.exports.PackageRange = PackageRange;
-module.exports.PackageRef = PackageRef;

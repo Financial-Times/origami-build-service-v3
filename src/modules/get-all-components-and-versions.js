@@ -1,10 +1,10 @@
 "use strict";
 
-const polyfill = require("array.prototype.flatmap");
+import * as polyfill from "array.prototype.flatmap";
 polyfill.shim();
-const RepoDataClient = require("@financial-times/origami-repo-data-client");
-const log = require("./log");
-const execa = require("execa");
+import * as RepoDataClient from "@financial-times/origami-repo-data-client";
+import { debug as log } from "./log";
+import * as execa from "execa";
 
 function retryIfServerError(fn, context) {
   const maxRetries = 30;
@@ -36,7 +36,7 @@ function retryIfServerError(fn, context) {
   };
 }
 
-module.exports = async function getAllComponentsAndVersions({
+export async function getAllComponentsAndVersions({
   origamiRepoDataApiKey,
   origamiRepoDataApiSecret,
 }) {
@@ -167,4 +167,4 @@ module.exports = async function getAllComponentsAndVersions({
   }
 
   return result;
-};
+}

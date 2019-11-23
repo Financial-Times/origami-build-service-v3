@@ -5,7 +5,7 @@
  *
  * @class ConflictCause
  */
-class ConflictCause {
+export class ConflictCause {
   /**
    * Creates an instance of ConflictCause.
    * @param {import('./incompatibility').Incompatibility} conflict
@@ -17,4 +17,3 @@ class ConflictCause {
     this.other = other;
   }
 }
-module.exports.ConflictCause = ConflictCause;

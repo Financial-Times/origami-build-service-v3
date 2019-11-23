@@ -1,14 +1,14 @@
 "use strict";
 
-const { Map } = require("immutable");
-const { ArgumentError, PackageNotFoundError } = require("./errors");
+import { Map } from "immutable";
+import { ArgumentError, PackageNotFoundError } from "./errors";
 
 /**
  * A source bound to a `SystemCache`.
  *
  * @class BoundSource
  */
-class BoundSource {
+export class BoundSource {
   constructor() {
     /**
      * @type {import('immutable').Map<import('./package-name').PackageId, import('./manifest').Manifest>}
@@ -167,5 +167,3 @@ class BoundSource {
     throw new Error("unimplemented");
   }
 }
-
-module.exports.BoundSource = BoundSource;

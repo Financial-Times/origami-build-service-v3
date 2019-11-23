@@ -5,7 +5,7 @@
  *
  * @class IncompatibilityCause
  */
-class IncompatibilityCause {
+export class IncompatibilityCause {
   /**
    * Creates an instance of IncompatibilityCause.
    * @param {string} _name
@@ -47,5 +47,3 @@ IncompatibilityCause.dependency = new IncompatibilityCause("dependency");
  * @memberof IncompatibilityCause
  */
 IncompatibilityCause.noVersions = new IncompatibilityCause("no versions");
-
-module.exports.IncompatibilityCause = IncompatibilityCause;

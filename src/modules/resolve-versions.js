@@ -1,6 +1,6 @@
 "use strict";
 
-const { VersionSolver } = require("./version-solver");
+import { VersionSolver } from "./version-solver";
 
 /**
  * Attempts to select the best concrete versions for all of the transitive
@@ -11,8 +11,6 @@ const { VersionSolver } = require("./version-solver");
  * @param {import('./package').Package} root
  * @returns {Promise<import('./solve-result').SolveResult>}
  */
-async function resolveVersions(cache, root) {
+export async function resolveVersions(cache, root) {
   return new VersionSolver(cache, root).solve();
 }
-
-module.exports.resolveVersions = resolveVersions;

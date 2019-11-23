@@ -1,9 +1,9 @@
 "use strict";
 
-const fs = require("fs").promises;
-const path = require("path");
-const { FormatError } = require("./errors");
-const { VersionConstraint } = require("./version");
+import { promises as fs } from "fs";
+import * as path from "path";
+import { FormatError } from "./errors";
+import { VersionConstraint } from "./version";
 
 /**
  * Creates a package.json file within `bundleLocation` with the `modules` as the dependencies.
@@ -11,7 +11,7 @@ const { VersionConstraint } = require("./version");
  * @param {import("immutable").Map<string, string>} modules
  * @returns {Promise<void>}
  */
-module.exports = async function createPackageJsonFile(bundleLocation, modules) {
+export async function createPackageJsonFile(bundleLocation, modules) {
   const errors = [];
   modules.reduce(function reducer(reduction, value, key) {
     try {
@@ -44,4 +44,4 @@ module.exports = async function createPackageJsonFile(bundleLocation, modules) {
     }),
     "utf-8",
   );
-};
+}

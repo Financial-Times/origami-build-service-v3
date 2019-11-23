@@ -1,12 +1,12 @@
 "use strict";
 
-const assert = require("assert");
-const { Map } = require("immutable");
-const { ConflictCause } = require("./conflict-cause");
-const { ApplicationError } = require("./errors");
-const { PackageDetail } = require("./package-detail");
-const { PackageNotFoundCause } = require("./package-not-found-cause");
-const { Pair } = require("./pair");
+import * as assert from "assert";
+import { Map } from "immutable";
+import { ConflictCause } from "./conflict-cause";
+import { ApplicationError } from "./errors";
+import { PackageDetail } from "./package-detail";
+import { PackageNotFoundCause } from "./package-not-found-cause";
+import { Pair } from "./pair";
 
 /**
  * An error indicating that version solving failed.
@@ -14,7 +14,7 @@ const { Pair } = require("./pair");
  * @class SolveFailure
  * @extends {ApplicationError}
  */
-class SolveFailure extends ApplicationError {
+export class SolveFailure extends ApplicationError {
   /**
    * Creates an instance of SolveFailure.
    * @param {import('./incompatibility').Incompatibility} incompatibility
@@ -483,5 +483,3 @@ class _Writer {
     return details;
   }
 }
-
-module.exports.SolveFailure = SolveFailure;

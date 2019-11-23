@@ -1,12 +1,13 @@
 "use strict";
 
-const { Set } = require("immutable");
+import { Set } from "immutable";
+
 /**
  * The result of a successful version resolution.
  *
  * @class SolveResult
  */
-class SolveResult {
+export class SolveResult {
   /**
    * Creates an instance of SolveResult.
    * @param {Array<import('./package-name').PackageId>} packages
@@ -50,4 +51,3 @@ class SolveResult {
     } tries to resolve to\n- ${this.packages.join("\n- ")}`;
   }
 }
-module.exports.SolveResult = SolveResult;

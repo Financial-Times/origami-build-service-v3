@@ -1,10 +1,10 @@
 "use strict";
 
-const fs = require("fs").promises;
-const path = require("path");
-const os = require("os");
-const { Package } = require("./package");
-const { HostedSource } = require("./hosted-source");
+import { promises as fs } from "fs";
+import * as path from "path";
+import * as os from "os";
+import { Package } from "./package";
+import { HostedSource } from "./hosted-source";
 
 /**
  * The system-wide cache of downloaded packages.
@@ -13,7 +13,7 @@ const { HostedSource } = require("./hosted-source");
  * Packages that are available locally (e.g. path dependencies) don't use this
  * cache.
  */
-class SystemCache {
+export class SystemCache {
   /**
    * Creates a system cache and registers all sources in `sources`.
    * @param {string} [rootDir]
@@ -93,4 +93,3 @@ class SystemCache {
  * @memberof SystemCache
  */
 SystemCache.defaultDir = path.join(os.homedir(), "/.jake-cache");
-module.exports.SystemCache = SystemCache;

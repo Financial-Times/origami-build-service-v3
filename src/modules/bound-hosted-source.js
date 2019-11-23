@@ -1,19 +1,18 @@
 "use strict";
 
-const AWS = require("aws-sdk");
-const decompress = require("decompress");
-const { writeFile, rename, mkdir } = require("fs").promises;
-const { fromJS, Map } = require("immutable");
-const path = require("path");
-const { CachedSource } = require("./cached-source");
-const directoryExists = require("directory-exists");
-const { PackageNotFoundError, ApplicationError } = require("./errors");
-const { Package } = require("./package");
-const { Manifest } = require("./manifest");
-const { ManifestDynamo } = require("./manifest-dynamo");
-const { mapper } = require("./manifest-mapper");
-const log = require("./log");
-const fs = require("fs").promises;
+import * as AWS from "aws-sdk";
+import * as decompress from "decompress";
+import { fromJS, Map } from "immutable";
+import * as path from "path";
+import { CachedSource } from "./cached-source";
+import * as directoryExists from "directory-exists";
+import { PackageNotFoundError, ApplicationError } from "./errors";
+import { Package } from "./package";
+import { Manifest } from "./manifest";
+import { ManifestDynamo } from "./manifest-dynamo";
+import { mapper } from "./manifest-mapper";
+import { debug as log } from "./log";
+import { promises as fs } from "fs";
 
 /**
  * Lists the contents of `dir`.
@@ -43,7 +42,7 @@ const listDir = async dir => {
  * @extends {CachedSource}
  * @implements {BoundSource}
  */
-class BoundHostedSource extends CachedSource {
+export class BoundHostedSource extends CachedSource {
   /**
    * Creates an instance of BoundHostedSource.
    * @param {import('./hosted-source').HostedSource} source
@@ -185,7 +184,7 @@ class BoundHostedSource extends CachedSource {
   async downloadToSystemCache(id) {
     if (!(await this.isInSystemCache(id))) {
       const packageDir = this.getDirectory(id);
-      await mkdir(path.dirname(packageDir), { recursive: true });
+      await fs.mkdir(path.dirname(packageDir), { recursive: true });
       const $package = this.source._parseDescription(id.description);
       await this._download($package, id.version, packageDir);
     }
@@ -246,7 +245,7 @@ class BoundHostedSource extends CachedSource {
     );
     const a = await this.systemCache.createTempDir();
     const tarPath = path.join(a, `${$package}@${version}.tar.gz`);
-    await mkdir(path.dirname(tarPath), { recursive: true });
+    await fs.mkdir(path.dirname(tarPath), { recursive: true });
     const useLocal = process.env.STAGE === "local";
     const localhost = process.env.LOCALSTACK_HOSTNAME || "localhost";
     let s3;
@@ -277,7 +276,7 @@ class BoundHostedSource extends CachedSource {
 
     try {
       const { Body: code } = await s3.getObject(params).promise();
-      await writeFile(tarPath, code);
+      await fs.writeFile(tarPath, code);
     } catch (err) {
       this._throwFriendlyError(err, response.codeLocation);
     }
@@ -288,7 +287,7 @@ class BoundHostedSource extends CachedSource {
       // Now that the get has succeeded, move it to the real location in the
       // cache. This ensures that we don't leave half-busted ghost
       // directories in the user's pub cache if a get fails.
-      await rename(tempDir, destPath);
+      await fs.rename(tempDir, destPath);
     } catch (err) {
       this._throwFriendlyError(err, $package);
     }
@@ -334,5 +333,3 @@ class BoundHostedSource extends CachedSource {
     return url.replace(/[<>:"\\/|?*%]/g, replacer);
   }
 }
-
-module.exports.BoundHostedSource = BoundHostedSource;

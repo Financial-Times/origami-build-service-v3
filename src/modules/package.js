@@ -1,13 +1,13 @@
 "use strict";
 
-const { Manifest } = require("./manifest");
+import { Manifest } from "./manifest";
 
 /**
  * A named, versioned, unit of code and resource reuse.
  *
  * @class Package
  */
-class Package {
+export class Package {
   /**
    * Creates a package with `manifest` located at `dir`.
    * @param {import('./manifest').Manifest} manifest
@@ -88,5 +88,3 @@ class Package {
     return `${this.name} ${this.version} (${this.dir})`;
   }
 }
-
-module.exports.Package = Package;

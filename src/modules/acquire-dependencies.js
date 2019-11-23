@@ -1,9 +1,9 @@
 "use strict";
 
-const { ArgumentError } = require("./errors");
-const { Package } = require("./package");
-const { resolveVersions } = require("./resolve-versions");
-const path = require("path");
+import { ArgumentError } from "./errors";
+import { Package } from "./package";
+import { resolveVersions } from "./resolve-versions";
+import * as path from "path";
 
 /**
  * Finds a set of dependencies that match the `rootDir` package's constraints
@@ -16,7 +16,7 @@ const path = require("path");
  * @throws {ArgumentError}
  * @returns {Promise<void>}
  */
-async function acquireDependencies(rootDir, cache) {
+export async function acquireDependencies(rootDir, cache) {
   if (!path.isAbsolute(rootDir)) {
     throw new ArgumentError(
       `rootDir needs to be an absolute path. rootDir is "${rootDir}".`,
@@ -45,5 +45,3 @@ async function _get(rootDir, cache, id) {
     await source.get(id, path.join(rootDir, "node_modules", id.name));
   }
 }
-
-module.exports.acquireDependencies = acquireDependencies;

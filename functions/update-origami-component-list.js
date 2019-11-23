@@ -1,13 +1,13 @@
 "use strict";
 
-const createError = require("http-errors");
-const process = require("process");
-const Raven = require("raven");
-const RavenLambdaWrapper = require("serverless-sentry-lib");
+import * as createError from "http-errors";
+import * as process from "process";
+import * as Raven from "raven";
+import * as RavenLambdaWrapper from "serverless-sentry-lib";
 
-const updateOrigamiComponentList = require("../src/update-origami-component-list");
+import { updateOrigamiComponentList } from "../src/update-origami-component-list";
 
-module.exports.handler = RavenLambdaWrapper.handler(Raven, async () => {
+const handler = RavenLambdaWrapper.handler(Raven, async () => {
   try {
     updateOrigamiComponentList({
       origamiRepoDataApiKey: process.env.ORIGAMI_REPO_DATA_KEY_ID,
@@ -43,3 +43,5 @@ module.exports.handler = RavenLambdaWrapper.handler(Raven, async () => {
     );
   }
 });
+
+export { handler };

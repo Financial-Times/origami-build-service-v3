@@ -37,7 +37,7 @@
  * @class Source
  * @abstract
  */
-class Source {
+export class Source {
   /**
    * Creates an instance of Source.
    * @param {string} name
@@ -136,4 +136,3 @@ class Source {
     throw new Error("unimplemented");
   }
 }
-module.exports.Source = Source;

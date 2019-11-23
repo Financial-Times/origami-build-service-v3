@@ -1,9 +1,9 @@
 "use strict";
 
-const assert = require("assert");
-const { BoundSource } = require("./bound-source");
-const { UnsupportedError } = require("./errors");
-const { PackageId } = require("./package-name");
+import * as assert from "assert";
+import { BoundSource } from "./bound-source";
+import { UnsupportedError } from "./errors";
+import { PackageId } from "./package-name";
 
 /**
  * A fake source that contains only the root package.
@@ -14,7 +14,7 @@ const { PackageId } = require("./package-name");
  * @class _RootSource
  * @extends {BoundSource}
  */
-class _RootSource extends BoundSource {
+export class _RootSource extends BoundSource {
   /**
    * Creates an instance of _RootSource.
    * @param {import('./package').Package} _package
@@ -105,5 +105,3 @@ class _RootSource extends BoundSource {
     throw this._unsupported;
   }
 }
-
-module.exports._RootSource = _RootSource;

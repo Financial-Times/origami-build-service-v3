@@ -1,10 +1,10 @@
 "use strict";
 
-const path = require("path");
-const os = require("os");
-const fs = require("fs").promises;
-const { acquireDependencies } = require("./acquire-dependencies");
-const { SystemCache } = require("./system-cache");
+import * as path from "path";
+import * as os from "os";
+import { promises as fs } from "fs";
+import { acquireDependencies } from "./acquire-dependencies";
+import { SystemCache } from "./system-cache";
 
 /**
  * Installs the dependencies for the package.json file locatde at `location`
@@ -13,7 +13,7 @@ const { SystemCache } = require("./system-cache");
  * @param {String} location
  * @returns {Promise<void>}
  */
-module.exports = async function installDependencies(
+export async function installDependencies(
   location,
   systemCacheDirectory = path.join(os.tmpdir(), "pubgrub-cache"),
 ) {
@@ -21,4 +21,4 @@ module.exports = async function installDependencies(
   const systemcache = new SystemCache(systemCacheDirectory);
 
   await acquireDependencies(location, systemcache);
-};
+}

@@ -1,11 +1,11 @@
 "use strict";
 
-const fs = require("fs").promises;
-const path = require("path");
-const { BoundSource } = require("./bound-source");
-const { Manifest } = require("./manifest");
-const directoryExists = require("directory-exists");
-const log = require("./log");
+import { promises as fs } from "fs";
+import * as path from "path";
+import { BoundSource } from "./bound-source";
+import { Manifest } from "./manifest";
+import * as directoryExists from "directory-exists";
+import { debug as log } from "./log";
 
 /**
  * Creates a new symlink that creates an alias at `symlink` that points to the
@@ -36,7 +36,7 @@ const createPackageSymlink = async (name, target, symlink) => {
  * @class CachedSource
  * @extends {BoundSource}
  */
-class CachedSource extends BoundSource {
+export class CachedSource extends BoundSource {
   /**
    * The root directory of this source's cache within the system cache.
    *
@@ -123,5 +123,3 @@ class CachedSource extends BoundSource {
     throw new Error("unimplemented");
   }
 }
-
-module.exports.CachedSource = CachedSource;

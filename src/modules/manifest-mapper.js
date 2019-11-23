@@ -1,8 +1,8 @@
 "use strict";
 
-const { DataMapper } = require("@aws/dynamodb-data-mapper");
-const DynamoDB = require("aws-sdk/clients/dynamodb");
-const process = require("process");
+import { DataMapper } from "@aws/dynamodb-data-mapper";
+import * as DynamoDB from "aws-sdk/clients/dynamodb";
+import * as process from "process";
 const useLocal = process.env.STAGE === "local";
 let client;
 
@@ -19,8 +19,6 @@ if (useLocal) {
   });
 }
 
-const mapper = new DataMapper({
+export const mapper = new DataMapper({
   client,
 });
-
-module.exports.mapper = mapper;

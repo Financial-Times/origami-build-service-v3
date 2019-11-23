@@ -1,13 +1,13 @@
 "use strict";
 
-const { IncompatibilityCause } = require("./incompatibility-cause");
+import { IncompatibilityCause } from "./incompatibility-cause";
 
 /**
  * The incompatibility represents a package that couldn't be found by its source.
  *
  * @class PackageNotFoundCause
  */
-class PackageNotFoundCause extends IncompatibilityCause {
+export class PackageNotFoundCause extends IncompatibilityCause {
   /**
    * Creates an instance of PackageNotFoundCause.
    *
@@ -19,4 +19,3 @@ class PackageNotFoundCause extends IncompatibilityCause {
     this.error = error;
   }
 }
-module.exports.PackageNotFoundCause = PackageNotFoundCause;

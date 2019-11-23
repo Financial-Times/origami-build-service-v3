@@ -1,21 +1,21 @@
 "use strict";
 
-const fs = require("fs").promises;
-const { createEntryFile } = require("./create-entry-file-js");
-const { parseModulesParameter } = require("./parse-modules-parameter");
-const util = require("util");
-const rimraf = require("rimraf");
-const rmrf = util.promisify(rimraf);
-const createPackageJsonFile = require("./modules/create-package-json-file");
-const installDependencies = require("./modules/install-dependencies");
-const createJavaScriptBundle = require("./modules/bundle-javascript");
-const { SolveFailure } = require("./modules/solve-failure");
-const {
+import { promises as fs } from "fs";
+import { createEntryFile } from "./create-entry-file-js";
+import { parseModulesParameter } from "./parse-modules-parameter";
+import * as util from "util";
+import * as rimraf from "rimraf";
+import { createPackageJsonFile } from "./modules/create-package-json-file";
+import { installDependencies } from "./modules/install-dependencies";
+import { createJavaScriptBundle } from "./modules/bundle-javascript";
+import { SolveFailure } from "./modules/solve-failure";
+import {
   UserError,
   FormatError,
   PackageNotFoundError,
   ApplicationError,
-} = require("./modules/errors");
+} from "./modules/errors";
+const rmrf = util.promisify(rimraf);
 
 const jsBundle = async (querystring = {}) => {
   await fs.mkdir("/tmp/bundle/", { recursive: true });
@@ -78,4 +78,4 @@ const jsBundle = async (querystring = {}) => {
   }
 };
 
-module.exports = { jsBundle };
+export { jsBundle };

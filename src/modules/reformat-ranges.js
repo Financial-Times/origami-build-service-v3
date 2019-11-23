@@ -1,14 +1,11 @@
 "use strict";
 
-const { ConflictCause } = require("./conflict-cause");
-const {
-  versionsEqualWithoutPrerelease,
-} = require("./versions-equal-without-prerelease");
-const { Incompatibility } = require("./incompatibility");
-const { Pair } = require("./pair");
-const { Term } = require("./term");
-const { Version } = require("./version");
-const { VersionRange } = require("./version");
+import { ConflictCause } from "./conflict-cause";
+import { versionsEqualWithoutPrerelease } from "./versions-equal-without-prerelease";
+import { Incompatibility } from "./incompatibility";
+import { Pair } from "./pair";
+import { Term } from "./term";
+import { Version, VersionRange } from "./version";
 
 /**
  * Replaces version ranges in `incompatibility` and its causes with more
@@ -30,7 +27,7 @@ const { VersionRange } = require("./version");
  * @param {Incompatibility} incompatibility
  * @returns {Incompatibility}
  */
-function reformatRanges(packageListers, incompatibility) {
+export function reformatRanges(packageListers, incompatibility) {
   let cause = incompatibility.cause;
   if (cause instanceof ConflictCause) {
     const conflict = cause;
@@ -199,5 +196,3 @@ function _reformatCause(packageListers, cause) {
       )
     : cause;
 }
-
-module.exports.reformatRanges = reformatRanges;

@@ -1,13 +1,11 @@
 "use strict";
 
-const fs = require("fs");
-const { fromJS, Map } = require("immutable");
-const path = require("path");
-const { FileError, ManifestError } = require("./errors");
-const { Version } = require("./version");
-const { VersionConstraint } = require("./version");
-const { VersionRange } = require("./version");
-const fromEntries = require("object.fromentries");
+import * as fs from "fs";
+import { fromJS, Map } from "immutable";
+import * as path from "path";
+import { FileError, ManifestError } from "./errors";
+import { Version, VersionConstraint, VersionRange } from "./version";
+import * as fromEntries from "object.fromentries";
 
 /**
  * The parsed contents of a manifest file.
@@ -19,7 +17,7 @@ const fromEntries = require("object.fromentries");
  *
  * @class Manifest
  */
-class Manifest {
+export class Manifest {
   /**
    * Creates an instance of Manifest.
    * @param {string} _name
@@ -343,4 +341,3 @@ class Manifest {
     throw new ManifestError(message);
   }
 }
-module.exports.Manifest = Manifest;

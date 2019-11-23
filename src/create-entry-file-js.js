@@ -1,8 +1,9 @@
 "use strict";
 
-const path = require("path");
-const { writeFile } = require("fs").promises;
-const lodash = require("lodash");
+import * as path from "path";
+import { promises } from "fs";
+const writeFile = promises.writeFile;
+import * as lodash from "lodash";
 
 /**
  * @param {string} installationDirectory
@@ -31,4 +32,4 @@ async function createEntryFile(installationDirectory, modules) {
   return entryFileLocation;
 }
 
-module.exports.createEntryFile = createEntryFile;
+export { createEntryFile };

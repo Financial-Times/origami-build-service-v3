@@ -1,8 +1,8 @@
 "use strict";
 
-const { Map } = require("immutable");
-const validateNpmPackageName = require("validate-npm-package-name");
-const { UserError } = require("./modules/errors");
+import { Map } from "immutable";
+import * as validateNpmPackageName from "validate-npm-package-name";
+import { UserError } from "./modules/errors";
 
 /**
  * Used to ensure all module names in the modules query parameter conform to the package.json specification.
@@ -14,7 +14,7 @@ const { UserError } = require("./modules/errors");
  * @param {string} modules
  * @returns {import("immutable").Map<string, string>}
  */
-module.exports.parseModulesParameter = modules => {
+export const parseModulesParameter = modules => {
   if (modules) {
     // Turn string value into an array and remove any empty items.
     const parsedModules = modules.split(",").filter(m => m !== "");

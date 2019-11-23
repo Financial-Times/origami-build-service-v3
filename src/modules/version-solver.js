@@ -1,22 +1,21 @@
 "use strict";
 
-const { Map, Set } = require("immutable");
-const { ConflictCause } = require("./conflict-cause");
-const { PackageNotFoundError } = require("./errors");
-const { Incompatibility } = require("./incompatibility");
-const { IncompatibilityCause } = require("./incompatibility-cause");
-const { PackageLister } = require("./package-lister");
-const { PackageNotFoundCause } = require("./package-not-found-cause");
-const { PackageRange } = require("./package-name");
-const { PartialSolution } = require("./partial-solution");
-const { reformatRanges } = require("./reformat-ranges");
-const { SetRelation } = require("./set-relation");
-const { SolveFailure } = require("./solve-failure");
-const { SolveResult } = require("./solve-result");
-const { Term } = require("./term");
-const { Version } = require("./version");
-const { VersionConstraint } = require("./version");
-const log = require("./log");
+import { Map, Set } from "immutable";
+import { ConflictCause } from "./conflict-cause";
+import { PackageNotFoundError } from "./errors";
+import { Incompatibility } from "./incompatibility";
+import { IncompatibilityCause } from "./incompatibility-cause";
+import { PackageLister } from "./package-lister";
+import { PackageNotFoundCause } from "./package-not-found-cause";
+import { PackageRange } from "./package-name";
+import { PartialSolution } from "./partial-solution";
+import { reformatRanges } from "./reformat-ranges";
+import { SetRelation } from "./set-relation";
+import { SolveFailure } from "./solve-failure";
+import { SolveResult } from "./solve-result";
+import { Term } from "./term";
+import { Version, VersionConstraint } from "./version";
+import { debug as log } from "./log";
 
 /**
  * Like `minBy`, but with an asynchronous `orderBy` callback.
@@ -52,7 +51,7 @@ async function minByAsync(values, orderBy) {
  *
  * @class VersionSolver
  */
-class VersionSolver {
+export class VersionSolver {
   /**
    * Creates an instance of VersionSolver.
    *
@@ -574,4 +573,3 @@ class VersionSolver {
     }
   }
 }
-module.exports.VersionSolver = VersionSolver;

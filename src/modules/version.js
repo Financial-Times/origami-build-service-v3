@@ -1,13 +1,11 @@
 "use strict";
 
 /* eslint-disable no-unused-vars */
-const assert = require("assert");
-const { hash, is, List } = require("immutable");
-const {
-  versionsEqualWithoutPrerelease,
-} = require("./versions-equal-without-prerelease");
-const { ArgumentError, FormatError } = require("./errors");
-const semver = require("semver");
+import * as assert from "assert";
+import { hash, is, List } from "immutable";
+import { versionsEqualWithoutPrerelease } from "./versions-equal-without-prerelease";
+import { ArgumentError, FormatError } from "./errors";
+import * as semver from "semver";
 
 /**
  * returns 1 if a is bigger than b.
@@ -154,7 +152,7 @@ const COMPATIBLE_WITH = "^";
  * @interface
  * @class VersionConstraint
  */
-class VersionConstraint {
+export class VersionConstraint {
   /**
    * Parses a version constraint.
    *
@@ -672,7 +670,7 @@ class _EmptyVersion extends VersionConstraint {
  * @implements {VersionConstraint}
  * @class VersionRange
  */
-class VersionRange extends VersionConstraint {
+export class VersionRange extends VersionConstraint {
   /**
    * Creates a new version range from `min` to `max`, either inclusive or
    * exclusive.
@@ -1258,7 +1256,7 @@ class VersionRange extends VersionConstraint {
  * @implements {VersionConstraint}
  * @extends {VersionRange}
  */
-class Version extends VersionRange {
+export class Version extends VersionRange {
   /**
    * Creates an instance of Version.
    * @param {number} major
@@ -2235,7 +2233,3 @@ VersionConstraint.any = new VersionRange();
  * @memberof VersionConstraint
  */
 VersionConstraint.empty = new _EmptyVersion();
-
-module.exports.VersionConstraint = VersionConstraint;
-module.exports.Version = Version;
-module.exports.VersionRange = VersionRange;

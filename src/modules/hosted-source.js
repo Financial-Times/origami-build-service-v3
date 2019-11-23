@@ -1,12 +1,13 @@
 "use strict";
 
-const { hash, is, Map } = require("immutable");
-const { BoundHostedSource } = require("./bound-hosted-source");
-const { ArgumentError, FormatError } = require("./errors");
-const URL = require("url").URL;
-const { PackageId } = require("./package-name");
-const { PackageRef } = require("./package-name");
-const { Source } = require("./source");
+import { hash, is, Map } from "immutable";
+import { BoundHostedSource } from "./bound-hosted-source";
+import { ArgumentError, FormatError } from "./errors";
+import * as url from "url";
+import { PackageId, PackageRef } from "./package-name";
+import { Source } from "./source";
+
+const URL = url.URL;
 
 /**
  * A package source that gets packages from a package hosting site that uses the same API as pub.dartlang.org.
@@ -14,7 +15,7 @@ const { Source } = require("./source");
  * @class HostedSource
  * @extends {Source}
  */
-class HostedSource extends Source {
+export class HostedSource extends Source {
   /**
    * Creates an instance of HostedSource.
    * @memberof HostedSource
@@ -178,4 +179,3 @@ class HostedSource extends Source {
     return name;
   }
 }
-module.exports.HostedSource = HostedSource;

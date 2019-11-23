@@ -1,12 +1,12 @@
 "use strict";
 
-const Raven = require("raven");
-const RavenLambdaWrapper = require("serverless-sentry-lib");
-const { jsBundle } = require("../src/create-javascript-bundle");
-const process = require("process");
+import * as Raven from "raven";
+import * as RavenLambdaWrapper from "serverless-sentry-lib";
+import { jsBundle } from "../src/create-javascript-bundle";
+import * as process from "process";
 
 process.on("unhandledRejection", function(err) {
-  console.error(err);
+  console.error(JSON.stringify(err));
   Raven.captureException(err, function(sendErr) {
     // This callback fires once the report has been sent to Sentry
     if (sendErr) {
@@ -61,6 +61,4 @@ const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
   }
 });
 
-module.exports = {
-  handler: jsHandler,
-};
+export { jsHandler as handler };

@@ -1,13 +1,13 @@
 "use strict";
 
-const { Term } = require("./term");
+import { Term } from "./term";
 /**
  * A term in a `PartialSolution` that tracks some additional metadata.
  *
  * @class Assignment
  * @extends {Term}
  */
-class Assignment extends Term {
+export class Assignment extends Term {
   /**
    * Creates an instance of Assignment.
    *
@@ -66,4 +66,3 @@ class Assignment extends Term {
     return this.cause == null;
   }
 }
-module.exports.Assignment = Assignment;

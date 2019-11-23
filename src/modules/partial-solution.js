@@ -1,10 +1,11 @@
 "use strict";
 
-const assert = require("assert");
-const { Map, Set } = require("immutable");
-const { Assignment } = require("./assignment");
-const { StateError } = require("./errors");
-const { SetRelation } = require("./set-relation");
+import * as assert from "assert";
+import { Map, Set } from "immutable";
+import { Assignment } from "./assignment";
+import { StateError } from "./errors";
+import { SetRelation } from "./set-relation";
+
 /**
  * A list of `Assignment`s that represent the solver's current best guess about
  * what's true for the eventual set of package versions that will comprise the
@@ -14,7 +15,7 @@ const { SetRelation } = require("./set-relation");
  *
  * @class PartialSolution
  */
-class PartialSolution {
+export class PartialSolution {
   /**
    * Creates an instance of PartialSolution.
    * @memberof PartialSolution
@@ -288,4 +289,3 @@ class PartialSolution {
     return negative.relation(term);
   }
 }
-module.exports.PartialSolution = PartialSolution;

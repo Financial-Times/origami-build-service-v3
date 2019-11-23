@@ -1,5 +1,5 @@
 "use strict";
 
-const debug = require("debug")("obs");
+import * as dbg from "debug";
 
-module.exports = debug;
+export const debug = dbg("obs");

@@ -1,10 +1,10 @@
 "use strict";
 
-const assert = require("assert");
-const { Map } = require("immutable");
-const { ConflictCause } = require("./conflict-cause");
-const { IncompatibilityCause } = require("./incompatibility-cause");
-const { PackageNotFoundCause } = require("./package-not-found-cause");
+import * as assert from "assert";
+import { Map } from "immutable";
+import { ConflictCause } from "./conflict-cause";
+import { IncompatibilityCause } from "./incompatibility-cause";
+import { PackageNotFoundCause } from "./package-not-found-cause";
 
 /**
  * A set of mutually-incompatible terms.
@@ -13,7 +13,7 @@ const { PackageNotFoundCause } = require("./package-not-found-cause");
  *
  * @class Incompatibility
  */
-class Incompatibility {
+export class Incompatibility {
   /**
    * Creates an incompatibility with `terms`.
    *
@@ -491,5 +491,3 @@ class Incompatibility {
     }
   }
 }
-
-module.exports.Incompatibility = Incompatibility;

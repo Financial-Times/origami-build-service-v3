@@ -1,7 +1,7 @@
 "use strict";
 
-const { ArgumentError } = require("./errors");
-const { SetRelation } = require("./set-relation");
+import { ArgumentError } from "./errors";
+import { SetRelation } from "./set-relation";
 /**
  * A statement about a package which is true or false for a given selection of
  * package versions.
@@ -10,7 +10,7 @@ const { SetRelation } = require("./set-relation");
  *
  * @class Term
  */
-class Term {
+export class Term {
   /**
    * Creates an instance of Term.
    * @param {import('./package-name').PackageRange} $package
@@ -248,4 +248,3 @@ class Term {
     return `${this.isPositive ? "" : "not "}${this.package}`;
   }
 }
-module.exports.Term = Term;

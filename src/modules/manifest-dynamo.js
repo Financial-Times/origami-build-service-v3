@@ -3,14 +3,14 @@
 "use strict";
 
 // This is required for the @aws/dynamodb-data-mapper-annotations package to work.
-require("reflect-metadata");
+import "reflect-metadata";
 
-const {
+import {
   attribute,
   hashKey,
   rangeKey,
   table,
-} = require("@aws/dynamodb-data-mapper-annotations");
+} from "@aws/dynamodb-data-mapper-annotations";
 
 /**
  * Applies a set of decorators to a property of a target object.
@@ -79,7 +79,7 @@ function decorateClass(decorators, target) {
   return target;
 }
 
-let ManifestDynamo = class {
+export let ManifestDynamo = class {
   constructor() {
     /**
      * @type {string}
@@ -135,5 +135,3 @@ ManifestDynamo = decorateClass(
   [table(process.env.COMPONENT_TABLE)],
   ManifestDynamo,
 );
-
-module.exports.ManifestDynamo = ManifestDynamo;

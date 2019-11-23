@@ -5,7 +5,7 @@
  *
  * @class PackageDetail
  */
-class PackageDetail {
+export class PackageDetail {
   /**
    * Creates an instance of PackageDetail.
    * @param {boolean} showVersion
@@ -50,5 +50,3 @@ class PackageDetail {
  * @memberof PackageDetail
  */
 PackageDetail.defaults = new PackageDetail(false, false, false);
-
-module.exports.PackageDetail = PackageDetail;

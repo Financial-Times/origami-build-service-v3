@@ -1,9 +1,7 @@
 "use strict";
 
-const execa = require("execa");
-const fs = require("fs").promises;
-
-module.exports = getProductionCodeFor;
+import * as execa from "execa";
+import { promises as fs } from "fs";
 
 /**
  * Fetches the tarball for the version from npm.
@@ -12,7 +10,7 @@ module.exports = getProductionCodeFor;
  * @param {string} version The version of the component whose code you want.
  * @returns {Promise<Buffer>} Buffer which contains a gzipped tarball of the code.
  */
-async function getProductionCodeFor(name, version) {
+export async function getProductionCodeFor(name, version) {
   const { stdout } = await execa.command(`npm pack ${name}@'${version}'`, {
     shell: true,
   });

@@ -4,7 +4,7 @@
  * An enum of possible relationships between two sets.
  * @class SetRelation
  */
-class SetRelation {
+export class SetRelation {
   /**
    * Creates an instance of SetRelation.
    * @param {string} _name
@@ -49,5 +49,3 @@ SetRelation.disjoint = new SetRelation("disjoint");
  * @memberof SetRelation
  */
 SetRelation.overlapping = new SetRelation("overlapping");
-
-module.exports.SetRelation = SetRelation;

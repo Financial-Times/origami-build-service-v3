@@ -1,7 +1,7 @@
 "use sitrct";
 
-const { ManifestDynamo } = require("./modules/manifest-dynamo");
-const { mapper } = require("./modules/manifest-mapper");
+import { ManifestDynamo } from "./modules/manifest-dynamo";
+import { mapper } from "./modules/manifest-mapper";
 
 async function go() {
   for await (const item of mapper.scan(ManifestDynamo)) {

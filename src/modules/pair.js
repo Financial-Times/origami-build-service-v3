@@ -1,13 +1,14 @@
 "use strict";
 
-const { hash, is } = require("immutable");
+import { hash, is } from "immutable";
+
 /**
  * A pair of values.
  * @template F
  * @template L
  * @class Pair
  */
-class Pair {
+export class Pair {
   /**
    * Creates an instance of Pair.
    * @param {F} first
@@ -48,4 +49,3 @@ class Pair {
     return hash(this.first) ^ hash(this.last);
   }
 }
-module.exports.Pair = Pair;

@@ -1,18 +1,16 @@
 "use strict";
 
-const assert = require("assert");
-const { is } = require("immutable");
-const { _RootSource } = require("./_root-source");
-const { PackageNotFoundError, ManifestError } = require("./errors");
-const { Incompatibility } = require("./incompatibility");
-const { IncompatibilityCause } = require("./incompatibility-cause");
-const { PackageId } = require("./package-name");
-const { PackageRef } = require("./package-name");
-const { Manifest } = require("./manifest");
-const { Term } = require("./term");
-const { VersionConstraint } = require("./version");
-const { VersionRange } = require("./version");
-const log = require("./log");
+import * as assert from "assert";
+import { is } from "immutable";
+import { _RootSource } from "./_root-source";
+import { PackageNotFoundError, ManifestError } from "./errors";
+import { Incompatibility } from "./incompatibility";
+import { IncompatibilityCause } from "./incompatibility-cause";
+import { PackageId, PackageRef } from "./package-name";
+import { Manifest } from "./manifest";
+import { Term } from "./term";
+import { VersionConstraint, VersionRange } from "./version";
+import { debug as log } from "./log";
 
 /**
  * Returns a list containing the sorted elements of `iter`.
@@ -57,7 +55,7 @@ function lowerBound(sortedList, value, compare) {
  *
  * @class PackageLister
  */
-class PackageLister {
+export class PackageLister {
   /**
    * Creates a package lister for the dependency identified by `ref`.
    * @param {(import('./system-cache').SystemCache | null)} cache
@@ -460,4 +458,3 @@ class PackageLister {
     }
   }
 }
-module.exports.PackageLister = PackageLister;
