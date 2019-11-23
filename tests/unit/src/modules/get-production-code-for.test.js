@@ -33,7 +33,8 @@ describe("getProductionCodeFor", () => {
       readFile: sinon.stub().resolves(new ArrayBuffer()),
     };
     mockery.registerMock("fs", { promises: fsStub });
-    getProductionCodeFor = require("../../../../src/modules/get-production-code-for");
+    getProductionCodeFor = require("../../../../src/modules/get-production-code-for")
+      .getProductionCodeFor;
   });
 
   afterEach(() => {
