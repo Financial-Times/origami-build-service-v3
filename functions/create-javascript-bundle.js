@@ -3,7 +3,7 @@
 // This is required for the @aws/dynamodb-data-mapper-annotations package to work.
 import "reflect-metadata";
 
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import * as SentryLambdaWrapper from "serverless-sentry-lib";
 import { jsBundle } from "../src/create-javascript-bundle";
 import * as process from "process";

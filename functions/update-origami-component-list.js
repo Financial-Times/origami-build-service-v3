@@ -5,7 +5,7 @@ import "reflect-metadata";
 
 import * as createError from "http-errors";
 import * as process from "process";
-import Sentry from "@sentry/node";
+import * as Sentry from "@sentry/node";
 import * as SentryLambdaWrapper from "serverless-sentry-lib";
 
 import { updateOrigamiComponentList } from "../src/update-origami-component-list";
