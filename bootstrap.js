@@ -75,7 +75,7 @@ async function bootstrap() {
     await s3.putObject(params).promise();
 
     const manifest = Object.assign(new ManifestDynamo(), {
-      dependencies,
+      dependencies: JSON.stringify(dependencies || {}),
       name,
       version,
       codeLocation,
