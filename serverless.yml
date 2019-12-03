@@ -12,6 +12,7 @@ provider:
     REGION: ${self:provider.region}
     COMPONENT_TABLE: ${self:service}-${self:provider.stage}-components
     MODULE_BUCKET_NAME: ${self:custom.bucketName}
+    NODE_ENV: "production"
     NPM_WEBHOOK_SECRET_DEV: ${env:NPM_WEBHOOK_SECRET_DEV}
     ORIGAMI_REPO_DATA_KEY_ID: ${env:ORIGAMI_REPO_DATA_KEY_ID}
     ORIGAMI_REPO_DATA_SECRET_KEY: ${env:ORIGAMI_REPO_DATA_SECRET_KEY}
