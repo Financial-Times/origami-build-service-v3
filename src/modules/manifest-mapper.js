@@ -1,9 +1,8 @@
-"use strict";
-
 import { DataMapper } from "@aws/dynamodb-data-mapper";
-import * as DynamoDB from "aws-sdk/clients/dynamodb";
+import DynamoDB from "aws-sdk/clients/dynamodb";
 import * as process from "process";
-const useLocal = process.env.STAGE === "local";
+const useLocal =
+  process.env.STAGE === "local" || process.env.NODE_ENV !== "production";
 let client;
 
 if (useLocal) {
