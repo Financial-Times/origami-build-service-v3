@@ -5,12 +5,12 @@ import "reflect-metadata";
 
 import * as createError from "http-errors";
 import * as process from "process";
-import * as Raven from "raven";
-import * as RavenLambdaWrapper from "serverless-sentry-lib";
+import Sentry from "@sentry/node";
+import * as SentryLambdaWrapper from "serverless-sentry-lib";
 
 import { updateOrigamiComponentList } from "../src/update-origami-component-list";
 
-const handler = RavenLambdaWrapper.handler(Raven, async () => {
+const handler = SentryLambdaWrapper.handler(Sentry, async () => {
   try {
     updateOrigamiComponentList({
       origamiRepoDataApiKey: process.env.ORIGAMI_REPO_DATA_KEY_ID,
@@ -31,15 +31,7 @@ const handler = RavenLambdaWrapper.handler(Raven, async () => {
     };
   } catch (err) {
     console.error(err);
-
-    Raven.captureException(err, function(sendErr) {
-      // This callback fires once the report has been sent to Sentry
-      if (sendErr) {
-        console.error("Failed to send captured error to Sentry");
-      } else {
-        console.log("Captured error and sent to Sentry successfully");
-      }
-    });
+    Sentry.captureException(err);
 
     return createError.InternalServerError(
       "Could not update the Origami Component list",

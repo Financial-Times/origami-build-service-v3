@@ -53,6 +53,7 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@financial-times/origami-repo-data-client": "^1.6.0",
+    "@sentry/node": "^5.9.0",
     "array.prototype.flatmap": "^1.2.2",
     "aws-sdk": "^2.576.0",
     "debug": "^4.1.1",
@@ -64,11 +65,10 @@
     "lodash": "^4.17.15",
     "oax": "^0.5.25",
     "object.fromentries": "^2.0.1",
-    "raven": "^2.6.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "semver": "^6.3.0",
-    "serverless-sentry-lib": "^1.1.2",
+    "serverless-sentry-lib": "github:aheissenberger/serverless-sentry-lib#64e6d11922aa3b91100501d6ba7e203187946b73",
     "utf8": "^3.0.0",
     "validate-npm-package-name": "^3.0.0"
   }

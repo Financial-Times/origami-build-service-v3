@@ -3,39 +3,25 @@
 // This is required for the @aws/dynamodb-data-mapper-annotations package to work.
 import "reflect-metadata";
 
-import * as Raven from "raven";
-import * as RavenLambdaWrapper from "serverless-sentry-lib";
+import Sentry from "@sentry/node";
+import * as SentryLambdaWrapper from "serverless-sentry-lib";
 import { jsBundle } from "../src/create-javascript-bundle";
 import * as process from "process";
 
 process.on("unhandledRejection", function(err) {
   console.error(JSON.stringify(err));
-  Raven.captureException(err, function(sendErr) {
-    // This callback fires once the report has been sent to Sentry
-    if (sendErr) {
-      console.error("Failed to send captured error to Sentry");
-    } else {
-      console.log("Captured error and sent to Sentry successfully");
-    }
-  });
+  Sentry.captureException(err);
   process.exit(1);
 });
 
-const jsHandler = RavenLambdaWrapper.handler(Raven, async event => {
+const jsHandler = SentryLambdaWrapper.handler(Sentry, async event => {
   try {
     // This await is required to make the Promise rejection from
     // jsBundle be turned into a thrown error that we can catch.
     return await jsBundle(event.queryStringParameters);
   } catch (err) {
     console.error(JSON.stringify(err));
-    Raven.captureException(err, function(sendErr) {
-      // This callback fires once the report has been sent to Sentry
-      if (sendErr) {
-        console.error("Failed to send captured error to Sentry");
-      } else {
-        console.log("Captured error and sent to Sentry successfully");
-      }
-    });
+    Sentry.captureException(err);
 
     if (Number.isInteger(err.code + 0)) {
       return {
