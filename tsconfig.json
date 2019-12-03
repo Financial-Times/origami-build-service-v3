@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
         "allowJs": true,
+        "allowSyntheticDefaultImports": true,
         "checkJs": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
         "noImplicitAny": false,
         "noUnusedParameters": true,
         "noUnusedLocals": true,
