@@ -88,5 +88,5 @@ async function bootstrap() {
     console.log("done");
   }
 }
-console.log(process.env.COMPONENT_TABLE);
+
 bootstrap();
