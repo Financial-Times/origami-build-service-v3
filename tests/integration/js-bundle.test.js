@@ -189,9 +189,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("requesting two different modules", async function() {
-    it("GET /v3/bundles/js?modules=component-with-one-dependency@1.0.0,component-with-no-dependencies@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-one-dependency@1.0.0,component-with-no-dependencies@1.0.0&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=component-with-one-dependency@1.0.0,component-with-no-dependencies@*&source=test",
+        "/v3/bundles/js?modules=component-with-one-dependency@1.0.0,component-with-no-dependencies@1.0.0&source=test",
       );
 
       proclaim.deepEqual(response.statusCode, 200);
@@ -205,7 +205,7 @@ describe("/v3/bundles/js", function() {
       );
       const window = doesNotThrowInBrowserEnvironment(response.text);
       proclaim.include(window.Origami, "component-with-no-dependencies");
-      proclaim.include(window.Origami, "@financial-times/o-autoinit");
+      proclaim.include(window.Origami, "component-with-one-dependency");
     });
   });
 
@@ -276,7 +276,7 @@ describe("/v3/bundles/js", function() {
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
-        "Origami Build Service returned an error: Because no versions of @financial-times/o-banner match 1111111.0.0 and your bundle depends on @financial-times/o-banner, version solving failed.\n",
+        "Origami Build Service returned an error: Because no versions of component-with-no-dependencies match 1111111.0.0 and your bundle depends on component-with-no-dependencies, version solving failed.\n",
       );
     });
   });
