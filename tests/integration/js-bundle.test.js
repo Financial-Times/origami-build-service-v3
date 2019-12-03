@@ -167,9 +167,9 @@ describe("/v3/bundles/js", function() {
       );
     });
 
-    it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.1,@financial-times/o-test-component@1.0.0%20-%201.0.19", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@1.0.1,component-with-no-dependencies@1.0.0%20-%201.0.19", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-test-component@1.0.1,@financial-times/o-test-component@1.0.0%20-%201.0.19",
+        "/v3/bundles/js?modules=component-with-no-dependencies@1.0.1,component-with-no-dependencies@1.0.0%20-%201.0.19",
       );
 
       proclaim.deepEqual(response.statusCode, 400);
@@ -189,9 +189,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("requesting two different modules", async function() {
-    it("GET /v3/bundles/js?modules=@financial-times/o-autoinit@1.5,component-with-no-dependencies@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-one-dependency@1.0.0,component-with-no-dependencies@*&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,component-with-no-dependencies@*&source=test",
+        "/v3/bundles/js?modules=component-with-one-dependency@1.0.0,component-with-no-dependencies@*&source=test",
       );
 
       proclaim.deepEqual(response.statusCode, 200);
@@ -232,9 +232,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("invalid version", function() {
-    it("GET /v3/bundles/js?modules=o-autoinit@!1&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@!1&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=o-autoinit@!1&source=test",
+        "/v3/bundles/js?modules=component-with-no-dependencies@!1&source=test",
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
@@ -248,7 +248,7 @@ describe("/v3/bundles/js", function() {
       // TODO: Is this a potential XSS?
       doesThrowInBrowserEnvironment(
         response.text,
-        "Origami Build Service returned an error: The version !1 in o-autoinit@!1 is not a valid version.\nPlease refer to TODO (build service documentation) for what is a valid version.",
+        "Origami Build Service returned an error: The version !1 in component-with-no-dependencies@!1 is not a valid version.\nPlease refer to TODO (build service documentation) for what is a valid version.",
       );
     });
   });
@@ -268,9 +268,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("version which does not exist", function() {
-    it("GET /v3/bundles/js?modules=@financial-times/o-banner@1111111&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@1111111&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-banner@1111111&source=test",
+        "/v3/bundles/js?modules=component-with-no-dependencies@1111111&source=test",
       );
       proclaim.deepEqual(response.statusCode, 400);
       doesThrowInBrowserEnvironment(
@@ -282,9 +282,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("attaches modules to the Origami global object", function() {
-    it("GET /v3/bundles/js?modules=component-with-no-dependencies@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@1.0.0&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=component-with-no-dependencies@*&source=test",
+        "/v3/bundles/js?modules=component-with-no-dependencies@1.0.0&source=test",
       );
 
       const window = doesNotThrowInBrowserEnvironment(response.text);
