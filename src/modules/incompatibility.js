@@ -1,6 +1,6 @@
 "use strict";
 
-import * as assert from "assert";
+import assert from "assert";
 import { Map } from "immutable";
 import { ConflictCause } from "./conflict-cause";
 import { IncompatibilityCause } from "./incompatibility-cause";

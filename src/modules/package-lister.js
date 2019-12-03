@@ -1,6 +1,6 @@
 "use strict";
 
-import * as assert from "assert";
+import assert from "assert";
 import { is } from "immutable";
 import { _RootSource } from "./_root-source";
 import { PackageNotFoundError, ManifestError } from "./errors";

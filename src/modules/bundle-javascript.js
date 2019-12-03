@@ -1,6 +1,6 @@
 "use strict";
 
-import * as execa from "execa";
+import execa from "execa";
 import * as oax from "oax";
 
 /**

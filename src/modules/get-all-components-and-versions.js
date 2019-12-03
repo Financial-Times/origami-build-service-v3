@@ -4,7 +4,7 @@ import * as polyfill from "array.prototype.flatmap";
 polyfill.shim();
 import * as RepoDataClient from "@financial-times/origami-repo-data-client";
 import { debug as log } from "./log";
-import * as execa from "execa";
+import execa from "execa";
 
 function retryIfServerError(fn, context) {
   const maxRetries = 30;

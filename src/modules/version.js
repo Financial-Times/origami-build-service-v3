@@ -1,7 +1,7 @@
 "use strict";
 
 /* eslint-disable no-unused-vars */
-import * as assert from "assert";
+import assert from "assert";
 import { hash, is, List } from "immutable";
 import { versionsEqualWithoutPrerelease } from "./versions-equal-without-prerelease";
 import { ArgumentError, FormatError } from "./errors";

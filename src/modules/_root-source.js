@@ -1,6 +1,6 @@
 "use strict";
 
-import * as assert from "assert";
+import assert from "assert";
 import { BoundSource } from "./bound-source";
 import { UnsupportedError } from "./errors";
 import { PackageId } from "./package-name";

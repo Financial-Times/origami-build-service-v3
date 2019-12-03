@@ -1,5 +1,5 @@
 import * as AWS from "aws-sdk";
-import * as execa from "execa";
+import execa from "execa";
 import * as path from "path";
 import process from "process";
 import { ManifestDynamo } from "./src/modules/manifest-dynamo";
