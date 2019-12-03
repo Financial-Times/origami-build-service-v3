@@ -106,8 +106,8 @@ custom:
     autostart: true
     stages:
       - local
-    lambda:
-      mountCode: true # Enable this flag should improve performance
+    # lambda:
+      # mountCode: true # Enable this flag should improve performance
     docker:
       sudo: false # Enable this flag to run "docker ..." commands as sudo
   remover:
