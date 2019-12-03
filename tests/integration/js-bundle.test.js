@@ -129,9 +129,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("basic request", function() {
-    it("GET /v3/bundles/js?modules=component-with-no-dependencies@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@1.0.0&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=component-with-no-dependencies@*&source=test",
+        "/v3/bundles/js?modules=component-with-no-dependencies@1.0.0&source=test",
       );
       proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
@@ -148,7 +148,7 @@ describe("/v3/bundles/js", function() {
   });
 
   context("requesting the same module multiple times", function() {
-    it("GET /v3/bundles/js?modules=component-with-no-dependencies@*,component-with-no-dependencies@*", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@1.0.0,component-with-no-dependencies@1.0.1", async function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-no-dependencies@*,component-with-no-dependencies@*",
       );
@@ -167,30 +167,11 @@ describe("/v3/bundles/js", function() {
       );
     });
 
-    it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.19,@financial-times/o-test-component@1.0.17%20-%201.0.19", async function() {
+    it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.1,@financial-times/o-test-component@1.0.0%20-%201.0.19", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-test-component@1.0.19,@financial-times/o-test-component@1.0.17%20-%201.0.19",
+        "/v3/bundles/js?modules=@financial-times/o-test-component@1.0.1,@financial-times/o-test-component@1.0.0%20-%201.0.19",
       );
 
-      proclaim.deepEqual(response.statusCode, 400);
-      proclaim.deepEqual(
-        response.get("cache-control"),
-        "max-age=0, must-revalidate, no-cache, no-store",
-      );
-      proclaim.deepEqual(
-        response.get("content-type"),
-        "application/javascript;charset=UTF-8",
-      );
-      doesThrowInBrowserEnvironment(
-        response.text,
-        "Origami Build Service returned an error: The modules query parameter contains duplicate module names.",
-      );
-    });
-
-    it("GET /v3/bundles/js?modules=@financial-times/o-test-component@1.0.17,@financial-times/o-test-component@1.0.19", async function() {
-      const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-test-component@1.0.17,@financial-times/o-test-component@1.0.19",
-      );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
         response.get("cache-control"),
