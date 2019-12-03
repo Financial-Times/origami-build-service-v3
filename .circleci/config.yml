@@ -38,7 +38,7 @@ jobs:
     steps:
       - checkout
       - run: npm i
-      - run: COMPONENT_TABLE="origami-build-service-int-components" MODULE_BUCKET_NAME="origami-build-service-int-modules" npm run bootstrap
+      - run: NODE_ENV="production" COMPONENT_TABLE="origami-build-service-int-components" MODULE_BUCKET_NAME="origami-build-service-int-modules" npm run bootstrap
       - run: HOST="https://origami-build-service-v3-dev.in.ft.com" npm run test:integration
 
   deploy_int:
