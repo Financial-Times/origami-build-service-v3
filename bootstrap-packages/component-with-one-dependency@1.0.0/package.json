@@ -1,0 +1,8 @@
+{
+    "name": "component-with-one-dependency",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+        "component-with-no-dependencies": "1.0.0"
+    }
+}
