@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "bootstrap": "node -r esm -r dotenv/config bootstrap.js",
+    "bootstrap": "node -r dotenv/config bootstrap-entry.js",
     "deploy-local": "DEBUG=obs,obs:* node -r dotenv/config ./node_modules/serverless/bin/serverless.js deploy --stage local --service obs",
     "deploy-local-mac": "npm run linux-container -- npm run package && npm run deploy-local -- --package .serverless-package",
     "install-mac": "npm run linux-container -- npm i",
@@ -11,13 +11,14 @@
     "start-localstack-mac": "SERVICES=serverless DEFAULT_REGION=us-east-1 TMPDIR=/private$TMPDIR LAMBDA_EXECUTOR=docker localstack start --docker",
     "typecheck": "tsc -p . --noEmit",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",
-    "test:integration": "mocha --require dotenv/config --require esm tests/integration --recursive --timeout 30000",
-    "test:unit": "mocha --require dotenv/config --require esm tests/unit --recursive --timeout 30000"
+    "test:integration": "mocha --require dotenv/config --require esm tests/integration --recursive --timeout 60000",
+    "test:unit": "mocha --require dotenv/config --require esm tests/unit --recursive --timeout 60000"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "@types/node": "^12.12.11",
+    "app-root-path": "^3.0.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-source-map-support": "^2.1.1",
     "dotenv": "^8.2.0",

@@ -1,15 +1,12 @@
-"use strict";
-
-const AWS = require("aws-sdk");
-const execa = require("execa");
-const path = require("path");
-const process = require("process");
-const { ManifestDynamo } = require("./src/modules/manifest-dynamo");
-const { mapper } = require("./src/modules/manifest-mapper");
-// const log = require("./src/modules/log");
-const fs = require("fs").promises;
-const util = require("util");
-const rimraf = require("rimraf");
+import * as AWS from "aws-sdk";
+import * as execa from "execa";
+import * as path from "path";
+import process from "process";
+import { ManifestDynamo } from "./src/modules/manifest-dynamo";
+import { mapper } from "./src/modules/manifest-mapper";
+import { promises as fs } from "fs";
+import * as util from "util";
+import rimraf from "rimraf";
 const rmrf = util.promisify(rimraf);
 
 process.on("unhandledRejection", function(err) {

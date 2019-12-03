@@ -1,5 +1,8 @@
 "use strict";
 
+// This is required for the @aws/dynamodb-data-mapper-annotations package to work.
+import "reflect-metadata";
+
 import * as Raven from "raven";
 import * as RavenLambdaWrapper from "serverless-sentry-lib";
 import { jsBundle } from "../src/create-javascript-bundle";

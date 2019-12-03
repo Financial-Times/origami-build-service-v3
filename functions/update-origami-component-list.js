@@ -1,5 +1,8 @@
 "use strict";
 
+// This is required for the @aws/dynamodb-data-mapper-annotations package to work.
+import "reflect-metadata";
+
 import * as createError from "http-errors";
 import * as process from "process";
 import * as Raven from "raven";

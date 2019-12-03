@@ -2,9 +2,6 @@
 /* eslint-disable getter-return */
 "use strict";
 
-// This is required for the @aws/dynamodb-data-mapper-annotations package to work.
-import "reflect-metadata";
-
 import {
   attribute,
   hashKey,
