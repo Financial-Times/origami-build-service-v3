@@ -110,7 +110,7 @@ describe("/v3/bundles/js", function() {
   context.skip("missing source parameter", function() {
     it("returns an error", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-date@*",
+        "/v3/bundles/js?modules=component-with-no-dependencies@*",
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
@@ -129,9 +129,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("basic request", function() {
-    it("GET /v3/bundles/js?modules=@financial-times/o-date@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@*&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-date@*&source=test",
+        "/v3/bundles/js?modules=component-with-no-dependencies@*&source=test",
       );
       proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
@@ -143,14 +143,14 @@ describe("/v3/bundles/js", function() {
         "application/javascript;charset=UTF-8",
       );
       const window = doesNotThrowInBrowserEnvironment(response.text);
-      proclaim.include(window.Origami, "@financial-times/o-date");
+      proclaim.include(window.Origami, "component-with-no-dependencies");
     });
   });
 
   context("requesting the same module multiple times", function() {
-    it("GET /v3/bundles/js?modules=@financial-times/o-date@*,@financial-times/o-date@*", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@*,component-with-no-dependencies@*", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-date@*,@financial-times/o-date@*",
+        "/v3/bundles/js?modules=component-with-no-dependencies@*,component-with-no-dependencies@*",
       );
       proclaim.deepEqual(response.statusCode, 400);
       proclaim.deepEqual(
@@ -208,9 +208,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("requesting two different modules", async function() {
-    it("GET /v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-date@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=@financial-times/o-autoinit@1.5,component-with-no-dependencies@*&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,@financial-times/o-date@*&source=test",
+        "/v3/bundles/js?modules=@financial-times/o-autoinit@1.5,component-with-no-dependencies@*&source=test",
       );
 
       proclaim.deepEqual(response.statusCode, 200);
@@ -223,7 +223,7 @@ describe("/v3/bundles/js", function() {
         "application/javascript;charset=UTF-8",
       );
       const window = doesNotThrowInBrowserEnvironment(response.text);
-      proclaim.include(window.Origami, "@financial-times/o-date");
+      proclaim.include(window.Origami, "component-with-no-dependencies");
       proclaim.include(window.Origami, "@financial-times/o-autoinit");
     });
   });
@@ -301,13 +301,13 @@ describe("/v3/bundles/js", function() {
   });
 
   context("attaches modules to the Origami global object", function() {
-    it("GET /v3/bundles/js?modules=@financial-times/o-date@*&source=test", async function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies@*&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=@financial-times/o-date@*&source=test",
+        "/v3/bundles/js?modules=component-with-no-dependencies@*&source=test",
       );
 
       const window = doesNotThrowInBrowserEnvironment(response.text);
-      proclaim.include(window.Origami, "@financial-times/o-date");
+      proclaim.include(window.Origami, "component-with-no-dependencies");
     });
   });
 });
