@@ -1,7 +1,7 @@
 "use strict";
 
 import { Map } from "immutable";
-import * as validateNpmPackageName from "validate-npm-package-name";
+import validateNpmPackageName from "validate-npm-package-name";
 import { UserError } from "./modules/errors";
 
 /**
@@ -12,6 +12,7 @@ import { UserError } from "./modules/errors";
  * If any module names are not valid, return an Error HTTP 400 status code, specifying which module names are invalid.
  *
  * @param {string} modules
+ * @throws {import('./modules/errors').UserError}
  * @returns {import("immutable").Map<string, string>}
  */
 export const parseModulesParameter = modules => {
