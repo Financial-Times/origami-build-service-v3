@@ -6,6 +6,7 @@ import * as path from "path";
 import { FileError, ManifestError } from "./errors";
 import { Version, VersionConstraint, VersionRange } from "./version";
 import * as fromEntries from "object.fromentries";
+import * as type from "type-detect";
 
 /**
  * The parsed contents of a manifest file.
@@ -116,7 +117,7 @@ export class Manifest {
       manifestNode = fromJS(JSON.parse(contents));
     } catch {
       throw new ManifestError(
-        `The manifest must be a JSON object. The manifest was "${contents}".`,
+        `The manifest must be a JSON object. The manifest is "${contents}".`,
       );
     }
     let manifestMap;
@@ -124,7 +125,9 @@ export class Manifest {
       manifestMap = Map(manifestNode);
     } else {
       throw new ManifestError(
-        `The manifest must be a JSON object. The manifest was "${contents}".`,
+        `The manifest must be a JSON object but it was a ${type(
+          manifestNode,
+        )}. The manifest is "${contents}".`,
       );
     }
 
@@ -146,12 +149,16 @@ export class Manifest {
     const name = this.fields.get("name");
     if (name == null) {
       throw new ManifestError(
-        `The manifest is missing the "name" field, which should be a string. The manifest was "${JSON.stringify(
+        `The manifest is missing the "name" field, which should be a string. The manifest is "${JSON.stringify(
           this.fields,
         )}".`,
       );
     } else if (typeof name != "string") {
-      throw new ManifestError('"name" field must be a string.');
+      throw new ManifestError(
+        `The manifest's "name" field, must be a string but it was a ${type(
+          name,
+        )}. The manifest is "${JSON.stringify(this.fields, undefined, 4)}".`,
+      );
     }
     this._name = name;
 
@@ -181,11 +188,15 @@ export class Manifest {
         fixed = `${fixed}.0`;
       }
       this._error(
-        `"version" field must have three numeric components: major, minor, and patch. Instead of "${version}", consider "${fixed}".`,
+        `"version" field must have three numeric components: major, minor, and patch. Instead of "${version}", it needs to be "${fixed}".`,
       );
     }
     if (typeof version != "string") {
-      this._error('"version" field must be a string.');
+      this._error(
+        `The manifest's "version" field, must be a string but it was a ${type(
+          version,
+        )}. The manifest is "${JSON.stringify(this.fields, undefined, 4)}".`,
+      );
     }
     this._version = Version.parse(version);
 
@@ -231,9 +242,9 @@ export class Manifest {
     }
     if (!(node instanceof Map)) {
       this._error(
-        `The manifest's "${field}" field, must be a JSON Object. The manifest was "${JSON.stringify(
-          this.fields,
-        )}".`,
+        `The manifest's "${field}" field, must be a JSON Object but it was a ${type(
+          node,
+        )}. The manifest is "${JSON.stringify(this.fields, undefined, 4)}".`,
       );
     }
 
@@ -244,8 +255,10 @@ export class Manifest {
     node.forEach((spec, name) => {
       if (this.fields.get("name") != null && name == this.name) {
         this._error(
-          `The manifest's "${field}" field has an entry for itself. A manifest may not directly depend on itself. The manifest was "${JSON.stringify(
+          `The manifest's "${field}" field has an entry for itself. A manifest may not directly depend on itself. The manifest is "${JSON.stringify(
             this.fields,
+            undefined,
+            4,
           )}".`,
         );
       }
@@ -258,22 +271,28 @@ export class Manifest {
             dependencies[name] = ref.withConstraint(versionConstraint);
           } catch (e) {
             this._error(
-              `The manifest's "${field}" field has an entry for "${name}" which is an invalid SemVer string. The manifest was "${JSON.stringify(
+              `The manifest's "${field}" field has an entry for "${name}" which is an invalid SemVer string. The manifest is "${JSON.stringify(
                 this.fields,
+                undefined,
+                4,
               )}". ${e.message}`,
             );
           }
         } else {
           this._error(
-            `The manifest's "${field}" field has an entry for "${name}" which is an empty string. Dependencies can only be defined with SemVer strings. The manifest was "${JSON.stringify(
+            `The manifest's "${field}" field has an entry for "${name}" which is an empty string. Dependencies can only be defined with SemVer strings. The manifest is "${JSON.stringify(
               this.fields,
+              undefined,
+              4,
             )}".`,
           );
         }
       } else {
         this._error(
-          `The manifest's "${field}" field has an entry for "${name}" which is not a string. Dependencies can only be defined with SemVer strings. The manifest was "${JSON.stringify(
+          `The manifest's "${field}" field has an entry for "${name}" which is not a string. Dependencies can only be defined with SemVer strings. The manifest is "${JSON.stringify(
             this.fields,
+            undefined,
+            4,
           )}".`,
         );
       }
@@ -338,6 +357,6 @@ export class Manifest {
    * @memberof Manifest
    */
   _error(message) {
-    throw new ManifestError(message);
+    throw new ManifestError(`${this.name}@${this.version}: ${message}`);
   }
 }
