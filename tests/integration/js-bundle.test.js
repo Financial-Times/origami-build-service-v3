@@ -267,6 +267,20 @@ describe("/v3/bundles/js", function() {
     });
   });
 
+  context("modules which has invalid dependencies property", function() {
+    it("GET /v3/bundles/js?modules=component-with-invalid-dependencies-property@1&source=test", async function() {
+      const response = await request(HOST).get(
+        "/v3/bundles/js?modules=component-with-invalid-dependencies-property@1&source=test",
+      );
+      proclaim.deepEqual(response.statusCode, 500);
+      doesThrowInBrowserEnvironment(
+        response.text,
+        // TODO: Is this a potential XSS?
+        'Origami Build Service returned an error: component-with-invalid-dependencies-property@1.0.0: The manifest\'s "dependencies" field, must be a JSON Object but it was a string. The manifest is "{\n    "name": "component-with-invalid-dependencies-property",\n    "version": "1.0.0",\n    "dependencies": "invalid"\n}".',
+      );
+    });
+  });
+
   context("version which does not exist", function() {
     it("GET /v3/bundles/js?modules=component-with-no-dependencies@1111111&source=test", async function() {
       const response = await request(HOST).get(
