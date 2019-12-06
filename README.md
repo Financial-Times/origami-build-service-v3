@@ -30,8 +30,15 @@ Running Locally
 Before we can run the application, we'll need to install dependencies:
 
 We install the dependencies inside a Docker container that mimics AWS Lambda's environment because we have dependencies that are environment specific (meaning they only work on the environment they are installed on. I.E. Installing on OS X and running on Linux will not work).
+
+On OS X run:
 ```sh
 npm run install-mac
+```
+
+On linux run:
+```sh
+npm run install
 ```
 
 Run the application in development mode with:
@@ -84,7 +91,10 @@ npm run bootstrap
 
 Now you can access the app over HTTP on the endpoints listed by Serverless.
 
-
+To run the tests locally:
+```sh
+HOST=http://localhost:4567/restapis/s7mywpb4zh/local/_user_request_ npm run test
+```
 
 
 License
