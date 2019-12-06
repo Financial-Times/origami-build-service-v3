@@ -1,0 +1,5 @@
+{
+    "name": "component-with-invalid-dependencies-property",
+    "version": "1.0.0",
+    "dependencies": "invalid"
+}
