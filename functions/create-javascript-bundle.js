@@ -21,6 +21,7 @@ const jsHandler = SentryLambdaWrapper.handler(Sentry, async event => {
     return await jsBundle(event.queryStringParameters);
   } catch (err) {
     console.error(JSON.stringify(err));
+    console.error(err);
     Sentry.captureException(err);
 
     if (Number.isInteger(err.code + 0)) {
