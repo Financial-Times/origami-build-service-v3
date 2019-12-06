@@ -14,6 +14,7 @@ import {
   FormatError,
   PackageNotFoundError,
   ApplicationError,
+  ManifestError,
 } from "./modules/errors";
 const rmrf = util.promisify(rimraf);
 
@@ -59,7 +60,10 @@ const jsBundle = async (querystring = {}) => {
           "Cache-Control": "max-age=0, must-revalidate, no-cache, no-store",
         },
       };
-    } else if (err instanceof ApplicationError) {
+    } else if (
+      err instanceof ApplicationError ||
+      err instanceof ManifestError
+    ) {
       return {
         body: `throw new Error(${JSON.stringify(
           "Origami Build Service returned an error: " + err.message,
