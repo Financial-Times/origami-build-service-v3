@@ -69,6 +69,7 @@
     "rimraf": "^3.0.0",
     "semver": "^6.3.0",
     "serverless-sentry-lib": "github:aheissenberger/serverless-sentry-lib#64e6d11922aa3b91100501d6ba7e203187946b73",
+    "type-detect": "^4.0.8",
     "utf8": "^3.0.0",
     "validate-npm-package-name": "^3.0.0"
   }
