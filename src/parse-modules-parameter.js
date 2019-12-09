@@ -67,14 +67,21 @@ export const parseModulesParameter = modules => {
         throw error;
       } else {
         const m = Map(
-          parsedModules.map(module =>
-            module.lastIndexOf("@") > 0
-              ? [
-                  module.substr(0, module.lastIndexOf("@")),
-                  module.substr(module.lastIndexOf("@") + 1),
-                ]
-              : [module, "*"],
-          ),
+          parsedModules.map(module => {
+            if (!(module.lastIndexOf("@") > 0)) {
+              const error = new UserError(
+                `The bundle request contains ${module} with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.`,
+              );
+              // @ts-ignore
+              error.code = 400;
+              throw error;
+            }
+
+            return [
+              module.substr(0, module.lastIndexOf("@")),
+              module.substr(module.lastIndexOf("@") + 1),
+            ];
+          }),
         );
 
         return m;

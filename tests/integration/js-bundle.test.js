@@ -253,6 +253,28 @@ describe("/v3/bundles/js", function() {
     });
   });
 
+  context("missing version range in request", function() {
+    it("GET /v3/bundles/js?modules=component-with-no-dependencies&source=test", async function() {
+      const response = await request(HOST).get(
+        "/v3/bundles/js?modules=component-with-no-dependencies&source=test",
+      );
+      proclaim.deepEqual(response.statusCode, 200);
+      proclaim.deepEqual(
+        response.get("cache-control"),
+        "max-age=0, must-revalidate, no-cache, no-store",
+      );
+      proclaim.deepEqual(
+        response.get("content-type"),
+        "application/javascript;charset=UTF-8",
+      );
+      // TODO: Is this a potential XSS?
+      doesThrowInBrowserEnvironment(
+        response.text,
+        "Origami Build Service returned an error: The bundle request contains component-with-no-dependencies with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.",
+      );
+    });
+  });
+
   context("module which does not exist", function() {
     it("GET /v3/bundles/js?modules=o-jake-does-not-exist&source=test", async function() {
       const response = await request(HOST).get(
