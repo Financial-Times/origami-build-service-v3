@@ -1,0 +1,7 @@
+{
+    "name": "component-with-dependency-version-as-empty-string",
+    "version": "1.0.0",
+    "dependencies": {
+        "component-with-no-dependencies": ""
+    }
+}

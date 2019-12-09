@@ -296,16 +296,32 @@ describe("/v3/bundles/js", function() {
   });
 
   context("module which has invalid version for a dependency", function() {
-    it("GET /v3/bundles/js?modules=component-with-invalid-dependency-version@1.0.0&source=test", async function() {
-      const response = await request(HOST).get(
-        "/v3/bundles/js?modules=component-with-invalid-dependency-version@1.0.0&source=test",
-      );
-      proclaim.deepEqual(response.statusCode, 500);
-      doesThrowInBrowserEnvironment(
-        response.text,
-        // TODO: Is this a potential XSS?
-        'Origami Build Service returned an error: component-with-invalid-dependency-version@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is not a string. Dependencies can only be defined with SemVer strings. The manifest is "{\n    "name": "component-with-invalid-dependency-version",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": true\n    }\n}".',
-      );
+    context("version is not a string", function() {
+      it("GET /v3/bundles/js?modules=component-with-invalid-dependency-version@1.0.0&source=test", async function() {
+        const response = await request(HOST).get(
+          "/v3/bundles/js?modules=component-with-invalid-dependency-version@1.0.0&source=test",
+        );
+        proclaim.deepEqual(response.statusCode, 500);
+        doesThrowInBrowserEnvironment(
+          response.text,
+          // TODO: Is this a potential XSS?
+          'Origami Build Service returned an error: component-with-invalid-dependency-version@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is not a string. Dependencies can only be defined with SemVer strings. The manifest is "{\n    "name": "component-with-invalid-dependency-version",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": true\n    }\n}".',
+        );
+      });
+    });
+
+    context("version is an empty string", function() {
+      it("GET /v3/bundles/js?modules=component-with-dependency-version-as-empty-string@1.0.0&source=test", async function() {
+        const response = await request(HOST).get(
+          "/v3/bundles/js?modules=component-with-dependency-version-as-empty-string@1.0.0&source=test",
+        );
+        proclaim.deepEqual(response.statusCode, 500);
+        doesThrowInBrowserEnvironment(
+          response.text,
+          // TODO: Is this a potential XSS?
+          'Origami Build Service returned an error: component-with-dependency-version-as-empty-string@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is an empty string. Dependencies can only be defined with SemVer strings. The manifest is "{\n    "name": "component-with-dependency-version-as-empty-string",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": ""\n    }\n}".',
+        );
+      });
     });
   });
 
