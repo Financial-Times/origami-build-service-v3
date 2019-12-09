@@ -276,9 +276,9 @@ describe("/v3/bundles/js", function() {
   });
 
   context("module which does not exist", function() {
-    it("GET /v3/bundles/js?modules=o-jake-does-not-exist&source=test", async function() {
+    it("GET /v3/bundles/js?modules=o-jake-does-not-exist@1&source=test", async function() {
       const response = await request(HOST).get(
-        "/v3/bundles/js?modules=o-jake-does-not-exist&source=test",
+        "/v3/bundles/js?modules=o-jake-does-not-exist@1&source=test",
       );
       proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
