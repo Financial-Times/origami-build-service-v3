@@ -323,6 +323,20 @@ describe("/v3/bundles/js", function() {
         );
       });
     });
+
+    context("version is a non-semver string", function() {
+      it("GET /v3/bundles/js?modules=component-with-dependency-version-as-non-semver-string@1.0.0&source=test", async function() {
+        const response = await request(HOST).get(
+          "/v3/bundles/js?modules=component-with-dependency-version-as-non-semver-string@1.0.0&source=test",
+        );
+        proclaim.deepEqual(response.statusCode, 500);
+        doesThrowInBrowserEnvironment(
+          response.text,
+          // TODO: Is this a potential XSS?
+          'Origami Build Service returned an error: component-with-dependency-version-as-non-semver-string@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is an invalid SemVer string. The manifest is "{\n    "name": "component-with-dependency-version-as-non-semver-string",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": "^_^"\n    }\n}". Expected version number after "^" in "^_^", got "_^".',
+        );
+      });
+    });
   });
 
   context("version which does not exist", function() {
