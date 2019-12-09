@@ -267,7 +267,7 @@ describe("/v3/bundles/js", function() {
     });
   });
 
-  context("modules which has invalid dependencies property", function() {
+  context("module which has invalid dependencies property", function() {
     it("GET /v3/bundles/js?modules=component-with-invalid-dependencies-property@1&source=test", async function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-invalid-dependencies-property@1&source=test",
@@ -277,6 +277,20 @@ describe("/v3/bundles/js", function() {
         response.text,
         // TODO: Is this a potential XSS?
         'Origami Build Service returned an error: component-with-invalid-dependencies-property@1.0.0: The manifest\'s "dependencies" field, must be a JSON Object but it was a string. The manifest is "{\n    "name": "component-with-invalid-dependencies-property",\n    "version": "1.0.0",\n    "dependencies": "invalid"\n}".',
+      );
+    });
+  });
+
+  context("module which has directly depended on itself", function() {
+    it("GET /v3/bundles/js?modules=component-depends-directly-on-itself@1.0.0&source=test", async function() {
+      const response = await request(HOST).get(
+        "/v3/bundles/js?modules=component-depends-directly-on-itself@1.0.0&source=test",
+      );
+      proclaim.deepEqual(response.statusCode, 500);
+      doesThrowInBrowserEnvironment(
+        response.text,
+        // TODO: Is this a potential XSS?
+        'Origami Build Service returned an error: component-depends-directly-on-itself@1.0.0: The manifest\'s "dependencies" field has an entry for itself. A manifest may not directly depend on itself. The manifest is "{\n    "name": "component-depends-directly-on-itself",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-depends-directly-on-itself": "*"\n    }\n}".',
       );
     });
   });

@@ -1,0 +1,7 @@
+{
+    "name": "component-depends-directly-on-itself",
+    "version": "1.0.0",
+    "dependencies": {
+        "component-depends-directly-on-itself": "*"
+    }
+}
