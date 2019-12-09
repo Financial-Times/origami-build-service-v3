@@ -353,6 +353,23 @@ describe("/v3/bundles/js", function() {
     });
   });
 
+  context(
+    "module which has dependency whose version doesn't exist",
+    function() {
+      it("GET /v3/bundles/js?modules=component-with-dependency-who-version-does-not-exist@1.0.0&source=test", async function() {
+        const response = await request(HOST).get(
+          "/v3/bundles/js?modules=component-with-dependency-who-version-does-not-exist@1.0.0&source=test",
+        );
+        proclaim.deepEqual(response.statusCode, 400);
+        doesThrowInBrowserEnvironment(
+          response.text,
+          // TODO: Is this a potential XSS?
+          "Origami Build Service returned an error: Because every version of component-with-dependency-who-version-does-not-exist depends on component-with-no-dependencies and no versions of component-with-no-dependencies match 0.0.1, component-with-dependency-who-version-does-not-exist is forbidden.\nSo, because your bundle depends on component-with-dependency-who-version-does-not-exist, version solving failed.\n",
+        );
+      });
+    },
+  );
+
   context("version which does not exist", function() {
     it("GET /v3/bundles/js?modules=component-with-no-dependencies@1111111&source=test", async function() {
       const response = await request(HOST).get(

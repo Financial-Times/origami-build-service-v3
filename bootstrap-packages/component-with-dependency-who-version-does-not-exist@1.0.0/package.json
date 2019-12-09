@@ -1,0 +1,8 @@
+{
+    "name": "component-with-dependency-who-version-does-not-exist",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+        "component-with-no-dependencies": "0.0.1"
+    }
+}
