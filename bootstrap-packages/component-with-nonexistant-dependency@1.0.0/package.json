@@ -1,0 +1,8 @@
+{
+    "name": "component-with-nonexistant-dependency",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+        "@financial-times/o-no-i-dont-exist": "1.0.0"
+    }
+}

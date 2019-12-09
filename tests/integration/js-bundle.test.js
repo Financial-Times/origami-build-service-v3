@@ -339,6 +339,20 @@ describe("/v3/bundles/js", function() {
     });
   });
 
+  context("module which has dependency that doesn't exist", function() {
+    it("GET /v3/bundles/js?modules=component-with-nonexistant-dependency@1.0.0&source=test", async function() {
+      const response = await request(HOST).get(
+        "/v3/bundles/js?modules=component-with-nonexistant-dependency@1.0.0&source=test",
+      );
+      proclaim.deepEqual(response.statusCode, 400);
+      doesThrowInBrowserEnvironment(
+        response.text,
+        // TODO: Is this a potential XSS?
+        "Origami Build Service returned an error: Because every version of component-with-nonexistant-dependency depends on @financial-times/o-no-i-dont-exist and @financial-times/o-no-i-dont-exist doesn't exist (could not find package @financial-times/o-no-i-dont-exist), component-with-nonexistant-dependency is forbidden.\nSo, because your bundle depends on component-with-nonexistant-dependency, version solving failed.\n",
+      );
+    });
+  });
+
   context("version which does not exist", function() {
     it("GET /v3/bundles/js?modules=component-with-no-dependencies@1111111&source=test", async function() {
       const response = await request(HOST).get(
