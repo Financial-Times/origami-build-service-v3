@@ -1,0 +1,7 @@
+{
+    "name": "component-with-invalid-dependency-version",
+    "version": "1.0.0",
+    "dependencies": {
+        "component-with-no-dependencies": true
+    }
+}
