@@ -21,12 +21,7 @@ export const parseModulesParameter = modules => {
     const parsedModules = modules.split(",").filter(m => m !== "");
 
     if (modules.length === 0) {
-      const error = new UserError(
-        "The modules query parameter can not be empty.",
-      );
-      // @ts-ignore
-      error.code = 400;
-      throw error;
+      throw new UserError("The modules query parameter can not be empty.");
     }
 
     const moduleNames = parsedModules.map(mod => {
@@ -42,39 +37,25 @@ export const parseModulesParameter = modules => {
     );
 
     if (invalidModuleNames.length > 0) {
-      const error = new UserError(
+      throw new UserError(
         `The modules query parameter contains module names which are not valid: ${invalidModuleNames.join(
           ", ",
         )}.`,
       );
-      // @ts-ignore
-      error.code = 400;
-      throw error;
     } else {
       if (moduleNames.length === 0) {
-        const error = new UserError(
-          "The modules query parameter can not be empty.",
-        );
-        // @ts-ignore
-        error.code = 400;
-        throw error;
+        throw new UserError("The modules query parameter can not be empty.");
       } else if (moduleNames.length !== new Set(moduleNames).size) {
-        const error = new UserError(
+        throw new UserError(
           `The modules query parameter contains duplicate module names.`,
         );
-        // @ts-ignore
-        error.code = 400;
-        throw error;
       } else {
         const m = Map(
           parsedModules.map(module => {
             if (!(module.lastIndexOf("@") > 0)) {
-              const error = new UserError(
+              throw new UserError(
                 `The bundle request contains ${module} with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.`,
               );
-              // @ts-ignore
-              error.code = 400;
-              throw error;
             }
 
             return [
@@ -88,10 +69,7 @@ export const parseModulesParameter = modules => {
       }
     }
   } else {
-    const error = new UserError("The modules query parameter is required.");
-    // @ts-ignore
-    error.code = 400;
-    throw error;
+    throw new UserError("The modules query parameter is required.");
   }
 };
 
