@@ -48,19 +48,7 @@ const jsBundle = async (querystring = {}) => {
       err instanceof SolveFailure ||
       err instanceof UserError ||
       err instanceof FormatError ||
-      err instanceof PackageNotFoundError
-    ) {
-      return {
-        body: `throw new Error(${JSON.stringify(
-          "Origami Build Service returned an error: " + err.message,
-        )})`,
-        statusCode: 400,
-        headers: {
-          "Content-Type": "application/javascript;charset=UTF-8",
-          "Cache-Control": "max-age=0, must-revalidate, no-cache, no-store",
-        },
-      };
-    } else if (
+      err instanceof PackageNotFoundError ||
       err instanceof ApplicationError ||
       err instanceof ManifestError
     ) {
@@ -68,7 +56,7 @@ const jsBundle = async (querystring = {}) => {
         body: `throw new Error(${JSON.stringify(
           "Origami Build Service returned an error: " + err.message,
         )})`,
-        statusCode: 500,
+        statusCode: 200,
         headers: {
           "Content-Type": "application/javascript;charset=UTF-8",
           "Cache-Control": "max-age=0, must-revalidate, no-cache, no-store",

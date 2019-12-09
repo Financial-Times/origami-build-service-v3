@@ -38,7 +38,7 @@ describe("/v3/bundles/js", function() {
   context("missing all parameters", function() {
     it("GET /v3/bundles/js", async function() {
       const response = await request(HOST).get("/v3/bundles/js");
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -57,7 +57,7 @@ describe("/v3/bundles/js", function() {
   context("invalid modules parameter", function() {
     it("GET /v3/bundles/js?modules", async function() {
       const response = await request(HOST).get("/v3/bundles/js?modules");
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -74,7 +74,7 @@ describe("/v3/bundles/js", function() {
 
     it("GET /v3/bundles/js?modules=,,", async function() {
       const response = await request(HOST).get("/v3/bundles/js?modules=,,");
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -91,7 +91,7 @@ describe("/v3/bundles/js", function() {
 
     it("GET /v3/bundles/js?modules=!1", async function() {
       const response = await request(HOST).get(`/v3/bundles/js?modules=!1`);
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -112,7 +112,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-no-dependencies@*",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -152,7 +152,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-no-dependencies@*,component-with-no-dependencies@*",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -172,7 +172,7 @@ describe("/v3/bundles/js", function() {
         "/v3/bundles/js?modules=component-with-no-dependencies@1.0.1,component-with-no-dependencies@1.0.0%20-%201.0.19",
       );
 
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -214,7 +214,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=o-autoinit_%25-test&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -236,7 +236,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-no-dependencies@!1&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       proclaim.deepEqual(
         response.get("cache-control"),
         "max-age=0, must-revalidate, no-cache, no-store",
@@ -258,7 +258,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=o-jake-does-not-exist&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
@@ -272,7 +272,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-invalid-dependencies-property@1&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 500);
+      proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
@@ -286,7 +286,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-depends-directly-on-itself@1.0.0&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 500);
+      proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
@@ -301,7 +301,7 @@ describe("/v3/bundles/js", function() {
         const response = await request(HOST).get(
           "/v3/bundles/js?modules=component-with-invalid-dependency-version@1.0.0&source=test",
         );
-        proclaim.deepEqual(response.statusCode, 500);
+        proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
           // TODO: Is this a potential XSS?
@@ -315,7 +315,7 @@ describe("/v3/bundles/js", function() {
         const response = await request(HOST).get(
           "/v3/bundles/js?modules=component-with-dependency-version-as-empty-string@1.0.0&source=test",
         );
-        proclaim.deepEqual(response.statusCode, 500);
+        proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
           // TODO: Is this a potential XSS?
@@ -329,7 +329,7 @@ describe("/v3/bundles/js", function() {
         const response = await request(HOST).get(
           "/v3/bundles/js?modules=component-with-dependency-version-as-non-semver-string@1.0.0&source=test",
         );
-        proclaim.deepEqual(response.statusCode, 500);
+        proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
           // TODO: Is this a potential XSS?
@@ -344,7 +344,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-nonexistant-dependency@1.0.0&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
@@ -360,7 +360,7 @@ describe("/v3/bundles/js", function() {
         const response = await request(HOST).get(
           "/v3/bundles/js?modules=component-with-dependency-who-version-does-not-exist@1.0.0&source=test",
         );
-        proclaim.deepEqual(response.statusCode, 400);
+        proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
           // TODO: Is this a potential XSS?
@@ -375,7 +375,7 @@ describe("/v3/bundles/js", function() {
       const response = await request(HOST).get(
         "/v3/bundles/js?modules=component-with-no-dependencies@1111111&source=test",
       );
-      proclaim.deepEqual(response.statusCode, 400);
+      proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
         // TODO: Is this a potential XSS?
