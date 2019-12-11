@@ -5,6 +5,16 @@ import validateNpmPackageName from "validate-npm-package-name";
 import { UserError } from "./modules/errors";
 
 /**
+ * Checks whether `str` is an empty string.
+ *
+ * @param {string} [str=""]
+ * @returns {boolean}
+ */
+function isEmptyString(str = "") {
+  return str === "";
+}
+
+/**
  * Used to ensure all module names in the modules query parameter conform to the package.json specification.
  * https://docs.npmjs.com/files/package.json#name
  *
@@ -20,8 +30,13 @@ export const parseModulesParameter = modules => {
     throw new UserError("The modules query parameter is required.");
   }
 
-  // Turn string value into an array and remove any empty items.
-  const parsedModules = modules.split(",").filter(m => m !== "");
+  const parsedModules = modules.split(",");
+
+  if (parsedModules.some(isEmptyString)) {
+    throw new UserError(
+      "The modules query parameter can not contain empty module names.",
+    );
+  }
 
   if (modules.length === 0) {
     throw new UserError("The modules query parameter can not be empty.");
