@@ -19,6 +19,7 @@ export const parseModulesParameter = modules => {
   if (!modules) {
     throw new UserError("The modules query parameter is required.");
   }
+
   // Turn string value into an array and remove any empty items.
   const parsedModules = modules.split(",").filter(m => m !== "");
 
@@ -44,32 +45,34 @@ export const parseModulesParameter = modules => {
         ", ",
       )}.`,
     );
-  } else {
-    if (moduleNames.length === 0) {
-      throw new UserError("The modules query parameter can not be empty.");
-    } else if (moduleNames.length !== new Set(moduleNames).size) {
-      throw new UserError(
-        `The modules query parameter contains duplicate module names.`,
-      );
-    } else {
-      const m = Map(
-        parsedModules.map(module => {
-          if (!(module.lastIndexOf("@") > 0)) {
-            throw new UserError(
-              `The bundle request contains ${module} with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.`,
-            );
-          }
-
-          return [
-            module.substr(0, module.lastIndexOf("@")),
-            module.substr(module.lastIndexOf("@") + 1),
-          ];
-        }),
-      );
-
-      return m;
-    }
   }
+
+  if (moduleNames.length === 0) {
+    throw new UserError("The modules query parameter can not be empty.");
+  }
+
+  if (moduleNames.length !== new Set(moduleNames).size) {
+    throw new UserError(
+      `The modules query parameter contains duplicate module names.`,
+    );
+  }
+
+  const m = Map(
+    parsedModules.map(module => {
+      if (!(module.lastIndexOf("@") > 0)) {
+        throw new UserError(
+          `The bundle request contains ${module} with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.`,
+        );
+      }
+
+      return [
+        module.substr(0, module.lastIndexOf("@")),
+        module.substr(module.lastIndexOf("@") + 1),
+      ];
+    }),
+  );
+
+  return m;
 };
 
 /**
