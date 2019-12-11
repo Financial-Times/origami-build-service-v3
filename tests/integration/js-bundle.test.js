@@ -85,7 +85,7 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        "Origami Build Service returned an error: The modules query parameter can not be empty.",
+        "Origami Build Service returned an error: The modules query parameter can not contain empty module names.",
       );
     });
 
