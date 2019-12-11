@@ -30,16 +30,16 @@ export const parseModulesParameter = modules => {
     throw new UserError("The modules query parameter is required.");
   }
 
+  if (modules.length === 0) {
+    throw new UserError("The modules query parameter can not be empty.");
+  }
+
   const parsedModules = modules.split(",");
 
   if (parsedModules.some(isEmptyString)) {
     throw new UserError(
       "The modules query parameter can not contain empty module names.",
     );
-  }
-
-  if (modules.length === 0) {
-    throw new UserError("The modules query parameter can not be empty.");
   }
 
   const moduleNames = parsedModules.map(mod => {
