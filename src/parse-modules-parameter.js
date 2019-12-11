@@ -16,60 +16,59 @@ import { UserError } from "./modules/errors";
  * @returns {import("immutable").Map<string, string>}
  */
 export const parseModulesParameter = modules => {
-  if (modules) {
-    // Turn string value into an array and remove any empty items.
-    const parsedModules = modules.split(",").filter(m => m !== "");
+  if (!modules) {
+    throw new UserError("The modules query parameter is required.");
+  }
+  // Turn string value into an array and remove any empty items.
+  const parsedModules = modules.split(",").filter(m => m !== "");
 
-    if (modules.length === 0) {
-      throw new UserError("The modules query parameter can not be empty.");
+  if (modules.length === 0) {
+    throw new UserError("The modules query parameter can not be empty.");
+  }
+
+  const moduleNames = parsedModules.map(mod => {
+    if (mod.startsWith("@")) {
+      return "@" + mod.split("@")[1];
+    } else {
+      return mod.split("@")[0];
     }
+  });
 
-    const moduleNames = parsedModules.map(mod => {
-      if (mod.startsWith("@")) {
-        return "@" + mod.split("@")[1];
-      } else {
-        return mod.split("@")[0];
-      }
-    });
+  const invalidModuleNames = moduleNames.filter(
+    name => !isValidNpmModuleName(name),
+  );
 
-    const invalidModuleNames = moduleNames.filter(
-      name => !isValidNpmModuleName(name),
+  if (invalidModuleNames.length > 0) {
+    throw new UserError(
+      `The modules query parameter contains module names which are not valid: ${invalidModuleNames.join(
+        ", ",
+      )}.`,
     );
-
-    if (invalidModuleNames.length > 0) {
+  } else {
+    if (moduleNames.length === 0) {
+      throw new UserError("The modules query parameter can not be empty.");
+    } else if (moduleNames.length !== new Set(moduleNames).size) {
       throw new UserError(
-        `The modules query parameter contains module names which are not valid: ${invalidModuleNames.join(
-          ", ",
-        )}.`,
+        `The modules query parameter contains duplicate module names.`,
       );
     } else {
-      if (moduleNames.length === 0) {
-        throw new UserError("The modules query parameter can not be empty.");
-      } else if (moduleNames.length !== new Set(moduleNames).size) {
-        throw new UserError(
-          `The modules query parameter contains duplicate module names.`,
-        );
-      } else {
-        const m = Map(
-          parsedModules.map(module => {
-            if (!(module.lastIndexOf("@") > 0)) {
-              throw new UserError(
-                `The bundle request contains ${module} with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.`,
-              );
-            }
+      const m = Map(
+        parsedModules.map(module => {
+          if (!(module.lastIndexOf("@") > 0)) {
+            throw new UserError(
+              `The bundle request contains ${module} with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.`,
+            );
+          }
 
-            return [
-              module.substr(0, module.lastIndexOf("@")),
-              module.substr(module.lastIndexOf("@") + 1),
-            ];
-          }),
-        );
+          return [
+            module.substr(0, module.lastIndexOf("@")),
+            module.substr(module.lastIndexOf("@") + 1),
+          ];
+        }),
+      );
 
-        return m;
-      }
+      return m;
     }
-  } else {
-    throw new UserError("The modules query parameter is required.");
   }
 };
 
