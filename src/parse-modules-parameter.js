@@ -62,10 +62,6 @@ export const parseModulesParameter = modules => {
     );
   }
 
-  if (moduleNames.length === 0) {
-    throw new UserError("The modules query parameter can not be empty.");
-  }
-
   if (moduleNames.length !== new Set(moduleNames).size) {
     throw new UserError(
       `The modules query parameter contains duplicate module names.`,
