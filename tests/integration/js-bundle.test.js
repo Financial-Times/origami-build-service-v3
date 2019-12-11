@@ -225,7 +225,6 @@ describe("/v3/bundles/js", function() {
       );
       doesThrowInBrowserEnvironment(
         response.text,
-        // TODO: Is this a potential XSS?
         "Origami Build Service returned an error: The modules query parameter contains module names which are not valid: o-autoinit_%-test.",
       );
     });
@@ -245,7 +244,6 @@ describe("/v3/bundles/js", function() {
         response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
-      // TODO: Is this a potential XSS?
       doesThrowInBrowserEnvironment(
         response.text,
         "Origami Build Service returned an error: The version !1 in component-with-no-dependencies@!1 is not a valid version.\nPlease refer to TODO (build service documentation) for what is a valid version.",
@@ -267,7 +265,6 @@ describe("/v3/bundles/js", function() {
         response.get("content-type"),
         "application/javascript;charset=UTF-8",
       );
-      // TODO: Is this a potential XSS?
       doesThrowInBrowserEnvironment(
         response.text,
         "Origami Build Service returned an error: The bundle request contains component-with-no-dependencies with no version range, a version range is required.\nPlease refer to TODO (build service documentation) for what is a valid version.",
@@ -283,7 +280,6 @@ describe("/v3/bundles/js", function() {
       proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
-        // TODO: Is this a potential XSS?
         "Origami Build Service returned an error: Because o-jake-does-not-exist doesn't exist (could not find package o-jake-does-not-exist) and your bundle depends on o-jake-does-not-exist, version solving failed.\n",
       );
     });
@@ -297,7 +293,6 @@ describe("/v3/bundles/js", function() {
       proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
-        // TODO: Is this a potential XSS?
         'Origami Build Service returned an error: component-with-invalid-dependencies-property@1.0.0: The manifest\'s "dependencies" field, must be a JSON Object but it was a string. The manifest is "{\n    "name": "component-with-invalid-dependencies-property",\n    "version": "1.0.0",\n    "dependencies": "invalid"\n}".',
       );
     });
@@ -311,7 +306,6 @@ describe("/v3/bundles/js", function() {
       proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
-        // TODO: Is this a potential XSS?
         'Origami Build Service returned an error: component-depends-directly-on-itself@1.0.0: The manifest\'s "dependencies" field has an entry for itself. A manifest may not directly depend on itself. The manifest is "{\n    "name": "component-depends-directly-on-itself",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-depends-directly-on-itself": "*"\n    }\n}".',
       );
     });
@@ -326,7 +320,6 @@ describe("/v3/bundles/js", function() {
         proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
-          // TODO: Is this a potential XSS?
           'Origami Build Service returned an error: component-with-invalid-dependency-version@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is not a string. Dependencies can only be defined with SemVer strings. The manifest is "{\n    "name": "component-with-invalid-dependency-version",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": true\n    }\n}".',
         );
       });
@@ -340,7 +333,6 @@ describe("/v3/bundles/js", function() {
         proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
-          // TODO: Is this a potential XSS?
           'Origami Build Service returned an error: component-with-dependency-version-as-empty-string@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is an empty string. Dependencies can only be defined with SemVer strings. The manifest is "{\n    "name": "component-with-dependency-version-as-empty-string",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": ""\n    }\n}".',
         );
       });
@@ -354,7 +346,6 @@ describe("/v3/bundles/js", function() {
         proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
-          // TODO: Is this a potential XSS?
           'Origami Build Service returned an error: component-with-dependency-version-as-non-semver-string@1.0.0: The manifest\'s "dependencies" field has an entry for "component-with-no-dependencies" which is an invalid SemVer string. The manifest is "{\n    "name": "component-with-dependency-version-as-non-semver-string",\n    "version": "1.0.0",\n    "dependencies": {\n        "component-with-no-dependencies": "^_^"\n    }\n}". Expected version number after "^" in "^_^", got "_^".',
         );
       });
@@ -369,7 +360,6 @@ describe("/v3/bundles/js", function() {
       proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
-        // TODO: Is this a potential XSS?
         "Origami Build Service returned an error: Because every version of component-with-nonexistant-dependency depends on @financial-times/o-no-i-dont-exist and @financial-times/o-no-i-dont-exist doesn't exist (could not find package @financial-times/o-no-i-dont-exist), component-with-nonexistant-dependency is forbidden.\nSo, because your bundle depends on component-with-nonexistant-dependency, version solving failed.\n",
       );
     });
@@ -385,7 +375,6 @@ describe("/v3/bundles/js", function() {
         proclaim.deepEqual(response.statusCode, 200);
         doesThrowInBrowserEnvironment(
           response.text,
-          // TODO: Is this a potential XSS?
           "Origami Build Service returned an error: Because every version of component-with-dependency-who-version-does-not-exist depends on component-with-no-dependencies and no versions of component-with-no-dependencies match 0.0.1, component-with-dependency-who-version-does-not-exist is forbidden.\nSo, because your bundle depends on component-with-dependency-who-version-does-not-exist, version solving failed.\n",
         );
       });
@@ -400,7 +389,6 @@ describe("/v3/bundles/js", function() {
       proclaim.deepEqual(response.statusCode, 200);
       doesThrowInBrowserEnvironment(
         response.text,
-        // TODO: Is this a potential XSS?
         "Origami Build Service returned an error: Because no versions of component-with-no-dependencies match 1111111.0.0 and your bundle depends on component-with-no-dependencies, version solving failed.\n",
       );
     });
