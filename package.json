@@ -12,7 +12,9 @@
     "typecheck": "tsc -p . --noEmit",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",
     "test:integration": "mocha --require dotenv/config tests/integration --recursive --timeout 60000",
-    "test:unit": "mocha --require dotenv/config --require esm tests/unit --recursive --timeout 60000"
+    "test:unit": "mocha --require dotenv/config --require esm tests/unit --recursive --timeout 60000",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -57,7 +59,7 @@
     "array.prototype.flatmap": "^1.2.2",
     "aws-sdk": "^2.576.0",
     "debug": "^4.1.1",
-    "decompress": "^4.2.0",
+    "decompress": "^4.2.1",
     "directory-exists": "^2.0.1",
     "execa": "^3.3.0",
     "http-errors": "^1.7.3",
@@ -71,6 +73,8 @@
     "serverless-sentry-lib": "github:aheissenberger/serverless-sentry-lib#64e6d11922aa3b91100501d6ba7e203187946b73",
     "type-detect": "^4.0.8",
     "utf8": "^3.0.0",
-    "validate-npm-package-name": "^3.0.0"
-  }
+    "validate-npm-package-name": "^3.0.0",
+    "snyk": "^1.316.2"
+  },
+  "snyk": true
 }
