@@ -57,7 +57,7 @@
     "@financial-times/origami-repo-data-client": "^1.6.0",
     "@sentry/node": "^5.9.0",
     "array.prototype.flatmap": "^1.2.2",
-    "aws-sdk": "^2.576.0",
+    "aws-sdk": "^2.707.0",
     "debug": "^4.1.1",
     "decompress": "^4.2.1",
     "directory-exists": "^2.0.1",
