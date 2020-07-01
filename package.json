@@ -17,7 +17,7 @@
     "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
+    "@babel/core": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@types/node": "^12.12.11",
     "app-root-path": "^3.0.0",
