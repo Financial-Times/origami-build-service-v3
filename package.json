@@ -61,7 +61,7 @@
     "debug": "^4.1.1",
     "decompress": "^4.2.1",
     "directory-exists": "^2.0.1",
-    "execa": "^3.3.0",
+    "execa": "^4.0.2",
     "http-errors": "^1.7.3",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
