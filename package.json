@@ -55,7 +55,7 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@financial-times/origami-repo-data-client": "^1.6.0",
-    "@sentry/node": "^5.9.0",
+    "@sentry/node": "^5.19.0",
     "array.prototype.flatmap": "^1.2.2",
     "aws-sdk": "^2.709.0",
     "debug": "^4.1.1",
