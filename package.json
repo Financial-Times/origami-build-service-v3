@@ -44,7 +44,7 @@
     "serverless-scriptable-plugin": "^1.0.4",
     "serverless-sentry": "^1.2.0",
     "serverless-webpack": "^5.3.1",
-    "sinon": "^7.5.0",
+    "sinon": "^9.0.2",
     "source-map-support": "^0.5.16",
     "supertest": "^4.0.2",
     "tslint": "^5.20.1",
