@@ -64,7 +64,7 @@
     "execa": "^4.0.3",
     "http-errors": "^1.8.0",
     "immutable": "^4.0.0-rc.12",
-    "lodash": "^4.17.16",
+    "lodash": "^4.17.17",
     "oax": "^0.5.25",
     "object.fromentries": "^2.0.1",
     "reflect-metadata": "^0.1.13",
